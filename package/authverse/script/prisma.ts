@@ -98,6 +98,29 @@ export const prismaRun = async () => {
     const userDestinationPath = path.join(serverPath, "user.ts");
     fs.copyFileSync(userTemplatePath, userDestinationPath);
 
+    // Create app/api/auth/[...all]/route.ts - FIXED SECTION
+    const routeTemplatePath = path.resolve(
+      __dirname,
+      "../../template/api/route.ts"
+    );
+
+    // Create the nested directory structure first
+    const routeDestinationDir = path.join(
+      projectDir,
+      "app",
+      "api",
+      "auth",
+      "[...all]"
+    );
+
+    // Ensure the directory exists before copying the file
+    if (!fs.existsSync(routeDestinationDir)) {
+      fs.mkdirSync(routeDestinationDir, { recursive: true });
+    }
+
+    const routeDestinationPath = path.join(routeDestinationDir, "route.ts");
+    fs.copyFileSync(routeTemplatePath, routeDestinationPath);
+
     console.log(chalk.green("Prisma schema copied successfully!"));
   } catch (err) {
     console.error(chalk.red("Prisma setup failed:"), err);
