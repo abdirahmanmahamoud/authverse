@@ -1,6 +1,7 @@
 import inquirer from "inquirer";
 import chalk from "chalk";
 import { prismaRun } from "../script/prisma.js";
+import { authUiRun } from "../script/authUi.js";
 
 export const initAnswer = async () => {
   const answers = await inquirer.prompt([
@@ -20,6 +21,6 @@ export const initAnswer = async () => {
 
   // --- Prisma Installation ---
   if (answers.database === "Prisma") {
-    prismaRun();
+    await prismaRun(answers.authUi);
   }
 };

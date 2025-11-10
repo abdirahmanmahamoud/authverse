@@ -5,8 +5,9 @@ import chalk from "chalk";
 import { execSync } from "child_process";
 import inquirer from "inquirer";
 import { GenerateSecret } from "../function/GenerateSecret.js";
+import { authUiRun } from "./authUi.js";
 
-export const prismaRun = async () => {
+export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
   try {
     const answers = await inquirer.prompt([
       {
@@ -84,6 +85,14 @@ export const prismaRun = async () => {
     const authDestinationPath = path.join(libPath, "auth.ts");
     fs.copyFileSync(authTemplatePath, authDestinationPath);
 
+    // Copy auth-client.ts
+    const authClientTemplatePath = path.resolve(
+      __dirname,
+      "../../template/lib/auth-client.ts"
+    );
+    const authClientDestinationPath = path.join(libPath, "auth-client.ts");
+    fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+
     // create server folder
     const serverPath = path.join(projectDir, folder, "server");
     if (!fs.existsSync(serverPath)) {
@@ -121,7 +130,15 @@ export const prismaRun = async () => {
     const routeDestinationPath = path.join(routeDestinationDir, "route.ts");
     fs.copyFileSync(routeTemplatePath, routeDestinationPath);
 
-    console.log(chalk.green("Prisma schema copied successfully!"));
+    if (authUi) {
+      console.log(
+        chalk.green(
+          "\nPrisma setup completed successfully and better-auth installed\n"
+        )
+      );
+    } else {
+      await authUiRun({ folder });
+    }
   } catch (err) {
     console.error(chalk.red("Prisma setup failed:"), err);
   }
