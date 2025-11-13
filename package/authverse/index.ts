@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { initAnswer } from "./cli/init.js";
 import { readFileSync } from "fs";
 import { providers } from "./cli/provider.js";
+import { forget } from "./cli/forget.js";
 const packageJson = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const program = new Command();
@@ -25,5 +26,10 @@ program
   .command("add <provider>")
   .description("Add a new authentication provider")
   .action((provider: string) => providers({ provider }));
+
+program
+  .command("forget")
+  .description("Forget stored configurations")
+  .action(forget);
 
 program.parse(process.argv);
