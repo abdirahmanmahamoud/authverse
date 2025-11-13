@@ -147,6 +147,6 @@ export const drizzleRun = async (authUi: boolean) => {
       );
     }
   } catch (err) {
-    console.error(chalk.red("Prisma setup failed:"), err);
+    console.error(chalk.red("Drizzle setup failed:"), err);
   }
 };

@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { initAnswer } from "./cli/init.js";
 import { readFileSync } from "fs";
+import { providers } from "./cli/provider.js";
 const packageJson = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const program = new Command();
@@ -19,5 +20,10 @@ program
   .command("init")
   .description("Select project template and configuration")
   .action(initAnswer);
+
+program
+  .command("add <provider>")
+  .description("Add a new authentication provider")
+  .action((provider: string) => providers({ provider }));
 
 program.parse(process.argv);
