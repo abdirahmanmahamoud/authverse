@@ -1,7 +1,17 @@
 {
   "name": "authverse",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "CLI tool for creating authverse projects",
+  "repository": {
+    "url": "https://github.com/abdirahmanmahamoud/authverse"
+  },
+  "homepage": "https://authverse.abdirahmandev.com",
+  "license": "MIT",
+  "author": {
+    "name": "Abdirahman Mohamoud",
+    "email": "me@abdirahmandev.com",
+    "url": "https://abdirahmandev.com"
+  },
   "type": "module",
   "bin": {
     "authverse": "./dist/index.js"
@@ -9,6 +19,12 @@
   "scripts": {
     "build": "tsup ./index.ts --format esm,cjs --dts --out-dir dist",
     "dev": "tsup ./index.ts --watch --onSuccess \"node dist/index.js\""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "chalk": "^5.6.2",
