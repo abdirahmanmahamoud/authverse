@@ -50,9 +50,11 @@ const ForgetComponent = () => {
       });
 
       if (error) {
+        setIsLoading(false);
         toast.error(error.message);
       }
       if (data) {
+        setIsLoading(false);
         toast.success("Password reset email sent. Please check your inbox.");
       }
     } catch (error) {

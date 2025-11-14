@@ -31,13 +31,17 @@ export const forget = async () => {
 
     let content = fs.readFileSync(authFilePath, "utf8");
 
-    // Add code for sendResetPassword
-    const codeAdded = `sendResetPassword: async ({ user, url }) => {
-      return resend.emails.send({
+    // Add code for sendResetPassword with proper void return
+    const codeAdded = `sendResetPassword: async ({ user, url, token }) => {
+      await resend.emails.send({
         from: \`\${process.env.EMAIL_SENDER_NAME} <\${process.env.EMAIL_SENDER_ADDRESS}>\`,
         to: user.email,
         subject: "Reset your password",
-        react: ForgotPasswordEmail({ username: user.name, resetUrl: url, userEmail: user.email }),
+        react: ForgotPasswordEmail({
+          username: user.name,
+          resetUrl: url,
+          userEmail: user.email,
+        }),
       });
     },`;
 
@@ -63,79 +67,128 @@ export const forget = async () => {
         }
       }
 
-      // Insert sendResetPassword before the closing brace of emailAndPassword
-      const before = content.substring(0, emailAndPasswordEnd);
-      const after = content.substring(emailAndPasswordEnd);
-      content = before + `,\n    ${codeAdded}` + after;
+      // Get the content inside emailAndPassword
+      const emailAndPasswordContent = content.substring(
+        emailAndPasswordStart,
+        emailAndPasswordEnd
+      );
+
+      // Check if sendResetPassword already exists
+      if (emailAndPasswordContent.includes("sendResetPassword:")) {
+        // Replace existing sendResetPassword
+        content = content.replace(
+          /sendResetPassword:\s*async\s*\([^)]*\)[^{]*\{[^}]*\}[^,]*/,
+          codeAdded
+        );
+      } else {
+        // Insert sendResetPassword before the closing brace of emailAndPassword
+        const before = content.substring(0, emailAndPasswordEnd);
+        const after = content.substring(emailAndPasswordEnd);
+        content = before + `\n ${codeAdded}` + after;
+      }
 
       fs.writeFileSync(authFilePath, content, "utf8");
 
-      // Check if sendEmail import exists, if not add it
-      if (!content.includes("import { sendEmail }")) {
+      // Check if resend import exists, if not add it
+      if (
+        !content.includes("import { Resend }") &&
+        !content.includes("const resend = new Resend")
+      ) {
         // Add import after the last import statement
         const lastImportIndex = content.lastIndexOf("import");
         const nextLineAfterLastImport =
           content.indexOf("\n", lastImportIndex) + 1;
         const beforeImports = content.substring(0, nextLineAfterLastImport);
         const afterImports = content.substring(nextLineAfterLastImport);
-        content =
-          beforeImports +
-          `import { Resend } from "resend";\nimport ForgotPasswordEmail from "@/components/email/reset-password";\n\nconst resend = new Resend(process.env.RESEND_API_KEY as string);\n` +
-          afterImports;
+
+        const newImports = `import { Resend } from "resend";\nimport ForgotPasswordEmail from "@/components/email/reset-password";\n\nconst resend = new Resend(process.env.RESEND_API_KEY as string);\n`;
+        content = beforeImports + newImports + afterImports;
 
         fs.writeFileSync(authFilePath, content, "utf8");
       }
 
       // add .env variables info
       const envPath = path.join(projectDir, ".env");
-      fs.appendFileSync(envPath, `\n\n# Resend API Key for sending emails`);
-      fs.appendFileSync(envPath, `\nRESEND_API_KEY=`);
-      fs.appendFileSync(
-        envPath,
-        `\nEMAIL_SENDER_NAME=Your Name\nEMAIL_SENDER_ADDRESS=`
-      );
+      if (fs.existsSync(envPath)) {
+        fs.appendFileSync(envPath, `\n\n# Resend API Key for sending emails`);
+        fs.appendFileSync(envPath, `\nRESEND_API_KEY=`);
+        fs.appendFileSync(envPath, `\nEMAIL_SENDER_NAME=Your Name`);
+        fs.appendFileSync(envPath, `\nEMAIL_SENDER_ADDRESS=`);
+      }
 
-      // add reset-password.tsx to components/email
+      // Add components/email/reset-password.tsx
       const componentPath = path.resolve(
         __dirname,
-        "../../template/components/email/reset-password.tsx"
+        "../../template/email/reset-password.tsx"
       );
+
       const destinationPath = path.join(
         projectDir,
         folder,
         "components",
         "email"
       );
+
       // Ensure the directory exists before copying the file
       if (!fs.existsSync(destinationPath)) {
         fs.mkdirSync(destinationPath, { recursive: true });
       }
-      const LoginDestinationPath = path.join(
+
+      const emailDestinationPath = path.join(
         destinationPath,
         "reset-password.tsx"
       );
-      fs.copyFileSync(componentPath, LoginDestinationPath);
 
-      // add components/authverse/ForgetComponent.tsx
-      const ForgetComponentPath = path.resolve(
+      if (fs.existsSync(componentPath)) {
+        fs.copyFileSync(componentPath, emailDestinationPath);
+      }
+
+      // Add components/authverse/ForgetComponent.tsx
+      const forgetComponentPath = path.resolve(
         __dirname,
-        "../../template/components/authverse/ForgetComponent.tsx"
+        "../../template/components/ForgetComponent.tsx"
       );
-      const ForgetDestinationPath = path.join(
+      const componentsDestinationPath = path.join(
         projectDir,
         folder,
         "components",
         "authverse"
       );
+
       // Ensure the directory exists before copying the file
-      if (!fs.existsSync(ForgetDestinationPath)) {
-        fs.mkdirSync(ForgetDestinationPath, { recursive: true });
+      if (!fs.existsSync(componentsDestinationPath)) {
+        fs.mkdirSync(componentsDestinationPath, { recursive: true });
       }
-      const ForgetComponentDestinationPath = path.join(
-        ForgetDestinationPath,
+
+      const forgetDestinationPath = path.join(
+        componentsDestinationPath,
         "ForgetComponent.tsx"
       );
-      fs.copyFileSync(ForgetComponentPath, ForgetComponentDestinationPath);
+
+      if (fs.existsSync(forgetComponentPath)) {
+        fs.copyFileSync(forgetComponentPath, forgetDestinationPath);
+      }
+
+      // Add components/authverse/ResetComponent.tsx
+      const resetComponentPath = path.resolve(
+        __dirname,
+        "../../template/components/ResetComponent.tsx"
+      );
+
+      const resetDestinationPath = path.join(
+        componentsDestinationPath,
+        "ResetComponent.tsx"
+      );
+
+      if (fs.existsSync(resetComponentPath)) {
+        fs.copyFileSync(resetComponentPath, resetDestinationPath);
+      }
+
+      // app add auth
+      const authTemplatePath = path.resolve(
+        __dirname,
+        "../../template/app-auth-uiDesign"
+      );
 
       // Create app directory
       const appDestinationPath = path.join(projectDir, folder, "app", "auth");
@@ -144,40 +197,43 @@ export const forget = async () => {
       if (!fs.existsSync(appDestinationPath)) {
         fs.mkdirSync(appDestinationPath, { recursive: true });
       }
-      // Copy forget/page.tsx
-      const forgetPageTemplatePath = path.resolve(
-        __dirname,
-        "../../template/app/auth/forget/page.tsx"
-      );
-      const forgetPageDestinationPath = path.join(appDestinationPath, "forget");
-      if (!fs.existsSync(forgetPageDestinationPath)) {
-        fs.mkdirSync(forgetPageDestinationPath, { recursive: true });
-      }
-      const forgetPageFinalPath = path.join(
-        forgetPageDestinationPath,
-        "page.tsx"
-      );
-      fs.copyFileSync(forgetPageTemplatePath, forgetPageFinalPath);
 
-      // Copy reset-password/page.tsx
-      const resetPasswordPageTemplatePath = path.resolve(
-        __dirname,
-        "../../template/app/auth/reset-password/page.tsx"
-      );
-      const resetPasswordPageDestinationPath = path.join(
-        appDestinationPath,
-        "reset-password"
-      );
-      if (!fs.existsSync(resetPasswordPageDestinationPath)) {
-        fs.mkdirSync(resetPasswordPageDestinationPath, { recursive: true });
+      // Create forget directory
+      const forgetDestinationDir = path.join(appDestinationPath, "forget");
+
+      if (!fs.existsSync(forgetDestinationDir)) {
+        fs.mkdirSync(forgetDestinationDir, { recursive: true });
       }
-      const resetPasswordPageFinalPath = path.join(
-        resetPasswordPageDestinationPath,
+
+      // Copy forget page.tsx
+      const forgetPageDestinationPath = path.join(
+        forgetDestinationDir,
         "page.tsx"
       );
       fs.copyFileSync(
-        resetPasswordPageTemplatePath,
-        resetPasswordPageFinalPath
+        `${authTemplatePath}/forget/page.tsx`,
+        forgetPageDestinationPath
+      );
+
+      // Create reset-password directory
+      const resetDestinationDir = path.join(
+        appDestinationPath,
+        "reset-password"
+      );
+
+      if (!fs.existsSync(resetDestinationDir)) {
+        fs.mkdirSync(resetDestinationDir, { recursive: true });
+      }
+
+      // Copy reset-password page.tsx
+      const resetPageDestinationPath = path.join(
+        resetDestinationDir,
+        "page.tsx"
+      );
+
+      fs.copyFileSync(
+        `${authTemplatePath}/reset-password/page.tsx`,
+        resetPageDestinationPath
       );
 
       console.log(
