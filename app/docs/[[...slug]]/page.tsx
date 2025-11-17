@@ -67,7 +67,7 @@ const DocsPage = async (props: { params: Promise<{ slug: string[] }> }) => {
           )}
         </div>
       </div>
-      <div className="w-full lg:w-[25%] lg:pl-3 pt-5 lg:pt-0">
+      <div className="w-[25%] lg:pl-3 pt-5 lg:pt-0 hidden lg:block fixed ml-[55%]">
         {doc.toc?.length ? (
           <div className="no-scrollbar overflow-y-auto px-8">
             <DocsTableOfContents toc={doc.toc} />
