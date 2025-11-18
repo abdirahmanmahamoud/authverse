@@ -73,7 +73,7 @@ Authverse will guide you step-by-step to choose:
 - And automatically generate everything for you
 
 After running the CLI, your project will be fully ready with  
-**Better Auth** **ShadCN UI components** and **database integration**.
+**Better Auth**, **ShadCN UI components**, and **database integration**.
 
 ---
 

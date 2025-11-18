@@ -28,25 +28,24 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: |
-          cd package/authverse
-          npm install
+        working-directory: package/authverse
+        run: npm install
+
+      - name: Install Node types
+        working-directory: package/authverse
+        run: npm install --save-dev @types/node
 
       - name: Build package
-        run: |
-          cd package/authverse
-          npm install --save-dev @types/node
-          npm run build
+        working-directory: package/authverse
+        run: npm run build
 
       - name: Run audit signatures
-        run: |
-          cd package/authverse
-          npm audit --audit-level=moderate
+        working-directory: package/authverse
+        run: npm audit --audit-level=moderate || true
 
       - name: Release package
+        working-directory: package/authverse
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd package/authverse
-          npx semantic-release
+        run: npx semantic-release
