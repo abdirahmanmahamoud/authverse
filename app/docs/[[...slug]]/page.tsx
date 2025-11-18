@@ -1,18 +1,49 @@
+import DocsTableOfContents from "@/components/DocsTableOfContents";
+import mdxComponents from "@/components/mdxComponents";
+import { Button } from "@/components/ui/button";
 import { source } from "@/lib/source";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import fm from "front-matter";
 import { findNeighbour } from "fumadocs-core/page-tree";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import z from "zod";
-import fm from "front-matter";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {
-  IconArrowLeft,
-  IconArrowRight,
-  IconArrowUpRight,
-} from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import mdxComponents from "@/components/mdxComponents";
-import DocsTableOfContents from "@/components/DocsTableOfContents";
+
+export function generateStaticParams() {
+  return source.generateParams();
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+
+  if (!page) {
+    notFound();
+  }
+
+  const doc = page.data;
+
+  if (!doc.title || !doc.description) {
+    notFound();
+  }
+
+  return {
+    title: doc.title,
+    description: doc.description,
+    openGraph: {
+      title: doc.title,
+      description: doc.description,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: doc.title,
+      description: doc.description,
+    },
+  };
+}
 
 const DocsPage = async (props: { params: Promise<{ slug: string[] }> }) => {
   const params = await props.params;

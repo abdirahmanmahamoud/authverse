@@ -1,3 +1,5 @@
+![Logo](./public/logo.png)
+
 # Authverse
 
 Authverse is a modern, lightweight, and developer-friendly
