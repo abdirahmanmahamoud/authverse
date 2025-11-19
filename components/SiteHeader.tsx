@@ -28,7 +28,7 @@ const SiteHeader = () => {
   const pathname = usePathname();
   const isMobile = useIsMobile();
   return (
-    <div className="fixed w-full h-10 z-50 px-6 lg:px-16 mx-auto top-0 left-0 right-0 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">
+    <div className="fixed w-full h-12 z-50 px-6 lg:px-16 mx-auto top-0 left-0 right-0 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">
       <div className="w-full h-full flex items-center justify-between">
         <div className="w-full h-full flex items-center">
           <Logo className="w-36 lg:w-28" />

@@ -36,7 +36,10 @@
     "auth",
     "authverse",
     "auth-ui",
-    "auth-ui-templates"
+    "auth-ui-templates",
+    "better-auth",
+    "nextjs",
+    "shadcn"
   ],
   "dependencies": {
     "chalk": "^5.6.2",

@@ -3,11 +3,9 @@ import mdxComponents from "@/components/mdxComponents";
 import { Button } from "@/components/ui/button";
 import { source } from "@/lib/source";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import fm from "front-matter";
 import { findNeighbour } from "fumadocs-core/page-tree";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import z from "zod";
 
 export function generateStaticParams() {
   return source.generateParams();
@@ -57,17 +55,6 @@ const DocsPage = async (props: { params: Promise<{ slug: string[] }> }) => {
   const neighbours = findNeighbour(source.pageTree, page.url);
 
   const raw = await page.data.getText("raw");
-  const { attributes } = fm(raw);
-  const { links } = z
-    .object({
-      links: z
-        .object({
-          doc: z.string().optional(),
-          api: z.string().optional(),
-        })
-        .optional(),
-    })
-    .parse(attributes);
 
   return (
     <div className="px-[4%] mt-10 pb-5 flex flex-col lg:flex-row">

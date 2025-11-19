@@ -1,4 +1,3 @@
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import {
   PageActions,
   PageHeader,
@@ -12,7 +11,6 @@ import Announcement from "./Announcement";
 const Hero = () => {
   return (
     <div className="w-full h-[90vh] flex items-center justify-center">
-      <AnimatedGridPattern className="opacity-45" />
       <PageHeader>
         <Announcement />
         <PageHeaderHeading className="max-w-4xl">

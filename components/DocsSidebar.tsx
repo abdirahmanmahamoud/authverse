@@ -35,7 +35,7 @@ const DocsSidebar = ({ tree }: { tree: typeof source.pageTree }) => {
   return (
     <Sidebar className="fixed top-[calc(var(--header-height)+1px)] z-30 hidden h-screen overscroll-none bg-transparent lg:flex lg:border-r px-1">
       <div className="pt-10" />
-      <SidebarContent className="mt-5">
+      <SidebarContent className="mt-9">
         <SidebarGroup>
           <SidebarGroupLabel className="text-muted-foreground font-medium">
             Getting Started
