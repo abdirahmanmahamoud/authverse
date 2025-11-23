@@ -7,21 +7,22 @@ import inquirer from "inquirer";
 import { GenerateSecret } from "../function/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 
-export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
+interface prismaRunProps {
+  authUi: boolean;
+  database: "Postgresql" | "Mongodb" | "Mysql";
+}
+
+export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
   try {
-    const answers = await inquirer.prompt([
-      {
-        type: "list",
-        name: "database",
-        message: "Select prisma database",
-        choices: ["postgresql", "mongodb", "mysql"],
-      },
-    ]);
     console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
 
     // Install prisma + @prisma/client
     execSync("npm install prisma --save-dev", { stdio: "inherit" });
     execSync("npm install @prisma/client", { stdio: "inherit" });
+
+    if (database === "Mysql") {
+      execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
+    }
 
     const projectDir = process.cwd();
     const prismaDir = path.join(projectDir, "prisma");
@@ -40,7 +41,7 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     // 1 Paths
     const templatePath = path.resolve(
       __dirname,
-      `./template/prisma/${answers.database}/schema.prisma`
+      `./template/prisma/${database}/schema.prisma`
     );
 
     // 2 Ensure prisma folder exists
@@ -80,7 +81,7 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     // Copy auth.ts
     const authTemplatePath = path.resolve(
       __dirname,
-      "./template/lib/auth-prisma.ts"
+      `./template/lib/${database}/auth.ts`
     );
     const authDestinationPath = path.join(libPath, "auth.ts");
     fs.copyFileSync(authTemplatePath, authDestinationPath);
@@ -140,13 +141,13 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
     if (authUi) {
+      await authUiRun({ folder });
+    } else {
       console.log(
         chalk.green(
           "\nPrisma setup completed successfully and better-auth installed\n"
         )
       );
-    } else {
-      await authUiRun({ folder });
     }
   } catch (err) {
     console.error(chalk.red("Prisma setup failed:"), err);
