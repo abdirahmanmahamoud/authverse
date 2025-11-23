@@ -24,6 +24,10 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
       execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
     }
 
+    if (database === "Postgresql") {
+      execSync("npm install @prisma/adapter-pg", { stdio: "inherit" });
+    }
+
     const projectDir = process.cwd();
     const prismaDir = path.join(projectDir, "prisma");
 
