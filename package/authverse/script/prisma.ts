@@ -17,15 +17,20 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
 
     // Install prisma + @prisma/client
-    execSync("npm install prisma --save-dev", { stdio: "inherit" });
-    execSync("npm install @prisma/client", { stdio: "inherit" });
+    if (database !== "Mongodb") {
+      execSync("npm install prisma --save-dev", { stdio: "inherit" });
+      execSync("npm install @prisma/client", { stdio: "inherit" });
 
-    if (database === "Mysql") {
-      execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
-    }
+      if (database === "Mysql") {
+        execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
+      }
 
-    if (database === "Postgresql") {
-      execSync("npm install @prisma/adapter-pg", { stdio: "inherit" });
+      if (database === "Postgresql") {
+        execSync("npm install @prisma/adapter-pg", { stdio: "inherit" });
+      }
+    } else if (database === "Mongodb") {
+      execSync("npm install prisma@6.19.0 --save-dev", { stdio: "inherit" });
+      execSync("npm install @prisma/client@6.19.0", { stdio: "inherit" });
     }
 
     const projectDir = process.cwd();
@@ -56,6 +61,15 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     // 3 Copy schema.prisma
     const destinationPath = path.join(prismaDir, "schema.prisma");
     fs.copyFileSync(templatePath, destinationPath);
+
+    // Copy prisma.config.ts
+    const prismaConfigPath = path.resolve(
+      __dirname,
+      `./template/config/prisma.config.ts`
+    );
+    const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
+
+    fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
 
     // install better auth
     console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
