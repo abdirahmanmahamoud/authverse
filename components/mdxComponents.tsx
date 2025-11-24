@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { CodeBlockCommand } from "./CodeBlockCommand";
 import { Kbd } from "./ui/kbd";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -26,6 +25,7 @@ import {
   Pre,
 } from "./codeBock";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
 const mdxComponents = {
   h1: ({ className, ...props }: React.ComponentProps<"h1">) => (
     <h1
