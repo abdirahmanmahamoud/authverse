@@ -13,7 +13,6 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Callout } from "./Callout";
 import { CodeTabs } from "./CodeTabs";
-import { ComponentSource } from "./componentSource";
 import { CodeCollapsibleWrapper } from "./codeCollapsibleWrapper";
 import { ComponentsList } from "./ComponentsList";
 import {
@@ -263,7 +262,6 @@ const mdxComponents = {
   AlertDescription,
   AspectRatio,
   CodeTabs,
-  ComponentSource,
   CodeCollapsibleWrapper,
   ComponentsList,
   // DirectoryList,
