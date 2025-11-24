@@ -6,10 +6,18 @@ export const initAnswer = async () => {
   const answers = await inquirer.prompt([
     {
       type: "list",
-      name: "database",
-      message: "Choose your database:",
+      name: "orm",
+      message: "Choose Your ORM:",
       choices: ["Prisma", "Drizzle"],
     },
+    {
+      type: "list",
+      name: "database",
+      message: "Select Database:",
+      choices: ["Postgresql", "Mongodb", "Mysql"],
+      when: (ans) => ans.orm === "Prisma",
+    },
+
     {
       type: "confirm",
       name: "authUi",
@@ -19,12 +27,15 @@ export const initAnswer = async () => {
   ]);
 
   // --- Prisma Installation ---
-  if (answers.database === "Prisma") {
-    await prismaRun(answers.authUi);
+  if (answers.orm === "Prisma") {
+    await prismaRun({
+      authUi: answers.authUi,
+      database: answers.database,
+    });
   }
 
   // --- Drizzle Installation ---
-  if (answers.database === "Drizzle") {
+  if (answers.orm === "Drizzle") {
     await drizzleRun(answers.authUi);
   }
 };

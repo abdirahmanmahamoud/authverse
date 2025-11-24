@@ -7,21 +7,31 @@ import inquirer from "inquirer";
 import { GenerateSecret } from "../function/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 
-export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
+interface prismaRunProps {
+  authUi: boolean;
+  database: "Postgresql" | "Mongodb" | "Mysql";
+}
+
+export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
   try {
-    const answers = await inquirer.prompt([
-      {
-        type: "list",
-        name: "database",
-        message: "Select prisma database",
-        choices: ["postgresql", "mongodb", "mysql"],
-      },
-    ]);
     console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
 
     // Install prisma + @prisma/client
-    execSync("npm install prisma --save-dev", { stdio: "inherit" });
-    execSync("npm install @prisma/client", { stdio: "inherit" });
+    if (database !== "Mongodb") {
+      execSync("npm install prisma --save-dev", { stdio: "inherit" });
+      execSync("npm install @prisma/client", { stdio: "inherit" });
+
+      if (database === "Mysql") {
+        execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
+      }
+
+      if (database === "Postgresql") {
+        execSync("npm install @prisma/adapter-pg", { stdio: "inherit" });
+      }
+    } else if (database === "Mongodb") {
+      execSync("npm install prisma@6.19.0 --save-dev", { stdio: "inherit" });
+      execSync("npm install @prisma/client@6.19.0", { stdio: "inherit" });
+    }
 
     const projectDir = process.cwd();
     const prismaDir = path.join(projectDir, "prisma");
@@ -37,20 +47,31 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
 
-    // 1 Paths
+    //  Paths
     const templatePath = path.resolve(
       __dirname,
-      `./template/prisma/${answers.database}/schema.prisma`
+      `./template/prisma/${database}/schema.prisma`
     );
 
-    // 2 Ensure prisma folder exists
+    //  Ensure prisma folder exists
     if (!fs.existsSync(prismaDir)) {
       fs.mkdirSync(prismaDir, { recursive: true });
     }
 
-    // 3 Copy schema.prisma
+    //  Copy schema.prisma
     const destinationPath = path.join(prismaDir, "schema.prisma");
     fs.copyFileSync(templatePath, destinationPath);
+
+    // Copy prisma.config.ts
+    if (database === "Mongodb") {
+      const prismaConfigPath = path.resolve(
+        __dirname,
+        `./template/config/prisma.config.ts`
+      );
+      const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
+
+      fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+    }
 
     // install better auth
     console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
@@ -80,7 +101,7 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     // Copy auth.ts
     const authTemplatePath = path.resolve(
       __dirname,
-      "./template/lib/auth-prisma.ts"
+      `./template/lib/${database}/auth.ts`
     );
     const authDestinationPath = path.join(libPath, "auth.ts");
     fs.copyFileSync(authTemplatePath, authDestinationPath);
@@ -140,13 +161,13 @@ export const prismaRun = async ({ authUi }: { authUi: boolean }) => {
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
     if (authUi) {
+      await authUiRun({ folder });
+    } else {
       console.log(
         chalk.green(
           "\nPrisma setup completed successfully and better-auth installed\n"
         )
       );
-    } else {
-      await authUiRun({ folder });
     }
   } catch (err) {
     console.error(chalk.red("Prisma setup failed:"), err);
