@@ -47,29 +47,31 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
 
-    // 1 Paths
+    //  Paths
     const templatePath = path.resolve(
       __dirname,
       `./template/prisma/${database}/schema.prisma`
     );
 
-    // 2 Ensure prisma folder exists
+    //  Ensure prisma folder exists
     if (!fs.existsSync(prismaDir)) {
       fs.mkdirSync(prismaDir, { recursive: true });
     }
 
-    // 3 Copy schema.prisma
+    //  Copy schema.prisma
     const destinationPath = path.join(prismaDir, "schema.prisma");
     fs.copyFileSync(templatePath, destinationPath);
 
     // Copy prisma.config.ts
-    const prismaConfigPath = path.resolve(
-      __dirname,
-      `./template/config/prisma.config.ts`
-    );
-    const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
+    if (database === "Mongodb") {
+      const prismaConfigPath = path.resolve(
+        __dirname,
+        `./template/config/prisma.config.ts`
+      );
+      const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
 
-    fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+      fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+    }
 
     // install better auth
     console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
