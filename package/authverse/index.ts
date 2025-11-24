@@ -4,6 +4,8 @@ import { initAnswer } from "./cli/init.js";
 import { readFileSync } from "fs";
 import { providers } from "./cli/provider.js";
 import { forget } from "./cli/forget.js";
+import { isNextJsProject } from "./script/detect-nextjs.js";
+import chalk from "chalk";
 const packageJson = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const program = new Command();
@@ -20,7 +22,13 @@ program
 program
   .command("init")
   .description("Select project template and configuration")
-  .action(initAnswer);
+  .action(() => {
+    if (!isNextJsProject) {
+      console.log(chalk.red("Only Next.js projects are supported."));
+      process.exit(1);
+    }
+    initAnswer();
+  });
 
 program
   .command("add <provider>")

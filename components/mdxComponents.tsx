@@ -3,9 +3,7 @@ import { CodeBlockCommand } from "./CodeBlockCommand";
 import { Kbd } from "./ui/kbd";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import Image from "next/image";
-import { CopyButton } from "./copyButton";
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +17,15 @@ import { CodeTabs } from "./CodeTabs";
 import { ComponentSource } from "./componentSource";
 import { CodeCollapsibleWrapper } from "./codeCollapsibleWrapper";
 import { ComponentsList } from "./ComponentsList";
-
+import {
+  CodeBlock,
+  CodeBlockTab,
+  CodeBlockTabs,
+  CodeBlockTabsList,
+  CodeBlockTabsTrigger,
+  Pre,
+} from "./codeBock";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 const mdxComponents = {
   h1: ({ className, ...props }: React.ComponentProps<"h1">) => (
     <h1
@@ -151,17 +157,15 @@ const mdxComponents = {
       {...props}
     />
   ),
-  pre: ({ className, children, ...props }: React.ComponentProps<"pre">) => {
+  pre: (props: any) => {
     return (
-      <pre
-        className={cn(
-          "no-scrollbar min-w-0 overflow-x-auto px-4 py-3.5 outline-none has-[[data-highlighted-line]]:px-0 has-[[data-line-numbers]]:px-0 has-[[data-slot=tabs]]:p-0",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </pre>
+      <CodeBlock className="rounded-xl bg-fd-muted" allowCopy={true} {...props}>
+        <div style={{ minWidth: "100%", display: "table" }}>
+          <Pre className="px-0 py-3 bg-fd-muted focus-visible:outline-none">
+            {props.children}
+          </Pre>
+        </div>
+      </CodeBlock>
     );
   },
   figure: ({ className, ...props }: React.ComponentProps<"figure">) => {
@@ -190,56 +194,29 @@ const mdxComponents = {
   //     </figcaption>
   //   )
   // },
-  code: ({
-    className,
-    __raw__,
-    __src__,
-    __npm__,
-    __yarn__,
-    __pnpm__,
-    __bun__,
-    ...props
-  }: React.ComponentProps<"code"> & {
-    __raw__?: string;
-    __src__?: string;
-    __npm__?: string;
-    __yarn__?: string;
-    __pnpm__?: string;
-    __bun__?: string;
-  }) => {
-    // Inline Code.
-    if (typeof props.children === "string") {
-      return (
-        <code
-          className={cn(
-            "bg-muted relative rounded-md px-[0.3rem] py-[0.2rem] font-mono text-[0.8rem] break-words outline-none",
-            className
-          )}
-          {...props}
-        />
-      );
-    }
-
-    // npm command.
-    const isNpmCommand = __npm__ && __yarn__ && __pnpm__ && __bun__;
-    if (isNpmCommand) {
-      return (
-        <CodeBlockCommand
-          __npm__={__npm__}
-          __yarn__={__yarn__}
-          __pnpm__={__pnpm__}
-          __bun__={__bun__}
-        />
-      );
-    }
-
-    // Default codeblock.
+  CodeBlockTabs: (props: any) => {
     return (
-      <>
-        {__raw__ && <CopyButton value={__raw__} src={__src__} />}
-        <code {...props} />
-      </>
+      <CodeBlockTabs
+        {...props}
+        className="p-0 rounded-lg border-0 bg-fd-secondary"
+      >
+        <div {...props}>{props.children}</div>
+      </CodeBlockTabs>
     );
+  },
+  CodeBlockTabsList: (props: any) => {
+    return (
+      <CodeBlockTabsList
+        {...props}
+        className="pb-0 my-0 rounded-lg bg-fd-secondary"
+      />
+    );
+  },
+  CodeBlockTab: (props: any) => {
+    return <CodeBlockTab {...props} className="p-0 m-0 rounded-lg" />;
+  },
+  CodeBlockTabsTrigger: (props: any) => {
+    return <CodeBlockTabsTrigger {...props} />;
   },
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
@@ -273,50 +250,8 @@ const mdxComponents = {
       {...props}
     />
   ),
-  Tabs: ({ className, ...props }: React.ComponentProps<typeof Tabs>) => {
-    return (
-      <Tabs className={cn("relative mt-6 w-full", className)} {...props} />
-    );
-  },
-  TabsList: ({
-    className,
-    ...props
-  }: React.ComponentProps<typeof TabsList>) => (
-    <TabsList
-      className={cn(
-        "justify-start gap-4 rounded-none bg-transparent px-0",
-        className
-      )}
-      {...props}
-    />
-  ),
-  TabsTrigger: ({
-    className,
-    ...props
-  }: React.ComponentProps<typeof TabsTrigger>) => (
-    <TabsTrigger
-      className={cn(
-        "text-muted-foreground data-[state=active]:text-foreground data-[state=active]:border-primary dark:data-[state=active]:border-primary hover:text-primary rounded-none border-0 border-b-2 border-transparent bg-transparent px-0 pb-3 text-base data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
-        className
-      )}
-      {...props}
-    />
-  ),
-  TabsContent: ({
-    className,
-    ...props
-  }: React.ComponentProps<typeof TabsContent>) => (
-    <TabsContent
-      className={cn(
-        "relative [&_h3.font-heading]:text-base [&_h3.font-heading]:font-medium *:[figure]:first:mt-0 [&>.steps]:mt-6",
-        className
-      )}
-      {...props}
-    />
-  ),
-  Tab: ({ className, ...props }: React.ComponentProps<"div">) => (
-    <div className={cn(className)} {...props} />
-  ),
+  Tab,
+  Tabs,
   Button,
   Callout,
   Accordion,

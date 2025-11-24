@@ -1,62 +1,32 @@
 "use client";
+import { useEffectEvent } from "fumadocs-core/utils/use-effect-event";
+import type { MouseEventHandler } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import * as React from "react";
-import { IconCheck, IconCopy } from "@tabler/icons-react";
+export function useCopyButton(
+  onCopy: () => void | Promise<void>
+): [checked: boolean, onClick: MouseEventHandler] {
+  const [checked, setChecked] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  const onClick: MouseEventHandler = useEffectEvent(() => {
+    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    const res = Promise.resolve(onCopy());
 
-export function copyToClipboardWithMeta(value: string) {
-  navigator.clipboard.writeText(value);
-}
+    void res.then(() => {
+      setChecked(true);
+      timeoutRef.current = window.setTimeout(() => {
+        setChecked(false);
+      }, 1500);
+    });
+  });
 
-export function CopyButton({
-  value,
-  className,
-  variant = "ghost",
-  tooltip = "Copy to Clipboard",
-  ...props
-}: React.ComponentProps<typeof Button> & {
-  value: string;
-  src?: string;
-  tooltip?: string;
-}) {
-  const [hasCopied, setHasCopied] = React.useState(false);
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setHasCopied(false);
-    }, 2000);
+  // Avoid updates after being unmounted
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    };
   }, []);
 
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          data-slot="copy-button"
-          data-copied={hasCopied}
-          size="icon"
-          variant={variant}
-          className={cn(
-            "bg-code absolute top-3 right-2 z-10 size-7 hover:opacity-100 focus-visible:opacity-100",
-            className
-          )}
-          onClick={() => {
-            copyToClipboardWithMeta(value);
-            setHasCopied(true);
-          }}
-          {...props}
-        >
-          <span className="sr-only">Copy</span>
-          {hasCopied ? <IconCheck /> : <IconCopy />}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>{hasCopied ? "Copied" : tooltip}</TooltipContent>
-    </Tooltip>
-  );
+  return [checked, onClick];
 }
