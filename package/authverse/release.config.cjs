@@ -18,6 +18,7 @@ module.exports = {
       "@semantic-release/npm",
       {
         npmPublish: true,
+        pkgRoot: "package/authverse",
         tarballDir: "dist",
       },
     ],
