@@ -1,6 +1,6 @@
 name: "Documentation Request"
 description: "Report missing, incorrect, or unclear documentation in Authverse"
-title: "[DOCS] <title>"
+title: "[DOCS]:"
 labels: ["documentation"]
 body:
   - type: textarea
