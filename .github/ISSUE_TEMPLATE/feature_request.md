@@ -1,22 +1,24 @@
----
 name: "Feature Request"
-about: "Suggest a new feature or enhancement"
-title: "[Feature]: "
+description: "Suggest a feature or enhancement"
+title: "[FEATURE] <title>"
 labels: ["enhancement"]
----
+body:
 
-## Summary
+- type: textarea
+  attributes:
+  label: "Feature description"
+  description: "What do you want to happen?"
+  validations:
+  required: true
 
-Describe the feature you’d like to see.
+- type: textarea
+  attributes:
+  label: "Motivation"
+  description: "Why is this feature useful? What problem does it solve?"
+  validations:
+  required: true
 
-## Motivation
-
-Why is this feature important? What problem does it solve?
-
-## Proposed Solution (Optional)
-
-Explain how you think it could be implemented.
-
-## Additional Information
-
-Any other context or related ideas.
+- type: textarea
+  attributes:
+  label: "Proposed solution"
+  description: "How should it work? Any example code or UI suggestions?"

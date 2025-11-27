@@ -1,18 +1,22 @@
----
-name: "Documentation Request"
-about: "Request documentation changes or improvements"
-title: "[Docs]: "
+name: "Docs Update"
+description: "Report incorrect or missing documentation"
+title: "[DOCS] <title>"
 labels: ["documentation"]
----
+body:
 
-## What needs to be updated?
+- type: textarea
+  attributes:
+  label: "What needs improvement?"
+  description: "Describe what part of the documentation is incorrect or missing."
+  validations:
+  required: true
 
-Page or section name, and what is unclear or missing.
+- type: textarea
+  attributes:
+  label: "Suggested changes"
+  description: "How should it be improved?"
 
-## Suggested Update
-
-Example improvements, corrected text, or code snippet.
-
-## Additional Context
-
-Screenshots or references if available.
+- type: textarea
+  attributes:
+  label: "Links / References"
+  description: "Any helpful context or URLs?"

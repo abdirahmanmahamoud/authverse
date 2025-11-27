@@ -1,36 +1,46 @@
----
 name: "Bug Report"
-about: "Report a problem or unexpected behavior in Authverse"
-title: "[Bug]: "
+description: "Report a problem or unexpected behavior"
+title: "[BUG] <title>"
 labels: ["bug", "needs triage"]
----
+body:
 
-## Description
+- type: checkboxes
+  attributes:
+  label: "Existing issue check"
+  description: "Please confirm you have searched for existing issues"
+  options: - label: "I have searched existing issues"
+  required: true
 
-A clear and concise description of what the bug is.
+- type: textarea
+  attributes:
+  label: "Description"
+  description: "What happened?"
+  validations:
+  required: true
 
-## Steps to Reproduce
+- type: textarea
+  attributes:
+  label: "Expected behavior"
+  description: "What should have happened?"
 
-1. …
-2. …
-3. …
+- type: textarea
+  attributes:
+  label: "Steps to reproduce"
+  placeholder: | 1. Go to... 2. Click... 3. Run command... 4. See error
 
-## Expected Behavior
+- type: textarea
+  attributes:
+  label: "Logs / Screenshots"
+  description: "Add screenshots or logs if helpful"
 
-What you expected to happen.
+- type: dropdown
+  id: browser
+  attributes:
+  label: "Affected browser(s)"
+  multiple: true
+  options: - Firefox - Chrome - Safari - Edge
 
-## Actual Behavior
-
-What actually happened.
-
-## Environment
-
-- OS:
-- Node.js version:
-- Authverse version:
-- Database & Provider (Prisma / Drizzle):
-- Package manager (npm/yarn/pnpm):
-
-## Additional Context
-
-Logs, screenshots, or error messages if available.
+- type: textarea
+  attributes:
+  label: "Additional context"
+  description: "Anything else to help us understand the issue?"
