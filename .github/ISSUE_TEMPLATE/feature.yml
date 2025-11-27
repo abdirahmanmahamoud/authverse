@@ -1,24 +1,28 @@
 name: "Feature Request"
-description: "Suggest a feature or enhancement"
+description: "Suggest a new feature or enhancement for Authverse"
 title: "[FEATURE] <title>"
 labels: ["enhancement"]
 body:
+  - type: textarea
+    attributes:
+      label: "Feature Description"
+      description: "Describe the feature you want to add or improve."
+    validations:
+      required: true
 
-- type: textarea
-  attributes:
-  label: "Feature description"
-  description: "What do you want to happen?"
-  validations:
-  required: true
+  - type: textarea
+    attributes:
+      label: "Motivation / Problem"
+      description: "Why is this feature important? What problem does it solve?"
+    validations:
+      required: true
 
-- type: textarea
-  attributes:
-  label: "Motivation"
-  description: "Why is this feature useful? What problem does it solve?"
-  validations:
-  required: true
+  - type: textarea
+    attributes:
+      label: "Proposed Solution (Optional)"
+      description: "How would you implement it? Provide examples, code snippets, or UI mockups if possible."
 
-- type: textarea
-  attributes:
-  label: "Proposed solution"
-  description: "How should it work? Any example code or UI suggestions?"
+  - type: textarea
+    attributes:
+      label: "Additional Context"
+      description: "Anything else that would help us understand this feature request."

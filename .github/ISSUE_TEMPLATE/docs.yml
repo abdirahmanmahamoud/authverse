@@ -1,22 +1,26 @@
-name: "Docs Update"
-description: "Report incorrect or missing documentation"
+name: "Documentation Request"
+description: "Report missing, incorrect, or unclear documentation in Authverse"
 title: "[DOCS] <title>"
 labels: ["documentation"]
 body:
+  - type: textarea
+    attributes:
+      label: "What needs to be updated?"
+      description: "Describe the documentation issue or missing information."
+    validations:
+      required: true
 
-- type: textarea
-  attributes:
-  label: "What needs improvement?"
-  description: "Describe what part of the documentation is incorrect or missing."
-  validations:
-  required: true
+  - type: textarea
+    attributes:
+      label: "Suggested Changes"
+      description: "Provide suggestions on how to improve or correct the documentation."
 
-- type: textarea
-  attributes:
-  label: "Suggested changes"
-  description: "How should it be improved?"
+  - type: textarea
+    attributes:
+      label: "References / Links"
+      description: "Add links, screenshots, or examples if applicable."
 
-- type: textarea
-  attributes:
-  label: "Links / References"
-  description: "Any helpful context or URLs?"
+  - type: textarea
+    attributes:
+      label: "Additional Context"
+      description: "Anything else that would help us understand this documentation request."
