@@ -57,7 +57,7 @@ The following behaviors are prohibited. Any instance, threat, or promotion of th
 
 If you witness or experience a violation, please report it as soon as possible.
 
-**Report violations to:** **info@authverse.abdirahmandev.com**
+**Report violations to:** **info@authverse.dev**
 
 Community Moderators take all reports seriously and will respond promptly. They will investigate reports through message logs, discussions, or interviews when necessary.  
 Moderators strive to remain transparent while prioritizing participant safety and confidentiality. Enforcement actions are handled privately unless all parties agree otherwise.

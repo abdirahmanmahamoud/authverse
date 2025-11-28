@@ -82,7 +82,7 @@ After running the CLI, your project will be fully ready with
 ## Documentation
 
 Full documentation is available on the official website:  
-**https://authverse.abdirahmandev.com**
+**https://authverse.dev**
 
 ---
 
