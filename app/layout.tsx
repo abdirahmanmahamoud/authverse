@@ -27,14 +27,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://authverse.abdirahmandev.com",
+    url: "https://authverse.dev",
     title: "Authverse",
     description:
       "Authverse is a modern, open-source CLI tool that generates a complete authentication system instantly inside your project.",
     siteName: "Authverse",
     images: [
       {
-        url: "https://authverse.abdirahmandev.com/og.png",
+        url: "https://authverse.dev/og.png",
         width: 800,
         height: 600,
         alt: "Authverse",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: "Authverse",
     description:
       "Authverse is a modern, open-source CLI tool that generates a complete authentication system instantly inside your project.",
-    images: ["https://authverse.abdirahmandev.com/og.png"],
+    images: ["https://authverse.dev/og.png"],
     creator: "@abdumahamoud",
   },
   icons: {
