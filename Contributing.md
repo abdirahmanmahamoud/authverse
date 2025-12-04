@@ -26,11 +26,24 @@ We welcome contributions in the form of:
 
 ---
 
-## How to Contribute
+## Development Guidelines
+
+when contributing to the project, please follow these guidelines
+
+- Keep changes focused. Large PRs are harder to review and unlikely to be accepted. We recommend opening an issue and discussing it with us first.
+- Ensure all code is type-safe and takes full advantage of TypeScript features.
+- Write clear, self-explanatory code. Use comments only when truly necessary.
+- Maintain a consistent and predictable API across all supported frameworks.
+- Follow the existing code style and conventions.
+- We aim for stability, so avoid changes that would require users to run a migration or update their config...
+
+## Getting Started
 
 ### 1. Fork the Repository
 
 Click **Fork** in GitHub to create your own copy.
+
+---
 
 ### 2. Clone Your Fork
 
@@ -39,21 +52,15 @@ git clone https://github.com/<your-username>/authverse.git
 cd authverse
 ```
 
-### 3. Create a Branch
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-Examples:
-
-- `feature/add-google-oauth`
-- `docs/update-installation`
-- `fix/cli-command-bug`
-
 ---
 
-### 4. Install Dependencies
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+package/authverse
 
 ```bash
 npm install
@@ -61,75 +68,103 @@ npm install
 
 ---
 
-### 5. Make Your Changes
+### 4. Create a new branch for your changes
 
-#### Documentation
+```bash
+git checkout -b type/description
+# Example: git checkout -b feat/facebook-oauth
+```
 
-- Edit or add MDX files under `./content`
-- Follow existing structure and formatting
+Implement your changes on the new branch. When committing, please follow these guidelines:
 
-#### CLI
-
-- Update or add commands in `package/authverse/src`
-- Include tests when adding features
-
-#### Templates
-
-- Edit `package/template` files carefully
-- Ensure CLI generates files correctly
+- **Commit Message Format**: Use a clear and concise commit message.
+- **Branch Type Prefixes**:
+  - `feat/` - New features
+  - `fix/` - Bug fixes
+  - `docs/` - Documentation changes
+  - `refactor/` - Code refactoring
+  - `test/` - Test-related changes
+  - `chore/` - Build process or tooling changes
 
 ---
 
-### 6. Test Your Changes
+### 5. Test Your Changes
+
+documentation website **Next.js** and **Fumadocs**
 
 ```bash
-npn run build
+npm run dev
 ```
 
-user windows
+Test Build
+
+```bash
+npm run build
+```
+
+- Authverse Cli
+
+MacOS and Linux
+
+```bash
+npm run build
+```
+
+- and
+
+```bash
+npm link
+```
+
+Windows
 
 ```bash
 npm run build:windows
 ```
 
----
-
-### 7. Commit Changes
-
-Use clear commit messages:
+- test features added your & fix any bugs, local laptop **Test Next.js**
 
 ```bash
-feat: add github oauth provider
-fix: correct prisma schema path
-docs: update getting started guide
+authverse init
 ```
 
----
-
-### 8. Push Your Branch
+or test provider
 
 ```bash
-git push origin feature/your-feature-name
+npx authverse add <provider-name>
 ```
 
+or test forget password
+
+```bash
+npx authverse add forget
+```
+
+### 6. Commit Your Changes
+
+Use the following commit message format:
+
+```bash
+fix: description
+feat(provider-name): description
+docs: description
+refactor: description
+test: description
+chore: description
+```
+
+- **Commit Message Format**: Use a clear and concise commit message following the `type: description` or `type(scope): description` pattern. This helps categorize changes and provides a clear, readable history.
+
 ---
 
-### 9. Open a Pull Request
+### 7. Push Your Changes
 
-- Describe your changes clearly
-- Link any related issues
-- Explain why the changes are needed
+```bash
+git push origin type/description
+```
 
-Moderators will review and provide feedback.
+### 8. Create a Pull Request
 
----
-
-## Reporting Issues
-
-Please report bugs or feature requests via **GitHub Issues** with clear details, steps to reproduce, or screenshots.
+Go to your forked repository on GitHub and create a pull request. Provide a clear title and description of your changes.
 
 ---
-
-## License
-
-By contributing, you agree your changes will be licensed under the **MIT License** of Authverse.
