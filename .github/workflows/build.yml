@@ -25,6 +25,10 @@ jobs:
         working-directory: package/authverse
         run: npm install
 
+      - name: Install Node types
+        working-directory: package/authverse
+        run: npm install --save-dev @types/node
+
       - name: Build project
         working-directory: package/authverse
         run: npm run build
