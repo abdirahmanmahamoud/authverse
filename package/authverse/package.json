@@ -1,6 +1,6 @@
 {
   "name": "authverse",
-  "version": "0.0.0-development",
+  "version": "1.0.2",
   "description": "CLI tool for creating authverse projects",
   "repository": {
     "url": "https://github.com/abdirahmanmahamoud/authverse"
