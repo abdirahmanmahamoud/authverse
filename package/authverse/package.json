@@ -1,7 +1,7 @@
 {
   "name": "authverse",
   "version": "1.0.2",
-  "description": "CLI tool for creating authverse projects",
+  "description": "Authverse Fast modern CLI to generate full auth systems with OAuth Prisma Drizzle better auth and ready-to-use ShadCN UI screens",
   "repository": {
     "url": "https://github.com/abdirahmanmahamoud/authverse"
   },
@@ -53,6 +53,7 @@
     "@semantic-release/github": "^12.0.2",
     "@semantic-release/npm": "^13.1.2",
     "@semantic-release/release-notes-generator": "^14.1.0",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
     "semantic-release": "^25.0.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3"
