@@ -22,8 +22,22 @@ export const packageManager = (pkg: string, dev = false) => {
   } else if (pm === "bun") {
     execSync(`bun add ${dev ? "-d " : ""}${pkg}`, { stdio: "inherit" });
   } else {
-    execSync(`npm install ${pkg} ${dev ? "--save-dev" : ""}`, {
+    execSync(`pnpm add ${pkg} ${dev ? "--save-dev" : ""}`, {
       stdio: "inherit",
     });
+  }
+};
+
+export const runCommand = (cmd: string) => {
+  const pm = getPackageManager();
+
+  if (pm === "pnpm") {
+    execSync(`pnpm dlx ${cmd}`, { stdio: "inherit" });
+  } else if (pm === "bun") {
+    execSync(`bunx ${cmd}`, { stdio: "inherit" });
+  } else if (pm === "yarn") {
+    execSync(`yarn dlx ${cmd}`, { stdio: "inherit" });
+  } else {
+    execSync(`npx ${cmd}`, { stdio: "inherit" });
   }
 };

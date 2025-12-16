@@ -4,7 +4,7 @@ import fs from "fs";
 import chalk from "chalk";
 import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
-import { packageManager } from "../utils/packageManager.js";
+import { packageManager, runCommand } from "../utils/packageManager.js";
 
 interface prismaRunProps {
   authUi: boolean;
@@ -14,7 +14,6 @@ interface prismaRunProps {
 export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
   try {
     console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
-    console.log(packageManager("prisma", true));
     // Install prisma + @prisma/client
     if (database !== "Mongodb") {
       packageManager("prisma", true);
@@ -39,7 +38,7 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     if (!fs.existsSync(prismaDir)) {
       // Initialize Prisma (creates prisma/schema.prisma)
       console.log(chalk.yellow("\n⚙️  Initializing Prisma...\n"));
-      packageManager("prisma init");
+      runCommand("prisma init");
     }
 
     //  Fix for __dirname in ES module

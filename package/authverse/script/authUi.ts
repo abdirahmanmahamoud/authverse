@@ -1,20 +1,16 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { packageManager, runCommand } from "../utils/packageManager.js";
 
 export const authUiRun = async ({ folder }: { folder: string }) => {
   try {
     // install shadcn ui
     console.log(chalk.yellow("\n Updating AuthUi Files\n"));
 
-    execSync("npx shadcn@latest add button sonner card field input", {
-      stdio: "inherit",
-    });
-    execSync("npm install react-hook-form @hookform/resolvers", {
-      stdio: "inherit",
-    });
+    runCommand("shadcn@latest add button sonner card field input");
+    packageManager("react-hook-form @hookform/resolvers");
 
     //  Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);
