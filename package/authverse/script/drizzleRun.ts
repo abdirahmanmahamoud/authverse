@@ -1,23 +1,21 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import { GenerateSecret } from "../function/GenerateSecret.js";
+import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
+import { packageManager } from "../utils/packageManager.js";
 
 export const drizzleRun = async (authUi: boolean) => {
   try {
     console.log(chalk.cyan("\n⚙️  Initializing better auth and drizzle...\n"));
 
     // install better auth
-    execSync("npm install better-auth", { stdio: "inherit" });
+    packageManager("better-auth");
 
     // install drizzle
-    execSync("npm install drizzle-orm @neondatabase/serverless dotenv", {
-      stdio: "inherit",
-    });
-    execSync("npm install -D drizzle-kit", { stdio: "inherit" });
+    packageManager("drizzle-orm @neondatabase/serverless dotenv");
+    packageManager("drizzle-kit", true);
 
     //  Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);

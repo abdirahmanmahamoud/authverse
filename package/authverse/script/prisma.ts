@@ -2,10 +2,9 @@ import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
 import chalk from "chalk";
-import { execSync } from "child_process";
-import inquirer from "inquirer";
-import { GenerateSecret } from "../function/GenerateSecret.js";
+import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
+import { packageManager, runCommand } from "../utils/packageManager.js";
 
 interface prismaRunProps {
   authUi: boolean;
@@ -15,22 +14,21 @@ interface prismaRunProps {
 export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
   try {
     console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
-
     // Install prisma + @prisma/client
     if (database !== "Mongodb") {
-      execSync("npm install prisma --save-dev", { stdio: "inherit" });
-      execSync("npm install @prisma/client", { stdio: "inherit" });
+      packageManager("prisma", true);
+      packageManager("@prisma/client");
 
       if (database === "Mysql") {
-        execSync("npm install @prisma/adapter-mariadb", { stdio: "inherit" });
+        packageManager("@prisma/adapter-mariadb");
       }
 
       if (database === "Postgresql") {
-        execSync("npm install @prisma/adapter-pg", { stdio: "inherit" });
+        packageManager("@prisma/adapter-pg");
       }
     } else if (database === "Mongodb") {
-      execSync("npm install prisma@6.19.0 --save-dev", { stdio: "inherit" });
-      execSync("npm install @prisma/client@6.19.0", { stdio: "inherit" });
+      packageManager("prisma@6.19.0", true);
+      packageManager("@prisma/client@6.19.0");
     }
 
     const projectDir = process.cwd();
@@ -40,7 +38,7 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     if (!fs.existsSync(prismaDir)) {
       // Initialize Prisma (creates prisma/schema.prisma)
       console.log(chalk.yellow("\n⚙️  Initializing Prisma...\n"));
-      execSync("npx prisma init", { stdio: "inherit" });
+      runCommand("prisma init");
     }
 
     //  Fix for __dirname in ES module
@@ -75,7 +73,7 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
 
     // install better auth
     console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
-    execSync("npm install better-auth", { stdio: "inherit" });
+    packageManager("better-auth");
 
     // Generate better auth secret
     const secret = await GenerateSecret();

@@ -1,13 +1,10 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 export const githubRun = async () => {
   try {
-    execSync("npm install react-icons --save", { stdio: "inherit" });
-
     // Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
