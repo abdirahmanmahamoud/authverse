@@ -22,7 +22,7 @@ export const packageManager = (pkg: string, dev = false) => {
   } else if (pm === "bun") {
     execSync(`bun add ${dev ? "-d " : ""}${pkg}`, { stdio: "inherit" });
   } else {
-    execSync(`pnpm add ${pkg} ${dev ? "--save-dev" : ""}`, {
+    execSync(`npm install ${pkg} ${dev ? "--save-dev" : ""}`, {
       stdio: "inherit",
     });
   }
