@@ -7,7 +7,7 @@ import { packageManager, runCommand } from "../utils/packageManager.js";
 export const authUiRun = async ({ folder }: { folder: string }) => {
   try {
     // install shadcn ui
-    console.log(chalk.yellow("\n Updating AuthUi Files\n"));
+    console.log(chalk.yellow("\n Installing shadcn ui Components\n"));
 
     runCommand("shadcn@latest add button sonner card field input");
     packageManager("react-hook-form @hookform/resolvers");
