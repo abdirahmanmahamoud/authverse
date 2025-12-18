@@ -13,25 +13,41 @@ interface prismaRunProps {
 
 export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
   try {
-    console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
-    // Install prisma + @prisma/client
-    if (database !== "Mongodb") {
-      packageManager("prisma", true);
-      packageManager("@prisma/client");
+    // Get project directory
+    const projectDir = process.cwd();
 
-      if (database === "Mysql") {
-        packageManager("@prisma/adapter-mariadb");
-      }
+    //  Fix for __dirname in ES module
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
 
-      if (database === "Postgresql") {
-        packageManager("@prisma/adapter-pg");
+    // Get package json
+    const packageJsonPath = path.join(projectDir, "package.json");
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+
+    // Check install prisma and @prisma/client
+    if (
+      !packageJson.devDependencies?.prisma &&
+      !packageJson.dependencies?.["@prisma/client"]
+    ) {
+      console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
+      // Install prisma + @prisma/client
+      if (database !== "Mongodb") {
+        packageManager("prisma", true);
+        packageManager("@prisma/client");
+
+        if (database === "Mysql") {
+          packageManager("@prisma/adapter-mariadb");
+        }
+
+        if (database === "Postgresql") {
+          packageManager("@prisma/adapter-pg");
+        }
+      } else if (database === "Mongodb") {
+        packageManager("prisma@6.19.0", true);
+        packageManager("@prisma/client@6.19.0");
       }
-    } else if (database === "Mongodb") {
-      packageManager("prisma@6.19.0", true);
-      packageManager("@prisma/client@6.19.0");
     }
 
-    const projectDir = process.cwd();
     const prismaDir = path.join(projectDir, "prisma");
 
     // prisma is not folder
@@ -39,51 +55,70 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
       // Initialize Prisma (creates prisma/schema.prisma)
       console.log(chalk.yellow("\n⚙️  Initializing Prisma...\n"));
       runCommand("prisma init");
-    }
 
-    //  Fix for __dirname in ES module
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    //  Paths
-    const templatePath = path.resolve(
-      __dirname,
-      `./template/prisma/${database}/schema.prisma`
-    );
-
-    //  Ensure prisma folder exists
-    if (!fs.existsSync(prismaDir)) {
-      fs.mkdirSync(prismaDir, { recursive: true });
-    }
-
-    //  Copy schema.prisma
-    const destinationPath = path.join(prismaDir, "schema.prisma");
-    fs.copyFileSync(templatePath, destinationPath);
-
-    // Copy prisma.config.ts
-    if (database === "Mongodb") {
-      const prismaConfigPath = path.resolve(
+      //  Paths
+      const templatePath = path.resolve(
         __dirname,
-        `./template/config/prisma.config.ts`
+        `./template/prisma/${database}/schema.prisma`
       );
-      const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
 
-      fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+      //  Ensure prisma folder exists
+      if (!fs.existsSync(prismaDir)) {
+        fs.mkdirSync(prismaDir, { recursive: true });
+      }
+
+      //  Copy schema.prisma
+      const destinationPath = path.join(prismaDir, "schema.prisma");
+      fs.copyFileSync(templatePath, destinationPath);
+
+      // Copy prisma.config.ts
+      if (database === "Mongodb") {
+        const prismaConfigPath = path.resolve(
+          __dirname,
+          `./template/config/prisma.config.ts`
+        );
+        const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
+
+        fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+      }
+    } else {
+      // schema copy
+      const schemaPath = path.join(prismaDir, "schema.prisma");
+
+      // Template path
+      const templatePath = path.resolve(
+        __dirname,
+        `./template/prisma/${database}/schema.prisma_copy`
+      );
+
+      // Copy schema.prisma
+      fs.appendFileSync(schemaPath, "\n");
+      fs.appendFileSync(schemaPath, fs.readFileSync(templatePath));
     }
 
-    // install better auth
-    console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
-    packageManager("better-auth");
+    // Check install better auth
+    if (!packageJson.dependencies?.["better-auth"]) {
+      console.log(chalk.yellow("\n⚙️  Initializing better-auth...\n"));
+      packageManager("better-auth");
+    }
 
     // Generate better auth secret
     const secret = await GenerateSecret();
 
     // .env file add better auth secret
     const envPath = path.join(projectDir, ".env");
-    fs.appendFileSync(envPath, `\n\nBETTER_AUTH_SECRET=${secret}`);
-    fs.appendFileSync(envPath, `\nBETTER_AUTH_URL=http://localhost:3000\n`);
 
-    console.log(chalk.yellow("\n create folder...\n"));
+    // Read .env content
+    const envContent = fs.readFileSync(envPath, "utf-8");
+
+    if (!envContent.includes("BETTER_AUTH_SECRET")) {
+      fs.appendFileSync(envPath, `\n\nBETTER_AUTH_SECRET=${secret}`);
+    }
+    if (!envContent.includes("BETTER_AUTH_URL")) {
+      fs.appendFileSync(envPath, `\nBETTER_AUTH_URL=http://localhost:3000\n`);
+    }
+
+    console.log(chalk.yellow("\n Initialize better-auth files...\n"));
 
     // Check Next.js folder structure src
     const srcPath = path.join(projectDir, "src");
