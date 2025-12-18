@@ -8,21 +8,38 @@ import { packageManager } from "../utils/packageManager.js";
 
 export const drizzleRun = async (authUi: boolean) => {
   try {
-    console.log(chalk.cyan("\n⚙️  Initializing better auth and drizzle...\n"));
+    // Get project directory
+    const projectDir = process.cwd();
 
-    // install better auth
-    packageManager("better-auth");
+    // Get package json
+    const packageJsonPath = path.join(projectDir, "package.json");
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 
-    // install drizzle
-    packageManager("drizzle-orm @neondatabase/serverless dotenv");
-    packageManager("drizzle-kit", true);
+    if (!packageJson.dependencies["better-auth"]) {
+      console.log(chalk.cyan("\n⚙️  Initializing better auth...\n"));
+
+      // install better auth
+      packageManager("better-auth");
+    }
+
+    if (
+      !packageJson.dependencies["drizzle-orm"] &&
+      !packageJson.dependencies["drizzle-orm"] &&
+      !packageJson.dependencies["drizzle-kit"] &&
+      !packageJson.devDependencies["drizzle-kit"]
+    ) {
+      console.log(chalk.cyan("\n⚙️  Initializing drizzle...\n"));
+
+      // install drizzle
+      packageManager("drizzle-orm @neondatabase/serverless dotenv");
+      packageManager("drizzle-kit", true);
+    }
 
     //  Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
 
     // Create .env file
-    const projectDir = process.cwd();
     const envPath = path.join(projectDir, ".env");
 
     if (!fs.existsSync(envPath)) {
@@ -32,9 +49,16 @@ export const drizzleRun = async (authUi: boolean) => {
     // Generate better auth secret
     const secret = await GenerateSecret();
 
+    // Read .env content
+    const envContent = fs.readFileSync(envPath, "utf-8");
+
     // .env file add better auth secret
-    fs.appendFileSync(envPath, `\n\nBETTER_AUTH_SECRET=${secret}`);
-    fs.appendFileSync(envPath, `\nBETTER_AUTH_URL=http://localhost:3000\n`);
+    if (!envContent.includes("BETTER_AUTH_SECRET")) {
+      fs.appendFileSync(envPath, `\n\nBETTER_AUTH_SECRET=${secret}`);
+    }
+    if (!envContent.includes("BETTER_AUTH_URL")) {
+      fs.appendFileSync(envPath, `\nBETTER_AUTH_URL=http://localhost:3000\n`);
+    }
 
     // Check Next.js folder structure src
     const srcPath = path.join(projectDir, "src");
