@@ -1,21 +1,31 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import { packageManager } from "../utils/packageManager.js";
 
 export const forget = async () => {
   try {
-    execSync("npm install @react-email/components resend", {
-      stdio: "inherit",
-    });
+    // Get project directory
+    const projectDir = process.cwd();
+
+    // Get package json
+    const packageJsonPath = path.join(projectDir, "package.json");
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+
+    if (!packageJson.dependencies?.resend) {
+      console.log(chalk.cyan("\n⚙️ Installing Resend...\n"));
+      packageManager("resend");
+    }
+
+    if (!packageJson.dependencies?.["@react-email/components"]) {
+      console.log(chalk.cyan("\n⚙️ Installing react email components...\n"));
+      packageManager("@react-email/components");
+    }
 
     // Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-
-    // Detect project structure
-    const projectDir = process.cwd();
 
     // Check Next.js folder structure src
     const srcPath = path.join(projectDir, "src");
@@ -109,7 +119,13 @@ export const forget = async () => {
 
       // add .env variables info
       const envPath = path.join(projectDir, ".env");
-      if (fs.existsSync(envPath)) {
+      const envContent = fs.readFileSync(envPath, "utf8");
+
+      if (
+        !envContent.includes("RESEND_API_KEY") &&
+        !envContent.includes("EMAIL_SENDER_NAME") &&
+        !envContent.includes("EMAIL_SENDER_ADDRESS")
+      ) {
         fs.appendFileSync(envPath, `\n\n# Resend API Key for sending emails`);
         fs.appendFileSync(envPath, `\nRESEND_API_KEY=`);
         fs.appendFileSync(envPath, `\nEMAIL_SENDER_NAME=Your Name`);
@@ -237,7 +253,7 @@ export const forget = async () => {
       );
 
       console.log(
-        chalk.green("Added sendResetPassword configuration successfully")
+        chalk.green("Successfully added forget and reset-password pages")
       );
     } else {
       console.log(
