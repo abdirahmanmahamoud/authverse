@@ -1,17 +1,16 @@
 import {
-  IconBrandGithub,
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandX,
-  IconMail,
 } from "@tabler/icons-react";
 import Logo from "./Logo";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Icons } from "./icons";
 
 const socialItems = [
   {
-    icons: IconBrandGithub,
+    icons: Icons.gitHub,
     href: "https://github.com/abdirahmanmahamoud/authverse",
     label: "GitHub",
     description: "Star our repository",
