@@ -82,18 +82,29 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
         fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
       }
     } else {
-      // schema copy
+      // schema selecy
       const schemaPath = path.join(prismaDir, "schema.prisma");
 
-      // Template path
-      const templatePath = path.resolve(
-        __dirname,
-        `./template/prisma/${database}/schema.prisma_copy`
-      );
+      // read schema.prisma
+      const schemaContent = fs.readFileSync(schemaPath, "utf-8");
 
-      // Copy schema.prisma
-      fs.appendFileSync(schemaPath, "\n");
-      fs.appendFileSync(schemaPath, fs.readFileSync(templatePath));
+      // check if schema.prisma user, session, account, verification
+      if (
+        !schemaContent.includes("User") &&
+        !schemaContent.includes("Session") &&
+        !schemaContent.includes("Account") &&
+        !schemaContent.includes("Verification")
+      ) {
+        // Template path
+        const templatePath = path.resolve(
+          __dirname,
+          `./template/prisma/${database}/schema.prisma_copy`
+        );
+
+        // Copy schema.prisma
+        fs.appendFileSync(schemaPath, "\n");
+        fs.appendFileSync(schemaPath, fs.readFileSync(templatePath));
+      }
     }
 
     // Check install better auth
