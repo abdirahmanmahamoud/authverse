@@ -1,5 +1,6 @@
 import "@/app/global.css";
 import ThemeProvider from "@/components/themeProvider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -64,7 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <RootProvider>{children}</RootProvider>
         </ThemeProvider>
       </body>
     </html>
