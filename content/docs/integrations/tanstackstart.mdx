@@ -1,0 +1,113 @@
+---
+title: TanStack Start
+description: TanStack Start integration for Authverse projects
+---
+
+Authverse can be easily integrated with **TanStack Start** to deliver a secure, modern, and server-first authentication experience.
+
+Before getting started, make sure you already have an **Authverse instance** configured.
+
+If you haven’t done this yet, please check the [Installation](/docs/installation) guide.
+
+---
+
+## Why TanStack Start + Authverse?
+
+TanStack Start works seamlessly with Authverse because it provides:
+
+- Server-side routing and loaders
+- Built-in middleware support
+- Secure session handling
+- A clean and scalable architecture
+
+This makes it an excellent choice for authentication-heavy applications such as dashboards, admin panels, and SaaS platforms.
+
+---
+
+## Page Protection (Login Required)
+
+In many cases, you may want to restrict access to certain pages (such as a dashboard) so that **only authenticated users** can access them.
+
+Authverse, together with Better Auth, allows you to protect pages using an **authentication middleware** that runs on the server.
+
+This ensures that unauthenticated users are blocked **before** the page is rendered.
+
+---
+
+## What This Middleware Does
+
+- Checks whether the user has an active authentication session
+- Redirects unauthenticated users to `/auth/login`
+- Allows authenticated users to continue normally
+- Runs securely on the server
+
+---
+
+## Protecting a Page with Middleware
+
+Once the middleware is set up, you can attach it to any route that requires authentication.
+
+### Importing the Middleware
+
+Always import the middleware from its exact path:
+
+```ts
+import { authMiddleware } from "@/lib/middleware/auth";
+```
+
+---
+
+### Example: Protecting the `/dashboard` Page
+
+```ts
+import { createFileRoute } from "@tanstack/react-router";
+import { authMiddleware } from "@/lib/middleware/auth";
+
+export const Route = createFileRoute("/dashboard")({
+  component: RouteComponent,
+  server: {
+    middleware: [authMiddleware],
+  },
+});
+
+function RouteComponent() {
+  return <div>Dashboard</div>;
+}
+```
+
+---
+
+## How Route Protection Works
+
+- The middleware runs **on the server** before the page loads
+- If no session exists, the user is redirected automatically
+- If a session exists, the page renders normally
+- The same middleware can be reused across multiple routes
+
+---
+
+## Protecting Multiple Pages
+
+You can reuse the same middleware to protect other routes such as:
+
+- `/profile`
+- `/settings`
+- `/billing`
+- `/admin`
+
+Simply add `authMiddleware` to the route’s `server.middleware` array.
+
+---
+
+## Best Practices
+
+- Always protect sensitive pages on the **server**
+- Do not rely on client-side checks for authentication
+- Keep middleware small, reusable, and focused
+- Extend the middleware later for:
+
+  - Role-based access control
+  - Admin-only routes
+  - Permission checks
+
+---

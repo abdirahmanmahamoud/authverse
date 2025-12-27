@@ -1,0 +1,97 @@
+---
+title: Next.js
+description: Next.js integration for Authverse projects
+---
+
+Authverse can be easily integrated with **Next.js**.
+Before getting started, make sure you already have an **Authverse instance** configured.
+
+If you haven’t done this yet, please check the [Installation](/docs/installation) guide.
+
+---
+
+## Page Protection (Login Required)
+
+In many cases, you may want to restrict access to certain pages (such as a dashboard) so that **only authenticated users** can access them.
+
+Authverse, together with Better Auth, allows you to protect pages using a **proxy middleware**.
+
+---
+
+## Example: Protecting the `/dashboard` Page
+
+Below is an example of a `proxy.ts` file that checks whether the user has a valid session.
+If the user is not logged in, they will be redirected to the home page (`/`).
+
+### `proxy.ts`
+
+```ts
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
+
+export async function proxy(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request);
+
+  // If no session exists, redirect to home
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // If session exists, allow the request
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/dashboard"],
+};
+```
+
+---
+
+## How It Works
+
+- **`getSessionCookie(request)`**
+  Checks whether the incoming request contains a valid authentication session.
+
+- **No session found**
+  The user is redirected to the home page.
+
+- **Session found**
+  The request continues normally.
+
+- **`matcher`**
+  Defines which routes are protected by the middleware.
+  In this example:
+
+```ts
+matcher: ["/dashboard"];
+```
+
+You can protect multiple routes like this:
+
+```ts
+matcher: ["/dashboard", "/profile", "/settings"];
+```
+
+---
+
+## Important Notes
+
+- This proxy runs as **Next.js Middleware**
+- Works well with:
+
+  - App Router
+  - Server Components
+  - Authverse + Better Auth
+
+- Can be extended later for **role-based access control**
+
+---
+
+## Summary
+
+By integrating **Authverse with Next.js**, you get:
+
+- Secure authentication
+- Simple page protection
+- Clean and maintainable middleware logic
