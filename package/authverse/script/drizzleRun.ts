@@ -5,6 +5,7 @@ import fs from "fs";
 import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 import { packageManager } from "../utils/packageManager.js";
+import inquirer from "inquirer";
 
 export const drizzleRun = async (authUi: boolean) => {
   try {
@@ -61,60 +62,122 @@ export const drizzleRun = async (authUi: boolean) => {
     }
 
     // Check Next.js folder structure src
-    const srcPath = path.join(projectDir, "src");
-    const folder = srcPath ? "" : "src";
+    const srcFolder = fs.existsSync(path.join(projectDir, "src")) ? "src" : "";
 
     // check exists lib
-    const libPath = path.join(projectDir, folder, "lib");
+    const libPath = path.join(projectDir, srcFolder, "lib");
     if (!fs.existsSync(libPath)) {
       fs.mkdirSync(libPath, { recursive: true });
     }
 
-    // Copy auth.ts
-    const authTemplatePath = path.resolve(
-      __dirname,
-      "./template/lib/auth-drizzle.ts"
-    );
-    const authDestinationPath = path.join(libPath, "auth.ts");
-    fs.copyFileSync(authTemplatePath, authDestinationPath);
+    // Check exists lib/auth.ts or auth-client.ts
+    const authPath = path.join(libPath, "auth.ts");
+    const authClientPath = path.join(libPath, "auth-client.ts");
+    if (fs.existsSync(authPath) || fs.existsSync(authClientPath)) {
+      const answers = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "overwrite",
+          message:
+            "Do you want to overwrite existing auth lib/auth.ts or lib/auth-client.ts",
+          default: false,
+        },
+      ]);
 
-    // Copy auth-client.ts
-    const authClientTemplatePath = path.resolve(
-      __dirname,
-      "./template/lib/auth-client.ts"
-    );
-    const authClientDestinationPath = path.join(libPath, "auth-client.ts");
-    fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+      if (answers.overwrite) {
+        // Copy auth.ts
+        const authTemplatePath = path.resolve(
+          __dirname,
+          "./template/lib/auth-drizzle.ts"
+        );
+        const authDestinationPath = path.join(libPath, "auth.ts");
+        fs.copyFileSync(authTemplatePath, authDestinationPath);
 
+        // Copy auth-client.ts
+        const authClientTemplatePath = path.resolve(
+          __dirname,
+          "./template/lib/auth-client.ts"
+        );
+        const authClientDestinationPath = path.join(libPath, "auth-client.ts");
+        fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+      }
+    } else {
+      // Copy auth.ts
+      const authTemplatePath = path.resolve(
+        __dirname,
+        "./template/lib/auth-drizzle.ts"
+      );
+      const authDestinationPath = path.join(libPath, "auth.ts");
+      fs.copyFileSync(authTemplatePath, authDestinationPath);
+
+      // Copy auth-client.ts
+      const authClientTemplatePath = path.resolve(
+        __dirname,
+        "./template/lib/auth-client.ts"
+      );
+      const authClientDestinationPath = path.join(libPath, "auth-client.ts");
+      fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+    }
     // Create db folder
     const dbTemplatePath = path.resolve(__dirname, "./template/db");
-    const dbDir = path.join(projectDir, folder, "db");
+    const dbDir = path.join(projectDir, srcFolder, "db");
 
     if (!fs.existsSync(dbDir)) {
       fs.mkdirSync(dbDir, { recursive: true });
     }
 
-    // Copy drizzle.ts
-    const dbDestinationPath = path.join(dbDir, "drizzle.ts");
-    fs.copyFileSync(`${dbTemplatePath}/drizzle.ts`, dbDestinationPath);
+    // Check exists db folder lib/drizzle.ts or lib/schema.ts
+    const drizzlePath = path.join(projectDir, srcFolder, "/db/drizzle.ts");
+    const schemaPath = path.join(projectDir, srcFolder, "/db/schema.ts");
 
-    // Copy drizzle schema.ts
-    const schemaDestinationPath = path.join(dbDir, "schema.ts");
-    fs.copyFileSync(`${dbTemplatePath}/schema.ts`, schemaDestinationPath);
+    if (fs.existsSync(drizzlePath) || fs.existsSync(schemaPath)) {
+      const answers = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "overwrite",
+          message:
+            "Your schema or drizzle file already exists. Do you want to overwrite it?",
+          default: false,
+        },
+      ]);
+      if (answers.overwrite) {
+        const schemaDestinationPath = path.join(dbDir, "schema.ts");
+        fs.copyFileSync(`${dbTemplatePath}/schema.ts`, schemaDestinationPath);
+      }
+    } else {
+      // Copy drizzle.ts
+      const dbDestinationPath = path.join(dbDir, "drizzle.ts");
+      fs.copyFileSync(`${dbTemplatePath}/drizzle.ts`, dbDestinationPath);
+
+      // Copy drizzle schema.ts
+      const schemaDestinationPath = path.join(dbDir, "schema.ts");
+      fs.copyFileSync(`${dbTemplatePath}/schema.ts`, schemaDestinationPath);
+    }
 
     // Copy drizzle config file
-    const drizzleConfigTemplatePath = path.resolve(
-      __dirname,
-      "./template/config/drizzle.config.ts"
-    );
-    const drizzleConfigDestinationPath = path.join(
-      projectDir,
-      "drizzle.config.ts"
-    );
-    fs.copyFileSync(drizzleConfigTemplatePath, drizzleConfigDestinationPath);
-
+    if (srcFolder == "src") {
+      const drizzleConfigTemplatePath = path.resolve(
+        __dirname,
+        "./template/config/drizzle.config-src.ts"
+      );
+      const drizzleConfigDestinationPath = path.join(
+        projectDir,
+        "drizzle.config.ts"
+      );
+      fs.copyFileSync(drizzleConfigTemplatePath, drizzleConfigDestinationPath);
+    } else {
+      const drizzleConfigTemplatePath = path.resolve(
+        __dirname,
+        "./template/config/drizzle.config.ts"
+      );
+      const drizzleConfigDestinationPath = path.join(
+        projectDir,
+        "drizzle.config.ts"
+      );
+      fs.copyFileSync(drizzleConfigTemplatePath, drizzleConfigDestinationPath);
+    }
     // create server folder
-    const serverPath = path.join(projectDir, folder, "server");
+    const serverPath = path.join(projectDir, srcFolder, "server");
     if (!fs.existsSync(serverPath)) {
       fs.mkdirSync(serverPath, { recursive: true });
     }
@@ -132,10 +195,10 @@ export const drizzleRun = async (authUi: boolean) => {
       __dirname,
       "./template/api/route.ts"
     );
-
     // Create the nested directory structure first
     const routeDestinationDir = path.join(
       projectDir,
+      srcFolder,
       "app",
       "api",
       "auth",
@@ -155,12 +218,12 @@ export const drizzleRun = async (authUi: boolean) => {
       __dirname,
       "./template/proxy/proxy.ts"
     );
-    const proxyDestinationDir = path.join(projectDir, folder);
+    const proxyDestinationDir = path.join(projectDir, srcFolder);
     const proxyDestinationPath = path.join(proxyDestinationDir, "proxy.ts");
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
     if (authUi) {
-      await authUiRun({ folder });
+      await authUiRun({ folder: srcFolder });
     } else {
       console.log(
         chalk.green(
