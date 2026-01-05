@@ -262,6 +262,21 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     const proxyDestinationPath = path.join(proxyDestinationDir, "proxy.ts");
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
+    // update path .gitignore prisma generated
+    const gitignorePath = path.join(projectDir, ".gitignore");
+    const gitignoreContent = fs.readFileSync(gitignorePath, "utf-8");
+
+    if (srcFolder === "src") {
+      fs.writeFileSync(
+        gitignorePath,
+        gitignoreContent.replace("/src/generated/prisma", "/generated")
+      );
+    } else {
+      fs.writeFileSync(
+        gitignorePath,
+        gitignoreContent.replace("generated/prisma", "/generated")
+      );
+    }
     if (authUi) {
       await authUiRun({ folder: srcFolder });
     } else {
