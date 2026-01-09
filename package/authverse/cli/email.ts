@@ -3,6 +3,7 @@ import fs from "fs";
 import inquirer from "inquirer";
 import chalk from "chalk";
 import { gmailRun } from "../email/gmailRun.js";
+import { gmailRunTanstackState } from "../email/gmailRunTanstackState.js";
 
 export const email = async () => {
   const projectDir = process.cwd();
@@ -77,5 +78,8 @@ export const email = async () => {
 
   if (answers.emailProvider === "Gmail" && framework === "Next js") {
     await gmailRun();
+  }
+  if (answers.emailProvider === "Gmail" && framework === "tanstack state") {
+    await gmailRunTanstackState();
   }
 };
