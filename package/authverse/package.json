@@ -1,9 +1,11 @@
 {
   "name": "authverse",
-  "version": "1.0.7-canary.2",
+  "version": "1.0.8",
   "description": "Authverse Fast modern CLI to generate full auth systems with OAuth Prisma Drizzle better auth and ready-to-use ShadCN UI screens",
   "repository": {
-    "url": "git+https://github.com/abdirahmanmahamoud/authverse.git"
+    "url": "git+https://github.com/abdirahmanmahamoud/authverse.git",
+    "type": "git",
+    "directory": "package/authverse"
   },
   "homepage": "https://authverse.dev",
   "license": "MIT",
@@ -45,7 +47,7 @@
   "dependencies": {
     "chalk": "^5.6.2",
     "commander": "^14.0.2",
-    "inquirer": "^12.10.0"
+    "inquirer": "^13.1.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",

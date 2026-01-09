@@ -5,6 +5,7 @@ import chalk from "chalk";
 import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 import { packageManager, runCommand } from "../utils/packageManager.js";
+import inquirer from "inquirer";
 
 interface prismaRunProps {
   authUi: boolean;
@@ -130,34 +131,92 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     }
 
     // Check Next.js folder structure src
-    const srcPath = path.join(projectDir, "src");
-    const folder = srcPath ? "" : "src";
+    const srcFolder = fs.existsSync(path.join(projectDir, "src")) ? "src" : "";
 
     // check exists lib
-    const libPath = path.join(projectDir, folder, "lib");
+    const libPath = path.join(projectDir, srcFolder, "lib");
     if (!fs.existsSync(libPath)) {
       // create lib folder
       fs.mkdirSync(libPath, { recursive: true });
     }
 
-    // Copy auth.ts
-    const authTemplatePath = path.resolve(
-      __dirname,
-      `./template/lib/${database}/auth.ts`
-    );
-    const authDestinationPath = path.join(libPath, "auth.ts");
-    fs.copyFileSync(authTemplatePath, authDestinationPath);
+    // Check exists lib/auth.ts or auth-client.ts
+    const authPath = path.join(libPath, "auth.ts");
+    const authClientPath = path.join(libPath, "auth-client.ts");
+    if (fs.existsSync(authPath) || fs.existsSync(authClientPath)) {
+      const answers = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "overwrite",
+          message:
+            "Do you want to overwrite existing auth lib/auth.ts or lib/auth-client.ts",
+          default: false,
+        },
+      ]);
 
-    // Copy auth-client.ts
-    const authClientTemplatePath = path.resolve(
-      __dirname,
-      "./template/lib/auth-client.ts"
-    );
-    const authClientDestinationPath = path.join(libPath, "auth-client.ts");
-    fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+      if (answers.overwrite) {
+        // Copy auth.ts
+        const authTemplatePath = path.resolve(
+          __dirname,
+          `./template/lib/${database}/auth.ts`
+        );
+        const authDestinationPath = path.join(libPath, "auth.ts");
+        fs.copyFileSync(authTemplatePath, authDestinationPath);
+
+        // Copy auth-client.ts
+        const authClientTemplatePath = path.resolve(
+          __dirname,
+          "./template/lib/auth-client.ts"
+        );
+        const authClientDestinationPath = path.join(libPath, "auth-client.ts");
+        fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+
+        if (srcFolder === "src") {
+          // context auth.ts update import prisma client
+          const authContextPath = path.join(libPath, "auth.ts");
+          const authContextContent = fs.readFileSync(authContextPath, "utf-8");
+          fs.writeFileSync(
+            authContextPath,
+            authContextContent.replace(
+              'import { PrismaClient } from "@/generated/prisma/client";',
+              'import { PrismaClient } from "../../generated/prisma/client";'
+            )
+          );
+        }
+      }
+    } else {
+      // Copy auth.ts
+      const authTemplatePath = path.resolve(
+        __dirname,
+        `./template/lib/${database}/auth.ts`
+      );
+      const authDestinationPath = path.join(libPath, "auth.ts");
+      fs.copyFileSync(authTemplatePath, authDestinationPath);
+
+      // Copy auth-client.ts
+      const authClientTemplatePath = path.resolve(
+        __dirname,
+        "./template/lib/auth-client.ts"
+      );
+      const authClientDestinationPath = path.join(libPath, "auth-client.ts");
+      fs.copyFileSync(authClientTemplatePath, authClientDestinationPath);
+
+      if (srcFolder === "src") {
+        // context auth.ts update import prisma client
+        const authContextPath = path.join(libPath, "auth.ts");
+        const authContextContent = fs.readFileSync(authContextPath, "utf-8");
+        fs.writeFileSync(
+          authContextPath,
+          authContextContent.replace(
+            'import { PrismaClient } from "@/generated/prisma/client";',
+            'import { PrismaClient } from "../../generated/prisma/client";'
+          )
+        );
+      }
+    }
 
     // create server folder
-    const serverPath = path.join(projectDir, folder, "server");
+    const serverPath = path.join(projectDir, srcFolder, "server");
     if (!fs.existsSync(serverPath)) {
       fs.mkdirSync(serverPath, { recursive: true });
     }
@@ -179,6 +238,7 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
     // Create the nested directory structure first
     const routeDestinationDir = path.join(
       projectDir,
+      srcFolder,
       "app",
       "api",
       "auth",
@@ -198,12 +258,27 @@ export const prismaRun = async ({ authUi, database }: prismaRunProps) => {
       __dirname,
       "./template/proxy/proxy.ts"
     );
-    const proxyDestinationDir = path.join(projectDir, folder);
+    const proxyDestinationDir = path.join(projectDir, srcFolder);
     const proxyDestinationPath = path.join(proxyDestinationDir, "proxy.ts");
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
+    // update path .gitignore prisma generated
+    const gitignorePath = path.join(projectDir, ".gitignore");
+    const gitignoreContent = fs.readFileSync(gitignorePath, "utf-8");
+
+    if (srcFolder === "src") {
+      fs.writeFileSync(
+        gitignorePath,
+        gitignoreContent.replace("/src/generated/prisma", "/generated")
+      );
+    } else {
+      fs.writeFileSync(
+        gitignorePath,
+        gitignoreContent.replace("generated/prisma", "/generated")
+      );
+    }
     if (authUi) {
-      await authUiRun({ folder });
+      await authUiRun({ folder: srcFolder });
     } else {
       console.log(
         chalk.green(

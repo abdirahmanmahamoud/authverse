@@ -19,7 +19,7 @@ module.exports = {
         releaseRules: [
           { type: "fix", release: "patch" },
           { type: "feat", release: "patch" },
-          { type: "featRefactor", release: "minor" },
+          { type: "featMinor", release: "minor" },
           { breaking: true, release: "major" },
         ],
       },
@@ -33,7 +33,7 @@ module.exports = {
           types: [
             { type: "feat", section: "Features" },
             { type: "fix", section: "Bug Fixes" },
-            { type: "featRefactor", section: "Features" },
+            { type: "featMinor", section: "Features" },
           ],
         },
       },

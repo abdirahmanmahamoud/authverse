@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Update root project (website)
+  - package-ecosystem: "npm"
+    directory: "/"  # website
+    schedule:
+      interval: "weekly"
+
+  # Update Authverse package
+  - package-ecosystem: "npm"
+    directory: "/package/authverse"  # package
+    schedule:
+      interval: "weekly"
