@@ -2,26 +2,12 @@ import chalk from "chalk";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import { packageManager } from "../utils/packageManager.js";
+import { email } from "../cli/email.js";
 
 export const forgetNext = async () => {
   try {
     // Get project directory
     const projectDir = process.cwd();
-
-    // Get package json
-    const packageJsonPath = path.join(projectDir, "package.json");
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-    if (!packageJson.dependencies?.resend) {
-      console.log(chalk.cyan("\n⚙️ Installing Resend...\n"));
-      packageManager("resend");
-    }
-
-    if (!packageJson.dependencies?.["@react-email/components"]) {
-      console.log(chalk.cyan("\n⚙️ Installing react email components...\n"));
-      packageManager("@react-email/components");
-    }
 
     // Fix for __dirname in ES module
     const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +16,12 @@ export const forgetNext = async () => {
     // Check Next.js folder structure src
     const srcPath = path.join(projectDir, "src");
     const folder = fs.existsSync(srcPath) ? "src" : "";
+
+    // check exits email.ts
+    const emailFilePath = path.join(projectDir, folder, "lib", "email.ts");
+    if (!fs.existsSync(emailFilePath)) {
+      await email();
+    }
 
     // Locate auth.ts file
     const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
@@ -42,12 +34,11 @@ export const forgetNext = async () => {
     let content = fs.readFileSync(authFilePath, "utf8");
 
     // Add code for sendResetPassword with proper void return
-    const codeAdded = `sendResetPassword: async ({ user, url, token }) => {
-      await resend.emails.send({
-        from: \`\${process.env.EMAIL_SENDER_NAME} <\${process.env.EMAIL_SENDER_ADDRESS}>\`,
-        to: user.email,
+    const codeAdded = ` sendResetPassword: async ({ user, url, token }) => {
+      await sendEmail({
+        email: user.email!,
         subject: "Reset your password",
-        react: ForgotPasswordEmail({
+        components: ForgotPasswordEmail({
           username: user.name,
           resetUrl: url,
           userEmail: user.email,
@@ -100,10 +91,7 @@ export const forgetNext = async () => {
       fs.writeFileSync(authFilePath, content, "utf8");
 
       // Check if resend import exists, if not add it
-      if (
-        !content.includes("import { Resend }") &&
-        !content.includes("const resend = new Resend")
-      ) {
+      if (!content.includes("import { sendEmail }")) {
         // Add import after the last import statement
         const lastImportIndex = content.lastIndexOf("import");
         const nextLineAfterLastImport =
@@ -111,25 +99,10 @@ export const forgetNext = async () => {
         const beforeImports = content.substring(0, nextLineAfterLastImport);
         const afterImports = content.substring(nextLineAfterLastImport);
 
-        const newImports = `import { Resend } from "resend";\nimport ForgotPasswordEmail from "@/components/email/reset-password";\n\nconst resend = new Resend(process.env.RESEND_API_KEY as string);\n`;
+        const newImports = `import ForgotPasswordEmail from "@/components/email/reset-password";\nimport { sendEmail } from "./email";\n`;
         content = beforeImports + newImports + afterImports;
 
         fs.writeFileSync(authFilePath, content, "utf8");
-      }
-
-      // add .env variables info
-      const envPath = path.join(projectDir, ".env");
-      const envContent = fs.readFileSync(envPath, "utf8");
-
-      if (
-        !envContent.includes("RESEND_API_KEY") &&
-        !envContent.includes("EMAIL_SENDER_NAME") &&
-        !envContent.includes("EMAIL_SENDER_ADDRESS")
-      ) {
-        fs.appendFileSync(envPath, `\n\n# Resend API Key for sending emails`);
-        fs.appendFileSync(envPath, `\nRESEND_API_KEY=`);
-        fs.appendFileSync(envPath, `\nEMAIL_SENDER_NAME=Your Name`);
-        fs.appendFileSync(envPath, `\nEMAIL_SENDER_ADDRESS=`);
       }
 
       // Add components/email/reset-password.tsx
