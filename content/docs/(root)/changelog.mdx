@@ -3,7 +3,42 @@ title: Changelog
 description: Latest updates and announcements.
 ---
 
-# December 2025 v1.0.7 — TanStack Start Integrations
+# January 2026 — Enhanced Email & Verification
+
+Authverse v1.1.2 significantly improves the **email integration** experience, adding support for multiple providers and a new dedicated email verification flow.
+
+This release focuses on **developer flexibility** and **security**, ensuring that email handling is easier to configure and authentication is more robust.
+
+---
+
+## New Features & Enhancements
+
+### Extended Email Provider Support
+
+- **Multiple Providers:** Single CLI command to setup **Resend**, **Gmail**, or **AWS SES**.
+- **Automatic Configuration:** The CLI now handles dependency installation and environment variable setup for each provider.
+- **Provider Switching:** Easily switch between providers using the `npx authverse@latest email` command.
+
+### New Email Verification Flow
+
+- **dedicated CLI command:** `npx authverse@latest verification` to add email verification to your app.
+- **Secure flows:** Configure verification requirements for sign-up and sign-in.
+- **Ready-to-use template:** Includes a pre-built, customizable email template for verification links.
+
+### Improved Forget Password Flow
+
+- **Generic Email Integration:** The `forget` command now leverages the unified email setup, removing provider lock-in.
+- **Smart Detection:** Automatically detects if an email provider is configured and prompts for setup if needed.
+
+## Documentation Updates
+
+- **New:** [Email Verification](/docs/auth/email-verification) guide.
+- **New:** [Email Integration](/docs/integrations/Email) guide with details for all supported providers.
+- **Updated:** [Forgot Password](/docs/auth/forgetPassword) documentation.
+
+---
+
+# December 2025 — TanStack Start Integrations
 
 Authverse v1.0.7 introduces **full TanStack Start support** with updated authentication features, route protection, and nextjs prisna database fixes.
 
@@ -73,7 +108,7 @@ This release makes it easier than ever to secure your routes and build modern fu
 
 ---
 
-# November 2025 v1.0.0 — First Stable Release
+# November 2025 — First Stable Release
 
 Authverse v1.0.0 is the first official **stable release** delivering a complete modern and production-ready authentication system that can be integrated into any Next.js or Node.js project in minutes.
 

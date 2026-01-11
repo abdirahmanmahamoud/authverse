@@ -1,0 +1,64 @@
+---
+title: Email Integration
+description: How to set up email integration using Authverse.
+---
+
+Authverse streamlines the setup of email providers with a single command. It supports **Resend**, **Gmail**, and **AWS SES**.
+
+Execute the following command to start the setup:
+
+```package-install
+npx authverse@latest email
+```
+
+You will be prompted to choose your preferred email provider.
+
+## Supported Providers
+
+### Resend
+
+If you choose Resend, the CLI will install the necessary dependencies and configure the email template.
+
+After the command completes, add the following variables to your `.env` file:
+
+```bash
+RESEND_API_KEY=
+EMAIL_SENDER_NAME="Your Name"
+EMAIL_SENDER_ADDRESS=
+```
+
+### Gmail
+
+For Gmail, you will need to provide your SMTP credentials.
+
+After the command completes, add the following variables to your `.env` file:
+
+```bash
+GMAIL_HOST=smtp.gmail.com
+GMAIL_PORT=465
+GMAIL_SERVICE=gmail
+GMAIL_MAIL=your-email@gmail.com
+GMAIL_NAME="Your Name"
+GMAIL_PASSWORD=your-app-password
+```
+
+> [!NOTE]
+> For `GMAIL_PASSWORD`, you should use an [App Password](https://support.google.com/accounts/answer/185833) if you have 2-Step Verification enabled.
+
+### AWS SES
+
+For AWS SES, ensure you have your SMTP credentials ready from the AWS Console.
+
+After the command completes, add the following variables to your `.env` file:
+
+```bash
+AWS_SES_HOST=email-smtp.us-east-1.amazonaws.com
+AWS_SES_PORT=465
+AWS_SES_SERVICE=ses
+AWS_SES_USER=
+AWS_SES_PASS=
+AWS_SES_FROM=
+```
+
+> [!TIP]
+> Make sure your AWS SES account is out of the sandbox environment if you intend to send emails to unverified addresses.

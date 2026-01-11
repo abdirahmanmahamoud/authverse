@@ -1,0 +1,39 @@
+---
+title: Email Verification
+description: How to set up email verification flow using Authverse.
+---
+
+Authverse allows you to easily add email verification to your authentication flow.
+
+## Setup
+
+Execute the following command:
+
+```package-install
+npx authverse@latest verification
+```
+
+This command automatically:
+
+- **Checks** for existing email configuration (and helps you set it up if missing).
+- **Updates** `auth.ts` to enable `requireEmailVerification`.
+- **Configures** the email verification logic in `auth.ts`.
+- **Creates** the `EmailVerification` email template.
+
+## How it works
+
+When enabled, users will receive a verification email upon sign up. You can customize the behavior using the options in `auth.ts`:
+
+```ts
+emailVerification: {
+  sendVerificationEmail: async ({ user, url }) => {
+    // ... sending logic
+  },
+  sendOnSignUp: true, // Send email when user signs up
+  sendOnSignIn: true, // Send email when user signs in (if not verified)
+},
+```
+
+## Email Provider
+
+This feature relies on the generic email integration. If you haven't set up an email provider yet, the CLI will prompt you to do so. See [Email Integration](/docs/integrations/Email) for details.
