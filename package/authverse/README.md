@@ -45,6 +45,7 @@ With just **one single run command**, you get:
 - **Sign Up**
 - **Forgot Password**
 - **Reset Password**
+- **Verify Email**
 - **Google OAuth**
 - **GitHub OAuth**
 - **Integrated Better Auth**
