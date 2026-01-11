@@ -2,6 +2,7 @@ import chalk from "chalk";
 import fs from "fs";
 import path from "path";
 import { verifyNext } from "../script/verifyNext.js";
+import { verifyTanstack } from "../script/verifyTanstack.js";
 
 export const verification = async () => {
   try {
@@ -23,6 +24,9 @@ export const verification = async () => {
 
     if (framework === "Next js") {
       await verifyNext();
+    }
+    if (framework === "tanstack state") {
+      await verifyTanstack();
     }
   } catch (error: any) {
     console.log(chalk.red(error.message));
