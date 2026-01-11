@@ -106,6 +106,7 @@ import { sendEmail } from "./email";
       "./template/email/EmailVerification.tsx"
     );
 
+    // Add components/email/EmailVerification.tsx
     const componentsDir = path.join(srcPath, "components", "email");
 
     if (!fs.existsSync(componentsDir)) {
