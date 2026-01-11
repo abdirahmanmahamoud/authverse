@@ -5,7 +5,7 @@ const SiteLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <SiteHeader />
-      <div className="mt-12">
+      <div className="mt-14">
         {children}
         <FooterSite />
       </div>
