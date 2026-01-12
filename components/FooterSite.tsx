@@ -37,7 +37,7 @@ const socialItems = [
 
 const FooterSite = () => {
   return (
-    <footer className="w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mt-6">
+    <footer className="w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 mt-6">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
