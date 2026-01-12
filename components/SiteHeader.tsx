@@ -12,6 +12,7 @@ import {
 import Search from "./Search";
 import ModeToggle from "./ModeToggle";
 import GithubRepo from "./GithubRepo";
+import MobieNav from "./MobieNav";
 
 const menuItems = [
   {
@@ -54,6 +55,9 @@ const SiteHeader = () => {
           </div>
           <ModeToggle />
           <GithubRepo />
+          <div className="lg:hidden">
+            <MobieNav />
+          </div>
         </div>
       </div>
     </div>
