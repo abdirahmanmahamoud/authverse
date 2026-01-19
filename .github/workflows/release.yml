@@ -43,14 +43,12 @@ jobs:
             exit 1
           fi
 
-      # npm publish
       - name: Publish to npm
         working-directory: package/authverse
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
 
-      # CHANGELOG
       - name: Generate changelog
         run: npx changelogithub
         env:

@@ -1,6 +1,6 @@
 export default {
   emojis: false,
-
+  contributors: true,
   types: {
     feat: { title: "Features" },
     fix: { title: "Bug Fixes" },
@@ -8,13 +8,7 @@ export default {
     refactor: { title: "Refactoring" },
     test: { title: "Tests" },
     docs: { title: "Documentation" },
-    chore: false,
-    ci: false,
-    build: false,
   },
-
-  contributors: true,
-
   commitUrlFormat: "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
   compareUrlFormat:
     "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
