@@ -71,20 +71,20 @@ npm install
 ### 4. Create a new branch for your changes
 
 ```bash
-git checkout -b type/description
-# Example: git checkout -b feat/facebook-oauth
+git checkout -b type:description
+# Example: git checkout -b feat: facebook-oauth
 ```
 
 Implement your changes on the new branch. When committing, please follow these guidelines:
 
 - **Commit Message Format**: Use a clear and concise commit message.
 - **Branch Type Prefixes**:
-  - `feat/` - New features
-  - `fix/` - Bug fixes
-  - `docs/` - Documentation changes
-  - `refactor/` - Code refactoring
-  - `test/` - Test-related changes
-  - `chore/` - Build process or tooling changes
+  - `feat:` - New features
+  - `fix:` - Bug fixes
+  - `docs:` - Documentation changes
+  - `refactor:` - Code refactoring
+  - `test:` - Test-related changes
+  - `chore:` - Build process or tooling changes
 
 ---
 
