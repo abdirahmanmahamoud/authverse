@@ -1,0 +1,34 @@
+name: PR Preview
+
+on:
+  push:
+    paths:
+      - "package/**"
+  pull_request:
+    paths:
+      - "package/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: package/authverse
+        run: npm install
+
+      - name: Install Node types
+        working-directory: package/authverse
+        run: npm install --save-dev @types/node
+
+      - name: Build project
+        working-directory: package/authverse
+        run: npm run build
