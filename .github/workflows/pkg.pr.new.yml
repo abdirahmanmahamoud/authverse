@@ -1,30 +1,43 @@
 name: PR Preview
 
 on:
-  push:
-    paths:
-      - "package/**"
   pull_request:
+    types: [opened, synchronize, labeled]
     paths:
       - "package/**"
+
+concurrency:
+  group: pkg-pr-new-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
 
 jobs:
-  build:
+  deploy-preview:
+    name: Deploy to pkg.pr.new
+    if: |
+      contains(github.event.pull_request.author_association, 'MEMBER') ||
+      contains(github.event.pull_request.labels.*.name, 'deploy:preview')
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .node-version
 
       - name: Install dependencies
         working-directory: package/authverse
         run: npm install
 
-      - name: Build project
+      - name: Build package
         working-directory: package/authverse
         run: npm run build
+
+      - name: Set preview version
+        working-directory: package/authverse
+        run: |
+          npm pkg set version=0.0.0-preview.${{ github.event.pull_request.head.sha }}
+          echo "::notice title=Install (PR)::npm install https://pkg.pr.new/abdirahmanmahamoud/authverse@${{ github.event.pull_request.number }}"
+
+      - name: Publish to pkg.pr.new
+        working-directory: package/authverse
+        run: npx pkg-pr-new publish --compact --no-template --npm
