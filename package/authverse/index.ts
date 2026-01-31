@@ -17,7 +17,7 @@ program
   .version(
     packageJson.version || "1.0.0",
     "-v, --version",
-    "display the version number"
+    "display the version number",
   );
 
 program
@@ -30,18 +30,29 @@ program
 program
   .command("add <provider>")
   .description("Add a new authentication provider")
-  .action((provider: string) => providers({ provider }));
+  .action(async (provider: string) => {
+    await providers({ provider });
+  });
 
 program
   .command("forget")
   .description("Forget stored configurations")
-  .action(forget);
+  .action(async () => {
+    await forget();
+  });
 
-program.command("email").description("Configure email settings").action(email);
+program
+  .command("email")
+  .description("Configure email settings")
+  .action(async () => {
+    await email();
+  });
 
 program
   .command("verify")
   .description("Verify authentication setup")
-  .action(verification);
+  .action(async () => {
+    await verification();
+  });
 
 program.parse(process.argv);
