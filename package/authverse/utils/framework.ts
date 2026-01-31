@@ -1,13 +1,18 @@
 import path from "path";
 import fs from "fs";
 
-export const getFramework = async () => {
+type returnFramework = {
+  framework: "Next js" | "tanstack state" | null;
+  error: string | null;
+};
+
+export const getFramework = async (): Promise<returnFramework> => {
   const projectDir = process.cwd();
 
   // check file package.json
   if (!fs.existsSync(path.join(projectDir, "package.json"))) {
     return {
-      framework: "",
+      framework: null,
       error: "No framework detected",
     };
   }
@@ -42,7 +47,7 @@ export const getFramework = async () => {
   }
 
   return {
-    framework: "",
+    framework: null,
     error: "No framework supported authverse",
   };
 };
