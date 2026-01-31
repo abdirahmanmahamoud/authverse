@@ -1,25 +1,15 @@
 import chalk from "chalk";
-import fs from "fs";
-import path from "path";
+import { getFramework } from "../utils/framework.js";
 import { verifyNext } from "../script/verifyNext.js";
 import { verifyTanstack } from "../script/verifyTanstack.js";
 
 export const verification = async () => {
   try {
-    const projectDir = process.cwd();
-    const packageJsonPath = path.join(projectDir, "package.json");
+    const { framework, error } = await getFramework();
 
-    // Auto detect framework
-    let framework: "Next js" | "tanstack state" = "tanstack state";
-
-    if (fs.existsSync(packageJsonPath)) {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-      const hasNext =
-        packageJson?.dependencies?.["next"] ||
-        packageJson?.devDependencies?.["next"];
-
-      framework = hasNext ? "Next js" : "tanstack state";
+    if (error) {
+      console.log(chalk.red(error));
+      return;
     }
 
     if (framework === "Next js") {
