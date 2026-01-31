@@ -1,27 +1,17 @@
 import chalk from "chalk";
 import { googleRun } from "../script/googleRun.js";
 import { githubRun } from "../script/githubRun.js";
-import path from "path";
-import fs from "fs";
 import { googleRunTanstackState } from "../script/googleRunTanstackState.js";
 import { githubRunTanstackState } from "../script/githubRunTanstackState.js";
+import { getFramework } from "../utils/framework.js";
 
 export const providers = async ({ provider }: { provider: string }) => {
   try {
-    const projectDir = process.cwd();
-    const packageJsonPath = path.join(projectDir, "package.json");
+    const { framework, error } = await getFramework();
 
-    // Auto detect framework
-    let framework: "Next js" | "tanstack state" = "tanstack state";
-
-    if (fs.existsSync(packageJsonPath)) {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-      const hasNext =
-        packageJson?.dependencies?.["next"] ||
-        packageJson?.devDependencies?.["next"];
-
-      framework = hasNext ? "Next js" : "tanstack state";
+    if (error) {
+      console.log(chalk.red(error));
+      return;
     }
 
     if (framework === "Next js" && provider == "google") {

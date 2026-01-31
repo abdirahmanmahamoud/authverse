@@ -1,26 +1,17 @@
 import inquirer from "inquirer";
 import { prismaRun } from "../script/prisma.js";
 import { drizzleRun } from "../script/drizzleRun.js";
-import path from "path";
-import fs from "fs";
 import { prismaRunTanstackState } from "../script/prismaRunTanstackState.js";
 import { drizzleRunTanstackState } from "../script/drizzleRunTanstackState.js";
+import { getFramework } from "../utils/framework.js";
+import chalk from "chalk";
 
 export const initAnswer = async () => {
-  const projectDir = process.cwd();
-  const packageJsonPath = path.join(projectDir, "package.json");
+  const { framework, error } = await getFramework();
 
-  // Auto detect framework
-  let framework: "Next js" | "tanstack state" = "tanstack state";
-
-  if (fs.existsSync(packageJsonPath)) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-    const hasNext =
-      packageJson?.dependencies?.["next"] ||
-      packageJson?.devDependencies?.["next"];
-
-    framework = hasNext ? "Next js" : "tanstack state";
+  if (error) {
+    console.log(chalk.red(error));
+    return;
   }
 
   console.log(`✔ Detected framework: ${framework}`);

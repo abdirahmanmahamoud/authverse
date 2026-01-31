@@ -7,22 +7,16 @@ import { awsSesRun } from "../email/awsSesRun.js";
 import { awsSesRunTanstackState } from "../email/awsSesRunTanstackState.js";
 import { resendRun } from "../email/resendRun.js";
 import { resendRunTanstackState } from "../email/resendRunTanstackState.js";
+import { getFramework } from "../utils/framework.js";
+import chalk from "chalk";
 
 export const email = async () => {
   const projectDir = process.cwd();
-  const packageJsonPath = path.join(projectDir, "package.json");
+  const { framework, error } = await getFramework();
 
-  // Auto detect framework
-  let framework: "Next js" | "tanstack state" = "tanstack state";
-
-  if (fs.existsSync(packageJsonPath)) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-    const hasNext =
-      packageJson?.dependencies?.["next"] ||
-      packageJson?.devDependencies?.["next"];
-
-    framework = hasNext ? "Next js" : "tanstack state";
+  if (error) {
+    console.log(chalk.red(error));
+    return;
   }
 
   if (framework === "Next js") {
@@ -52,7 +46,7 @@ export const email = async () => {
     const srcFolderTanstackState = path.join(projectDir, "src");
     const libPathTanstackState = path.join(
       srcFolderTanstackState,
-      "lib/email.ts"
+      "lib/email.ts",
     );
     if (fs.existsSync(libPathTanstackState)) {
       const answers = await inquirer.prompt([

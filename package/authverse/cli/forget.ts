@@ -1,23 +1,14 @@
-import path from "path";
-import fs from "fs";
 import { forgetNext } from "../script/forgetNext.js";
 import { forgetTanstack } from "../script/forgetTanstack.js";
+import { getFramework } from "../utils/framework.js";
+import chalk from "chalk";
 
-export const forget = () => {
-  const projectDir = process.cwd();
-  const packageJsonPath = path.join(projectDir, "package.json");
+export const forget = async () => {
+  const { framework, error } = await getFramework();
 
-  // Auto detect framework
-  let framework: "Next js" | "tanstack state" = "tanstack state";
-
-  if (fs.existsSync(packageJsonPath)) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-
-    const hasNext =
-      packageJson?.dependencies?.["next"] ||
-      packageJson?.devDependencies?.["next"];
-
-    framework = hasNext ? "Next js" : "tanstack state";
+  if (error) {
+    console.log(chalk.red(error));
+    return;
   }
 
   if (framework === "Next js") {
