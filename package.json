@@ -7,7 +7,7 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clear": "turbo clean && rimraf .turbo node_modules/.cache/turbo"
+    "clear": "turbo clean && pnpm dlx rimraf .turbo node_modules/.cache/turbo"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
