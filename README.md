@@ -1,4 +1,4 @@
-![Logo](./public/logo.png)
+![Logo](./app/web/public/logo.png)
 
 # Authverse
 
