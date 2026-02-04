@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
-import { useIsMobile } from "@/web/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   NavigationMenu,
   NavigationMenuItem,

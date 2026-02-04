@@ -1,6 +1,6 @@
 "use client";
-import { PAGES_NEW } from "@/web/lib/docs";
-import { source } from "@/web/lib/source";
+import { PAGES_NEW } from "@/lib/docs";
+import { source } from "@/lib/source";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {

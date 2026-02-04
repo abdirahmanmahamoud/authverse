@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/web/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Check, Copy, ArrowRight, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "motion/react";
-import { cn } from "@/web/lib/utils";
+import { cn } from "@/lib/utils";
 
 const Hero = () => {
   const [copied, setCopied] = useState(false);

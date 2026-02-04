@@ -1,7 +1,7 @@
-import DocsTableOfContents from "@/web/components/DocsTableOfContents";
-import mdxComponents from "@/web/components/mdxComponents";
-import { Button } from "@/web/components/ui/button";
-import { source } from "@/web/lib/source";
+import DocsTableOfContents from "@/components/DocsTableOfContents";
+import mdxComponents from "@/components/mdxComponents";
+import { Button } from "@/components/ui/button";
+import { source } from "@/lib/source";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { findNeighbour } from "fumadocs-core/page-tree";
 import Link from "next/link";

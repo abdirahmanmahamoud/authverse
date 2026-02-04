@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { PAGES_NEW } from "@/web/lib/docs";
-import { source } from "@/web/lib/source";
+import { PAGES_NEW } from "@/lib/docs";
+import { source } from "@/lib/source";
 
 export function ComponentsList() {
   const components = source.pageTree.children.find(

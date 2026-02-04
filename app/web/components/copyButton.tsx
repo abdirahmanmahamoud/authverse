@@ -1,10 +1,32 @@
 "use client";
-import { useEffectEvent } from "fumadocs-core/utils/use-effect-event";
 import type { MouseEventHandler } from "react";
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useInsertionEffect,
+} from "react";
+
+/**
+ * A polyfill for the experimental `useEffectEvent` hook.
+ */
+function useEffectEvent<T extends (...args: any[]) => any>(fn: T): T {
+  const ref = useRef<T>(fn);
+
+  useInsertionEffect(() => {
+    ref.current = fn;
+  }, [fn]);
+
+  // @ts-expect-error -- we want a stable reference
+  return useCallback((...args: any[]) => {
+    const latest = ref.current;
+    return latest(...args);
+  }, []);
+}
 
 export function useCopyButton(
-  onCopy: () => void | Promise<void>
+  onCopy: () => void | Promise<void>,
 ): [checked: boolean, onClick: MouseEventHandler] {
   const [checked, setChecked] = useState(false);
   const timeoutRef = useRef<number | null>(null);

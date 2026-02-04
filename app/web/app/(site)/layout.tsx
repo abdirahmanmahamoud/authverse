@@ -1,5 +1,5 @@
-import FooterSite from "@/web/components/FooterSite";
-import SiteHeader from "@/web/components/SiteHeader";
+import FooterSite from "@/components/FooterSite";
+import SiteHeader from "@/components/SiteHeader";
 
 const SiteLayout = ({ children }: { children: React.ReactNode }) => {
   return (

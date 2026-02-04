@@ -1,4 +1,4 @@
-import { cn } from "@/web/lib/utils";
+import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 export function Callout({

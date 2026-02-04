@@ -1,5 +1,5 @@
 import "@/app/global.css";
-import ThemeProvider from "@/web/components/themeProvider";
+import ThemeProvider from "@/components/themeProvider";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";

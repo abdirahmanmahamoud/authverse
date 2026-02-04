@@ -1,7 +1,7 @@
-import DocsSidebar from "@/web/components/DocsSidebar";
-import SiteHeader from "@/web/components/SiteHeader";
-import { SidebarProvider } from "@/web/components/ui/sidebar";
-import { source } from "@/web/lib/source";
+import DocsSidebar from "@/components/DocsSidebar";
+import SiteHeader from "@/components/SiteHeader";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { source } from "@/lib/source";
 
 const DocsLayout = ({ children }: { children: React.ReactNode }) => {
   return (

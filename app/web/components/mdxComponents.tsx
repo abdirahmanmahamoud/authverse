@@ -1,4 +1,4 @@
-import { cn } from "@/web/lib/utils";
+import { cn } from "@/lib/utils";
 import { Kbd } from "./ui/kbd";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -45,7 +45,7 @@ const mdxComponents = {
           .replace(/\?/g, "")
           .toLowerCase()}
         className={cn(
-          "font-heading [&+]*:[code]:text-xl mt-10 scroll-m-28 text-xl font-medium tracking-tight first:mt-0 lg:mt-16 [&+.steps]:!mt-0 [&+.steps>h3]:!mt-4 [&+h3]:!mt-6 [&+p]:!mt-4",
+          "font-heading [&+]*:[code]:text-xl mt-10 scroll-m-28 text-xl font-medium tracking-tight first:mt-0 lg:mt-16 [&.steps]:mt-0! [&+.steps>h3]:mt-4! [&+h3]:mt-6! [&+p]:mt-4!",
           className,
         )}
         {...props}
@@ -55,7 +55,7 @@ const mdxComponents = {
   h3: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
-        "font-heading mt-12 scroll-m-28 text-lg font-medium tracking-tight [&+p]:!mt-4 *:[code]:text-xl",
+        "font-heading mt-12 scroll-m-28 text-lg font-medium tracking-tight [&+p]:mt-4! *:[code]:text-xl",
         className,
       )}
       {...props}
@@ -96,7 +96,7 @@ const mdxComponents = {
   ),
   p: ({ className, ...props }: React.ComponentProps<"p">) => (
     <p
-      className={cn("leading-relaxed [&:not(:first-child)]:mt-6", className)}
+      className={cn("leading-relaxed [:not(:first-child)]:mt-6", className)}
       {...props}
     />
   ),
@@ -141,7 +141,7 @@ const mdxComponents = {
   th: ({ className, ...props }: React.ComponentProps<"th">) => (
     <th
       className={cn(
-        "px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right",
+        "px-4 py-2 text-left font-bold [[align=center]]:text-center [[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -150,7 +150,7 @@ const mdxComponents = {
   td: ({ className, ...props }: React.ComponentProps<"td">) => (
     <td
       className={cn(
-        "px-4 py-2 text-left whitespace-nowrap [&[align=center]]:text-center [&[align=right]]:text-right",
+        "px-4 py-2 text-left whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -228,7 +228,7 @@ const mdxComponents = {
   ),
   Steps: ({ ...props }) => (
     <div
-      className="[&>h3]:step steps mb-12 [counter-reset:step] *:[h3]:first:!mt-0"
+      className="[&>h3]:step steps mb-12 [counter-reset:step] *[h3]:first:!mt-0"
       {...props}
     />
   ),

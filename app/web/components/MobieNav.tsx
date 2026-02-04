@@ -15,8 +15,8 @@ import {
 } from "./ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { PAGES_NEW } from "@/web/lib/docs";
-import { source } from "@/web/lib/source";
+import { PAGES_NEW } from "@/lib/docs";
+import { source } from "@/lib/source";
 import Logo from "./Logo";
 
 const MobieNav = () => {

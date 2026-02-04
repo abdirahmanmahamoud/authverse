@@ -16,13 +16,8 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { buttonVariants } from "@/web/components/ui/button";
-import {
-  Tabs,@/web/lib/utils
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/web/components/ui/tabs";
+import { buttonVariants } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, mergeRefs } from "@/lib/utils";
 import { ScrollArea, ScrollBar, ScrollViewport } from "./ui/scroll-area";
 import { useCopyButton } from "./copyButton";
@@ -305,8 +300,7 @@ export const CodeBlockOld = forwardRef<HTMLElement, CodeBlockProps>(
         {...props}
         className={cn(
           "not-prose group fd-codeblock relative my-6 overflow-hidden rounded-lg border text-sm",
-          keepBackground &&
-            "bg-[var(--shiki-light-bg)] dark:bg-[var(--shiki-dark-bg)]",
+          keepBackground && "bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)",
           props.className,
         )}
       >
@@ -336,7 +330,7 @@ export const CodeBlockOld = forwardRef<HTMLElement, CodeBlockProps>(
         ) : (
           allowCopy && (
             <CopyButton
-              className="absolute right-2 top-2 z-[2] backdrop-blur-md"
+              className="absolute right-2 top-2 z-2 backdrop-blur-md"
               onCopy={onCopy}
             />
           )

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { useConfig } from "@/web/hooks/use-config";
+import { useConfig } from "@/hooks/use-config";
 import { Tabs } from "./ui/tabs";
 
 export function CodeTabs({ children }: React.ComponentProps<typeof Tabs>) {

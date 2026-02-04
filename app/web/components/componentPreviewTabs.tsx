@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@/web/lib/utils";
+import { cn } from "@/lib/utils";
 
 export function ComponentPreviewTabs({
   className,
