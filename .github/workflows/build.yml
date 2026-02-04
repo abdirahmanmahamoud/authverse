@@ -3,10 +3,12 @@ name: Build and Test
 on:
   push:
     paths:
-      - "package/**"
+      - "package/authverse/**"
+      - "package/template/**"
   pull_request:
     paths:
-      - "package/**"
+      - "package/authverse/**"
+      - "package/template/**"
 
 jobs:
   build:

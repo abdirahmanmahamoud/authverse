@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: package/authverse
-        run: npm ci
+        run: npm install
 
       - name: Build package
         working-directory: package/authverse

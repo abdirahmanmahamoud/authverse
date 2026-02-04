@@ -15,7 +15,7 @@ We welcome contributions in the form of:
 
 ## Project Structure Overview
 
-- **Documentation (`/content`)**  
+- **Documentation (`/app/web/content`)**  
   All guides, tutorials, and API references live here in **MDX** format, rendered via Fumadocs.
 
 - **CLI (`package/authverse`)**  
@@ -57,13 +57,7 @@ cd authverse
 ### 3. Install Dependencies
 
 ```bash
-npm install
-```
-
-package/authverse
-
-```bash
-npm install
+pnpm install
 ```
 
 ---
@@ -93,13 +87,13 @@ Implement your changes on the new branch. When committing, please follow these g
 documentation website **Next.js** and **Fumadocs**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Test Build
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 - Authverse Cli
@@ -107,19 +101,13 @@ npm run build
 MacOS and Linux
 
 ```bash
-npm run build
-```
-
-- and
-
-```bash
-npm link
+pnpm run build && pnpm link
 ```
 
 Windows
 
 ```bash
-npm run build:windows
+pnpm run build:win
 ```
 
 - test features added your & fix any bugs, local laptop **Test Next.js**

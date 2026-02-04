@@ -4,7 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, labeled]
     paths:
-      - "package/**"
+      - "package/authverse/**"
+      - "package/template/**"
 
 concurrency:
   group: pkg-pr-new-${{ github.event.pull_request.number }}
