@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "fumadocs-mdx",
-    "clean": "pnpm dlx rimraf .next dist"
+    "clear": "pnpm dlx rimraf .next dist"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

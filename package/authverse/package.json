@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsup ./index.ts --format esm,cjs --dts --out-dir dist && cp -r ../template ./dist/template",
     "build:win": "tsup ./index.ts --format esm,cjs --dts --out-dir dist && xcopy ..\\template dist\\template /E /I /Y && npm link",
-    "clean": "pnpm dlx rimraf dist"
+    "clear": "pnpm dlx rimraf dist"
   },
   "publishConfig": {
     "access": "public"

@@ -2,6 +2,16 @@
   "name": "authverse-monorepo",
   "version": "1.0.0",
   "private": true,
+  "repository": {
+    "url": "git+https://github.com/abdirahmanmahamoud/authverse.git",
+    "type": "git"
+  },
+  "homepage": "https://authverse.dev",
+  "author": {
+    "name": "Abdirahman Mohamoud",
+    "email": "me@abdirahmandev.com",
+    "url": "https://abdirahmandev.com"
+  },
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
