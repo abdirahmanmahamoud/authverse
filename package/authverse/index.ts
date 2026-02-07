@@ -6,6 +6,7 @@ import { providers } from "./cli/provider.js";
 import { forget } from "./cli/forget.js";
 import { email } from "./cli/email.js";
 import { verification } from "./cli/verification.js";
+import { cmdType, initCmd } from "./cli/initCmd.js";
 
 const packageJson = JSON.parse(readFileSync("./package.json", "utf8"));
 const program = new Command();
@@ -22,8 +23,15 @@ program
 program
   .command("init")
   .description("Select project template and configuration")
-  .action(async () => {
-    await initAnswer();
+  .option("--orm <type>", "Select ORM (prisma, drizzle)")
+  .option("--db <type>", "Select database (mysql, postgres, mongodb)")
+  .option("--authUi <value>", "Include auth UI (yes/no)")
+  .action(async (cmd: cmdType) => {
+    if (!cmd.orm || !cmd.db || !cmd.authUi) {
+      await initAnswer();
+    } else {
+      await initCmd(cmd);
+    }
   });
 
 program
