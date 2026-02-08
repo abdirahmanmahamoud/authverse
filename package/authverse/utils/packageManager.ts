@@ -9,35 +9,35 @@ export const getPackageManager = (): PM => {
   if (ua.includes("pnpm")) return "pnpm";
   if (ua.includes("yarn")) return "yarn";
 
-  return "npm";
+  return "pnpm";
 };
 
 const pm = getPackageManager();
 
 export const packageManager = (pkg: string, dev = false) => {
-  if (pm === "npm") {
-    execSync(`npm install ${pkg} ${dev ? "--save-dev" : ""}`, {
-      stdio: "inherit",
-    });
+  if (pm === "pnpm") {
+    execSync(`pnpm add ${dev ? "-D " : ""}${pkg}`, { stdio: "inherit" });
   } else if (pm === "yarn") {
     execSync(`yarn add ${dev ? "--dev " : ""}${pkg}`, { stdio: "inherit" });
   } else if (pm === "bun") {
     execSync(`bun add ${dev ? "-d " : ""}${pkg}`, { stdio: "inherit" });
   } else {
-    execSync(`pnpm add ${dev ? "-D " : ""}${pkg}`, { stdio: "inherit" });
+    execSync(`npm install ${pkg} ${dev ? "--save-dev" : ""}`, {
+      stdio: "inherit",
+    });
   }
 };
 
 export const runCommand = (cmd: string) => {
   const pm = getPackageManager();
 
-  if (pm === "npm") {
-    execSync(`npx ${cmd}`, { stdio: "inherit" });
+  if (pm === "pnpm") {
+    execSync(`pnpm dlx ${cmd}`, { stdio: "inherit" });
   } else if (pm === "bun") {
     execSync(`bunx ${cmd}`, { stdio: "inherit" });
   } else if (pm === "yarn") {
     execSync(`yarn dlx ${cmd}`, { stdio: "inherit" });
   } else {
-    execSync(`pnpm dlx ${cmd}`, { stdio: "inherit" });
+    execSync(`npx ${cmd}`, { stdio: "inherit" });
   }
 };
