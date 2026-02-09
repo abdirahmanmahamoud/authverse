@@ -55,8 +55,11 @@ export const authUiTanstackState = async ({
       runCommand(`shadcn@latest add ${install}`);
     }
 
-    if (!packageJson.dependencies?.["@tanstack/react-form"]) {
-      packageManager("@tanstack/react-form");
+    if (
+      !packageJson.dependencies?.["@tanstack/react-form"] ||
+      !packageJson.dependencies?.["zod"]
+    ) {
+      packageManager("@tanstack/react-form zod");
     }
 
     //  Fix for __dirname in ES module
