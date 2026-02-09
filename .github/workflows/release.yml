@@ -21,13 +21,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-          registry-url: "https://registry.npmjs.org"
-          cache: "npm"
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         working-directory: package/authverse
-        run: npm install
+        run: npm ci
 
       - name: Build package
         working-directory: package/authverse
