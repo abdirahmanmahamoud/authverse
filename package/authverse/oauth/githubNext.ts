@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const githubRunTanstackState = async () => {
+export const githubNext = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -12,8 +12,9 @@ export const githubRunTanstackState = async () => {
 
     // detect src folder
     const srcPath = path.join(projectDir, "src");
+    const folder = fs.existsSync(srcPath) ? "src" : "";
 
-    const authFilePath = path.join(srcPath, "lib", "auth.ts");
+    const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
       console.log(chalk.red("auth.ts file not found"));
@@ -29,7 +30,7 @@ export const githubRunTanstackState = async () => {
 
     // prevent duplicate
     if (content.includes("socialProviders") && content.includes("github:")) {
-      console.log(chalk.yellow("Github provider already exists"));
+      console.log(chalk.yellow("GitHub provider already exists"));
       return;
     }
 
@@ -74,8 +75,8 @@ export const githubRunTanstackState = async () => {
       if (!databaseRegex.test(content)) {
         console.log(
           chalk.red(
-            "Could not find database adapter (prismaAdapter or drizzleAdapter)"
-          )
+            "Could not find database adapter (prismaAdapter or drizzleAdapter)",
+          ),
         );
         return;
       }
@@ -87,7 +88,7 @@ ${githubProviderEntry}
 
       content = content.replace(
         databaseRegex,
-        (match) => `${match}\n${socialProvidersBlock}`
+        (match) => `${match}\n${socialProvidersBlock}`,
       );
     }
 
@@ -100,18 +101,23 @@ ${githubProviderEntry}
       if (!envContent.includes("GITHUB_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Github OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`
+          `\n\n# GitHub OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy GoogleProviders.tsx
+    // Copy GithubProviders.ts
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/GithubProviders.tsx"
+      "./template/components/GithubProviders.tsx",
     );
 
-    const componentsDir = path.join(srcPath, "components", "authverse");
+    const componentsDir = path.join(
+      projectDir,
+      folder,
+      "components",
+      "authverse",
+    );
 
     if (!fs.existsSync(componentsDir)) {
       fs.mkdirSync(componentsDir, { recursive: true });
@@ -123,8 +129,8 @@ ${githubProviderEntry}
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Github provider added & merged successfully"));
+    console.log(chalk.green("GitHub provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("githubRunTanstackState error:"), error);
+    console.log(chalk.red("githubRun error:"), error);
   }
 };

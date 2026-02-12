@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const googleRunTanstackState = async () => {
+export const githubTanstackState = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,15 +28,15 @@ export const googleRunTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("google:")) {
-      console.log(chalk.yellow("Google provider already exists"));
+    if (content.includes("socialProviders") && content.includes("github:")) {
+      console.log(chalk.yellow("Github provider already exists"));
       return;
     }
 
-    const googleProviderEntry = `
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    const githubProviderEntry = `
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -63,7 +63,7 @@ export const googleRunTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        googleProviderEntry +
+        githubProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -74,20 +74,20 @@ export const googleRunTanstackState = async () => {
       if (!databaseRegex.test(content)) {
         console.log(
           chalk.red(
-            "Could not find database adapter (prismaAdapter or drizzleAdapter)"
-          )
+            "Could not find database adapter (prismaAdapter or drizzleAdapter)",
+          ),
         );
         return;
       }
 
       const socialProvidersBlock = `
   socialProviders: {
-${googleProviderEntry}
+${githubProviderEntry}
   },`;
 
       content = content.replace(
         databaseRegex,
-        (match) => `${match}\n${socialProvidersBlock}`
+        (match) => `${match}\n${socialProvidersBlock}`,
       );
     }
 
@@ -97,10 +97,10 @@ ${googleProviderEntry}
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("GOOGLE_CLIENT_ID")) {
+      if (!envContent.includes("GITHUB_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`
+          `\n\n# Github OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`,
         );
       }
     }
@@ -108,7 +108,7 @@ ${googleProviderEntry}
     // Copy GoogleProviders.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/GoogleProviders.tsx"
+      "./template/TanstackState/components/GithubProviders.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -117,14 +117,14 @@ ${googleProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "GoogleProviders.tsx");
+    const componentDest = path.join(componentsDir, "GithubProviders.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Google provider added & merged successfully"));
+    console.log(chalk.green("Github provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("googleRunTanstackState error:"), error);
+    console.log(chalk.red("githubRunTanstackState error:"), error);
   }
 };

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const githubRun = async () => {
+export const googleNext = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -17,7 +17,7 @@ export const githubRun = async () => {
     const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
-      console.log(chalk.red("auth.ts file not found"));
+      console.log(chalk.red("❌ auth.ts file not found"));
       return;
     }
 
@@ -29,15 +29,15 @@ export const githubRun = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("github:")) {
-      console.log(chalk.yellow("GitHub provider already exists"));
+    if (content.includes("socialProviders") && content.includes("google:")) {
+      console.log(chalk.yellow("Google provider already exists"));
       return;
     }
 
-    const githubProviderEntry = `
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    const googleProviderEntry = `
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -64,7 +64,7 @@ export const githubRun = async () => {
 
       content =
         content.slice(0, insertPos) +
-        githubProviderEntry +
+        googleProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -75,20 +75,20 @@ export const githubRun = async () => {
       if (!databaseRegex.test(content)) {
         console.log(
           chalk.red(
-            "Could not find database adapter (prismaAdapter or drizzleAdapter)"
-          )
+            "Could not find database adapter (prismaAdapter or drizzleAdapter)",
+          ),
         );
         return;
       }
 
       const socialProvidersBlock = `
   socialProviders: {
-${githubProviderEntry}
+${googleProviderEntry}
   },`;
 
       content = content.replace(
         databaseRegex,
-        (match) => `${match}\n${socialProvidersBlock}`
+        (match) => `${match}\n${socialProvidersBlock}`,
       );
     }
 
@@ -98,39 +98,39 @@ ${githubProviderEntry}
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("GITHUB_CLIENT_ID")) {
+      if (!envContent.includes("GOOGLE_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# GitHub OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`
+          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy GithubProviders.ts
+    // Copy GoogleProviders.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/components/GithubProviders.tsx"
+      "./template/components/GoogleProviders.tsx",
     );
 
     const componentsDir = path.join(
       projectDir,
       folder,
       "components",
-      "authverse"
+      "authverse",
     );
 
     if (!fs.existsSync(componentsDir)) {
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "GithubProviders.tsx");
+    const componentDest = path.join(componentsDir, "GoogleProviders.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("GitHub provider added & merged successfully"));
+    console.log(chalk.green("Google provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("githubRun error:"), error);
+    console.log(chalk.red("googleRun error:"), error);
   }
 };

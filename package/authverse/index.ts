@@ -2,7 +2,7 @@
 import { Command } from "commander";
 import { initAnswer } from "./cli/init.js";
 import { readFileSync } from "fs";
-import { providers } from "./cli/provider.js";
+import { Oauth } from "./cli/oauth.js";
 import { forget } from "./cli/forget.js";
 import { email } from "./cli/email.js";
 import { verification } from "./cli/verification.js";
@@ -35,10 +35,10 @@ program
   });
 
 program
-  .command("add <provider>")
+  .command("add <oauth>")
   .description("Add a new authentication provider")
-  .action(async (provider: string) => {
-    await providers({ provider });
+  .action(async (oauth: string) => {
+    await Oauth({ oauth });
   });
 
 program

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const googleRun = async () => {
+export const googleTanstackState = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -12,12 +12,11 @@ export const googleRun = async () => {
 
     // detect src folder
     const srcPath = path.join(projectDir, "src");
-    const folder = fs.existsSync(srcPath) ? "src" : "";
 
-    const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
+    const authFilePath = path.join(srcPath, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
-      console.log(chalk.red("❌ auth.ts file not found"));
+      console.log(chalk.red("auth.ts file not found"));
       return;
     }
 
@@ -75,8 +74,8 @@ export const googleRun = async () => {
       if (!databaseRegex.test(content)) {
         console.log(
           chalk.red(
-            "Could not find database adapter (prismaAdapter or drizzleAdapter)"
-          )
+            "Could not find database adapter (prismaAdapter or drizzleAdapter)",
+          ),
         );
         return;
       }
@@ -88,7 +87,7 @@ ${googleProviderEntry}
 
       content = content.replace(
         databaseRegex,
-        (match) => `${match}\n${socialProvidersBlock}`
+        (match) => `${match}\n${socialProvidersBlock}`,
       );
     }
 
@@ -101,7 +100,7 @@ ${googleProviderEntry}
       if (!envContent.includes("GOOGLE_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`
+          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`,
         );
       }
     }
@@ -109,15 +108,10 @@ ${googleProviderEntry}
     // Copy GoogleProviders.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/components/GoogleProviders.tsx"
+      "./template/TanstackState/components/GoogleProviders.tsx",
     );
 
-    const componentsDir = path.join(
-      projectDir,
-      folder,
-      "components",
-      "authverse"
-    );
+    const componentsDir = path.join(srcPath, "components", "authverse");
 
     if (!fs.existsSync(componentsDir)) {
       fs.mkdirSync(componentsDir, { recursive: true });
@@ -131,6 +125,6 @@ ${googleProviderEntry}
 
     console.log(chalk.green("Google provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("googleRun error:"), error);
+    console.log(chalk.red("googleRunTanstackState error:"), error);
   }
 };
