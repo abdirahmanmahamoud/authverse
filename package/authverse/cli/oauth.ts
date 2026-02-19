@@ -11,6 +11,9 @@ import { LinkedInTanstackState } from "../oauth/LinkedInTanstackState.js";
 import { twitterNext } from "../oauth/twitterNext.js";
 import { twitterTanstackState } from "../oauth/twitterTanstackState.js";
 
+import { AppleNext } from "../oauth/AppleNext.js";
+import { AppleTanstackState } from "../oauth/AppleTanstackState.js";
+
 export const Oauth = async ({ oauth }: { oauth: string }) => {
   try {
     const { framework, error } = await getFramework();
@@ -50,12 +53,19 @@ export const Oauth = async ({ oauth }: { oauth: string }) => {
       await twitterTanstackState();
     }
 
+    if (framework === "Next js" && oauth === "apple") {
+      await AppleNext();
+    } else if (framework === "tanstack state" && oauth === "apple") {
+      await AppleTanstackState();
+    }
+
     if (
       oauth !== "google" &&
       oauth !== "github" &&
       oauth !== "facebook" &&
       oauth !== "LinkedIn" &&
-      oauth !== "twitter"
+      oauth !== "twitter" &&
+      oauth !== "apple"
     ) {
       console.log(chalk.red("Invalid oauth provider"));
       return;
