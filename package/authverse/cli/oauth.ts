@@ -4,6 +4,8 @@ import { githubNext } from "../oauth/githubNext.js";
 import { googleTanstackState } from "../oauth/googleTanstackState.js";
 import { githubTanstackState } from "../oauth/githubTanstackState.js";
 import { getFramework } from "../utils/framework.js";
+import { facebookNext } from "../oauth/facebookNext.js";
+import { facebookTanstackState } from "../oauth/facebookTanstackState.js";
 
 export const Oauth = async ({ oauth }: { oauth: string }) => {
   try {
@@ -26,7 +28,13 @@ export const Oauth = async ({ oauth }: { oauth: string }) => {
       await githubTanstackState();
     }
 
-    if (oauth !== "google" && oauth !== "github") {
+    if (framework === "Next js" && oauth == "facebook") {
+      await facebookNext();
+    } else if (framework === "tanstack state" && oauth == "facebook") {
+      await facebookTanstackState();
+    }
+
+    if (oauth !== "google" && oauth !== "github" && oauth !== "facebook") {
       console.log(chalk.red("Invalid oauth provider"));
       return;
     }
