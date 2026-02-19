@@ -8,6 +8,8 @@ import { facebookNext } from "../oauth/facebookNext.js";
 import { facebookTanstackState } from "../oauth/facebookTanstackState.js";
 import { LinkedInNext } from "../oauth/LinkedInNext.js";
 import { LinkedInTanstackState } from "../oauth/LinkedInTanstackState.js";
+import { twitterNext } from "../oauth/twitterNext.js";
+import { twitterTanstackState } from "../oauth/twitterTanstackState.js";
 
 export const Oauth = async ({ oauth }: { oauth: string }) => {
   try {
@@ -42,11 +44,18 @@ export const Oauth = async ({ oauth }: { oauth: string }) => {
       await LinkedInTanstackState();
     }
 
+    if (framework === "Next js" && oauth === "twitter") {
+      await twitterNext();
+    } else if (framework === "tanstack state" && oauth === "twitter") {
+      await twitterTanstackState();
+    }
+
     if (
       oauth !== "google" &&
       oauth !== "github" &&
       oauth !== "facebook" &&
-      oauth !== "LinkedIn"
+      oauth !== "LinkedIn" &&
+      oauth !== "twitter"
     ) {
       console.log(chalk.red("Invalid oauth provider"));
       return;
