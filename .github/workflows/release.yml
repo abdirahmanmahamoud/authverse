@@ -7,6 +7,13 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM || github.repository_owner }}
+  TURBO_CACHE: remote:rw
+  TURBO_FORCE: true
 
 jobs:
   release:
@@ -44,13 +51,27 @@ jobs:
             exit 1
           fi
 
+      - name: Determine npm tag
+        id: determine_npm_tag
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [[ "$TAG" =~ -(beta|rc|next|alpha|canary)\. ]]; then
+            NPM_TAG=${BASH_REMATCH[1]}
+          else
+            NPM_TAG="latest"
+          fi
+          echo "npm_tag=$NPM_TAG" >> $GITHUB_OUTPUT
+          echo "Using npm tag: $NPM_TAG"
+
       - name: Publish to npm
         working-directory: package/authverse
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+          NPM_CONFIG_PROVENANCE: true
+        run: npm publish --tag ${{ steps.determine_npm_tag.outputs.npm_tag }} --access public --provenance
 
       - name: Generate changelog & create GitHub Release
+        working-directory: package/authverse
         run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
