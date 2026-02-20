@@ -35,7 +35,7 @@ program
   });
 
 program
-  .command("add <oauth>")
+  .command("oauth <oauth>")
   .description("Add a new authentication OAuth")
   .action(async (oauth: string) => {
     await Oauth({ oauth });
