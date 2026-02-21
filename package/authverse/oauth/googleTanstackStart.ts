@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const githubTanstackState = async () => {
+export const googleTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,15 +28,15 @@ export const githubTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("github:")) {
-      console.log(chalk.yellow("Github provider already exists"));
+    if (content.includes("socialProviders") && content.includes("google:")) {
+      console.log(chalk.yellow("Google provider already exists"));
       return;
     }
 
-    const githubProviderEntry = `
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    const googleProviderEntry = `
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -63,7 +63,7 @@ export const githubTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        githubProviderEntry +
+        googleProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -82,7 +82,7 @@ export const githubTanstackState = async () => {
 
       const socialProvidersBlock = `
   socialProviders: {
-${githubProviderEntry}
+${googleProviderEntry}
   },`;
 
       content = content.replace(
@@ -97,18 +97,18 @@ ${githubProviderEntry}
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("GITHUB_CLIENT_ID")) {
+      if (!envContent.includes("GOOGLE_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Github OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`,
+          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy GithubOAuthButton.tsx
+    // Copy `GoogleOAuthButt`on.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/GithubOAuthButton.tsx",
+      "./template/TanstackStart/components/GoogleOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -117,14 +117,14 @@ ${githubProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "GithubOAuthButton.tsx");
+    const componentDest = path.join(componentsDir, "GoogleOAuthButton.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Github provider added & merged successfully"));
+    console.log(chalk.green("Google provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("githubRunTanstackState error:"), error);
+    console.log(chalk.red("googleRunTanstackState error:"), error);
   }
 };

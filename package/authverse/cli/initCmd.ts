@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { getFramework } from "../utils/framework.js";
 import { prismaRun } from "../script/prisma.js";
-import { prismaRunTanstackState } from "../script/prismaRunTanstackState.js";
+import { prismaRunTanstackStart } from "../script/prismaRunTanstackStart.js";
 import { drizzleRun } from "../script/drizzleRun.js";
-import { drizzleRunTanstackState } from "../script/drizzleRunTanstackState.js";
+import { drizzleRunTanstackStart } from "../script/drizzleRunTanstackStart.js";
 
 export type cmdType = {
   orm: "prisma" | "drizzle";
@@ -36,18 +36,18 @@ export const initCmd = async (cmd: cmdType) => {
       });
     }
 
-    // tanstack state or Prisma Installation
-    if (framework === "tanstack state" && cmd.orm === "prisma") {
-      await prismaRunTanstackState({
+    // tanstack start or Prisma Installation
+    if (framework === "tanstack start" && cmd.orm === "prisma") {
+      await prismaRunTanstackStart({
         authUi: cmd.authUi === "yes" ? true : false,
         database: cmd.db,
         cmd: true,
       });
     }
 
-    // tanstack state or Drizzle Installation
-    if (framework === "tanstack state" && cmd.orm === "drizzle") {
-      await drizzleRunTanstackState({
+    // tanstack start or Drizzle Installation
+    if (framework === "tanstack start" && cmd.orm === "drizzle") {
+      await drizzleRunTanstackStart({
         authUi: cmd.authUi === "yes" ? true : false,
         cmd: true,
       });

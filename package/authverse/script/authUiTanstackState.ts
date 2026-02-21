@@ -71,7 +71,7 @@ export const authUiTanstackState = async ({
 
     const componentPath = path.resolve(
       __dirname,
-      "./template/TanstackState/components",
+      "./template/TanstackStart/components",
     );
 
     // Copy component files
@@ -104,7 +104,7 @@ export const authUiTanstackState = async ({
     // template routes page
     const templateRoutesPage = path.resolve(
       __dirname,
-      "./template/TanstackState/routes/auth",
+      "./template/TanstackStart/routes/auth",
     );
 
     fs.copyFileSync(

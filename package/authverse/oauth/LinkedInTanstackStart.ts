@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const LinkedInTanstackState = async () => {
+export const LinkedInTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -108,7 +108,7 @@ ${LinkedInProviderEntry}
     // Copy LinkedInOAuthButton.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/LinkedInOAuthButton.tsx",
+      "./template/TanstackStart/components/LinkedInOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");

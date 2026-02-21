@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 
 type returnFramework = {
-  framework: "Next js" | "tanstack state" | null;
+  framework: "Next js" | "tanstack start" | null;
   error: string | null;
 };
 
@@ -41,7 +41,7 @@ export const getFramework = async (): Promise<returnFramework> => {
 
   if (hasTanstackState) {
     return {
-      framework: "tanstack state",
+      framework: "tanstack start",
       error: null,
     };
   }

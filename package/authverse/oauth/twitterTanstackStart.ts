@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const googleTanstackState = async () => {
+export const twitterTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,15 +28,15 @@ export const googleTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("google:")) {
-      console.log(chalk.yellow("Google provider already exists"));
+    if (content.includes("socialProviders") && content.includes("twitter:")) {
+      console.log(chalk.yellow("twitter provider already exists"));
       return;
     }
 
-    const googleProviderEntry = `
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    const twitterProviderEntry = `
+    twitter: {
+      clientId: process.env.TWITTER_CLIENT_ID as string,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -63,7 +63,7 @@ export const googleTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        googleProviderEntry +
+        twitterProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -82,7 +82,7 @@ export const googleTanstackState = async () => {
 
       const socialProvidersBlock = `
   socialProviders: {
-${googleProviderEntry}
+${twitterProviderEntry}
   },`;
 
       content = content.replace(
@@ -97,18 +97,18 @@ ${googleProviderEntry}
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("GOOGLE_CLIENT_ID")) {
+      if (!envContent.includes("TWITTER_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Google OAuth\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n`,
+          `\n\n# twitter OAuth\nTWITTER_CLIENT_ID=\nTWITTER_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy `GoogleOAuthButt`on.tsx
+    // Copy twitterOAuthButton.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/GoogleOAuthButton.tsx",
+      "./template/TanstackStart/components/twitterOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -117,14 +117,14 @@ ${googleProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "GoogleOAuthButton.tsx");
+    const componentDest = path.join(componentsDir, "twitterOAuthButton.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Google provider added & merged successfully"));
+    console.log(chalk.green("twitter provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("googleRunTanstackState error:"), error);
+    console.log(chalk.red("twitter tanstack state error:"), error);
   }
 };

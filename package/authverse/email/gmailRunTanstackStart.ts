@@ -4,7 +4,7 @@ import fs from "fs";
 import { packageManager } from "../utils/packageManager.js";
 import { fileURLToPath } from "url";
 
-export const gmailRunTanstackState = async () => {
+export const gmailRunTanstackStart = async () => {
   try {
     const projectDir = process.cwd();
     const packageJsonPath = path.join(projectDir, "package.json");
@@ -50,7 +50,7 @@ export const gmailRunTanstackState = async () => {
     // template/email/gmail.tsx
     const templatePath = path.resolve(
       __dirname,
-      "./template/email/emailGmail.ts"
+      "./template/email/emailGmail.ts",
     );
 
     // create lib/email.ts

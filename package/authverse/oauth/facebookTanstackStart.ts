@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const twitterTanstackState = async () => {
+export const facebookTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,15 +28,15 @@ export const twitterTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("twitter:")) {
-      console.log(chalk.yellow("twitter provider already exists"));
+    if (content.includes("socialProviders") && content.includes("facebook:")) {
+      console.log(chalk.yellow("Facebook provider already exists"));
       return;
     }
 
-    const twitterProviderEntry = `
-    twitter: {
-      clientId: process.env.TWITTER_CLIENT_ID as string,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+    const facebookProviderEntry = `
+    facebook: {
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -63,7 +63,7 @@ export const twitterTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        twitterProviderEntry +
+        facebookProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -82,7 +82,7 @@ export const twitterTanstackState = async () => {
 
       const socialProvidersBlock = `
   socialProviders: {
-${twitterProviderEntry}
+${facebookProviderEntry}
   },`;
 
       content = content.replace(
@@ -97,18 +97,18 @@ ${twitterProviderEntry}
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("TWITTER_CLIENT_ID")) {
+      if (!envContent.includes("FACEBOOK_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# twitter OAuth\nTWITTER_CLIENT_ID=\nTWITTER_CLIENT_SECRET=\n`,
+          `\n\n# Facebook OAuth\nFACEBOOK_CLIENT_ID=\nFACEBOOK_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy twitterOAuthButton.tsx
+    // Copy FacebookOAuthButton.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/twitterOAuthButton.tsx",
+      "./template/TanstackStart/components/FacebookOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -117,14 +117,14 @@ ${twitterProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "twitterOAuthButton.tsx");
+    const componentDest = path.join(componentsDir, "FacebookOAuthButton.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("twitter provider added & merged successfully"));
+    console.log(chalk.green("Facebook provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("twitter tanstack state error:"), error);
+    console.log(chalk.red("facebookRunTanstackState error:"), error);
   }
 };

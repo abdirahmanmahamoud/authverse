@@ -14,7 +14,7 @@ export const forget = async () => {
   if (framework === "Next js") {
     return forgetNext();
   }
-  if (framework === "tanstack state") {
+  if (framework === "tanstack start") {
     return forgetTanstack();
   }
 };

@@ -2,11 +2,11 @@ import path from "path";
 import fs from "fs";
 import inquirer from "inquirer";
 import { gmailRun } from "../email/gmailRun.js";
-import { gmailRunTanstackState } from "../email/gmailRunTanstackState.js";
+import { gmailRunTanstackStart } from "../email/gmailRunTanstackStart.js";
 import { awsSesRun } from "../email/awsSesRun.js";
-import { awsSesRunTanstackState } from "../email/awsSesRunTanstackState.js";
+import { awsSesRunTanstackStart } from "../email/awsSesRunTanstackStart.js";
 import { resendRun } from "../email/resendRun.js";
-import { resendRunTanstackState } from "../email/resendRunTanstackState.js";
+import { resendRunTanstackStart } from "../email/resendRunTanstackStart.js";
 import { getFramework } from "../utils/framework.js";
 import chalk from "chalk";
 
@@ -41,8 +41,8 @@ export const email = async () => {
     }
   }
 
-  //   Tanstack state
-  if (framework === "tanstack state") {
+  //   Tanstack start
+  if (framework === "tanstack start") {
     const srcFolderTanstackState = path.join(projectDir, "src");
     const libPathTanstackState = path.join(
       srcFolderTanstackState,
@@ -76,19 +76,19 @@ export const email = async () => {
   if (answers.emailProvider === "Gmail" && framework === "Next js") {
     await gmailRun();
   }
-  if (answers.emailProvider === "Gmail" && framework === "tanstack state") {
-    await gmailRunTanstackState();
+  if (answers.emailProvider === "Gmail" && framework === "tanstack start") {
+    await gmailRunTanstackStart();
   }
   if (answers.emailProvider === "AWS SES" && framework === "Next js") {
     await awsSesRun();
   }
-  if (answers.emailProvider === "AWS SES" && framework === "tanstack state") {
-    await awsSesRunTanstackState();
+  if (answers.emailProvider === "AWS SES" && framework === "tanstack start") {
+    await awsSesRunTanstackStart();
   }
   if (answers.emailProvider === "Resend" && framework === "Next js") {
     await resendRun();
   }
-  if (answers.emailProvider === "Resend" && framework === "tanstack state") {
-    await resendRunTanstackState();
+  if (answers.emailProvider === "Resend" && framework === "tanstack start") {
+    await resendRunTanstackStart();
   }
 };

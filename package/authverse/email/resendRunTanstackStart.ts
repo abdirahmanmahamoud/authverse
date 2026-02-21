@@ -4,7 +4,7 @@ import fs from "fs";
 import { packageManager } from "../utils/packageManager.js";
 import { fileURLToPath } from "url";
 
-export const resendRunTanstackState = async () => {
+export const resendRunTanstackStart = async () => {
   try {
     const projectDir = process.cwd();
     const packageJsonPath = path.join(projectDir, "package.json");
@@ -40,7 +40,7 @@ export const resendRunTanstackState = async () => {
     // template/email/resend.tsx
     const templatePath = path.resolve(
       __dirname,
-      "./template/email/emailResend.ts"
+      "./template/email/emailResend.ts",
     );
 
     // create lib/email.ts

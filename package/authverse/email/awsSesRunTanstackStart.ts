@@ -4,7 +4,7 @@ import fs from "fs";
 import { packageManager } from "../utils/packageManager.js";
 import { fileURLToPath } from "url";
 
-export const awsSesRunTanstackState = async () => {
+export const awsSesRunTanstackStart = async () => {
   try {
     const projectDir = process.cwd();
     const packageJsonPath = path.join(projectDir, "package.json");
@@ -50,7 +50,7 @@ export const awsSesRunTanstackState = async () => {
     // template/email/emailAwsSes.ts
     const templatePath = path.resolve(
       __dirname,
-      "./template/email/emailAwsSes.ts"
+      "./template/email/emailAwsSes.ts",
     );
 
     // create lib/email.ts

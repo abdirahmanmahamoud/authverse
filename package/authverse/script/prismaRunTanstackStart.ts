@@ -6,17 +6,17 @@ import { packageManager, runCommand } from "../utils/packageManager.js";
 import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiTanstackState } from "./authUiTanstackState.js";
 
-interface prismaRunTanstackStateProps {
+interface prismaRunTanstackStartProps {
   authUi: boolean;
   database: "Postgresql" | "Mongodb" | "Mysql";
   cmd: boolean;
 }
 
-export const prismaRunTanstackState = async ({
+export const prismaRunTanstackStart = async ({
   authUi,
   database,
   cmd,
-}: prismaRunTanstackStateProps) => {
+}: prismaRunTanstackStartProps) => {
   try {
     // Get project directory
     const projectDir = process.cwd();
@@ -147,7 +147,7 @@ export const prismaRunTanstackState = async ({
     // Copy auth.ts
     const authTemplatePath = path.resolve(
       __dirname,
-      `./template/TanstackState/lib/${database}/auth.ts`,
+      `./template/TanstackStart/lib/${database}/auth.ts`,
     );
     const authDestinationPath = path.join(libPath, "auth.ts");
     fs.copyFileSync(authTemplatePath, authDestinationPath);
@@ -171,7 +171,7 @@ export const prismaRunTanstackState = async ({
     // Copy auth.ts
     const authMiddlewareTemplatePath = path.resolve(
       __dirname,
-      `./template/TanstackState/middleware/auth.ts`,
+      `./template/TanstackStart/middleware/auth.ts`,
     );
     const authMiddlewareDestinationPath = path.join(middlewarePath, "auth.ts");
     fs.copyFileSync(authMiddlewareTemplatePath, authMiddlewareDestinationPath);
@@ -179,7 +179,7 @@ export const prismaRunTanstackState = async ({
     // create file routes/api/auth/$.ts
     const fileRouteTemplatePath = path.resolve(
       __dirname,
-      `./template/TanstackState/routes/$.ts`,
+      `./template/TanstackStart/routes/$.ts`,
     );
     const fileRouteDestinationPath = path.join(
       srcPath,

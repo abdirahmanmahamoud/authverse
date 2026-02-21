@@ -15,7 +15,7 @@ export const verification = async () => {
     if (framework === "Next js") {
       await verifyNext();
     }
-    if (framework === "tanstack state") {
+    if (framework === "tanstack start") {
       await verifyTanstack();
     }
   } catch (error: any) {

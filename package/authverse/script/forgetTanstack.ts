@@ -2,7 +2,6 @@ import chalk from "chalk";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import { packageManager } from "../utils/packageManager.js";
 import { email } from "../cli/email.js";
 
 export const forgetTanstack = async () => {
@@ -71,7 +70,7 @@ export const forgetTanstack = async () => {
       // Get the content inside emailAndPassword
       const emailAndPasswordContent = content.substring(
         emailAndPasswordStart,
-        emailAndPasswordEnd
+        emailAndPasswordEnd,
       );
 
       // Check if sendResetPassword already exists
@@ -79,7 +78,7 @@ export const forgetTanstack = async () => {
         // Replace existing sendResetPassword
         content = content.replace(
           /sendResetPassword:\s*async\s*\([^)]*\)[^{]*\{[^}]*\}[^,]*/,
-          codeAdded
+          codeAdded,
         );
       } else {
         // Insert sendResetPassword before the closing brace of emailAndPassword
@@ -109,7 +108,7 @@ export const forgetTanstack = async () => {
       // Add components/email/reset-password.tsx
       const componentPath = path.resolve(
         __dirname,
-        "./template/email/reset-password.tsx"
+        "./template/email/reset-password.tsx",
       );
 
       const destinationPath = path.join(srcPath, "components", "email");
@@ -121,7 +120,7 @@ export const forgetTanstack = async () => {
 
       const emailDestinationPath = path.join(
         destinationPath,
-        "reset-password.tsx"
+        "reset-password.tsx",
       );
 
       if (fs.existsSync(componentPath)) {
@@ -131,12 +130,12 @@ export const forgetTanstack = async () => {
       // Add components/authverse/ForgetComponent.tsx
       const forgetComponentPath = path.resolve(
         __dirname,
-        "./template/TanstackState/components/ForgetComponent.tsx"
+        "./template/TanstackStart/components/ForgetComponent.tsx",
       );
       const componentsDestinationPath = path.join(
         srcPath,
         "components",
-        "authverse"
+        "authverse",
       );
 
       // Ensure the directory exists before copying the file
@@ -146,7 +145,7 @@ export const forgetTanstack = async () => {
 
       const forgetDestinationPath = path.join(
         componentsDestinationPath,
-        "ForgetComponent.tsx"
+        "ForgetComponent.tsx",
       );
 
       if (fs.existsSync(forgetComponentPath)) {
@@ -156,12 +155,12 @@ export const forgetTanstack = async () => {
       // Add components/authverse/ResetComponent.tsx
       const resetComponentPath = path.resolve(
         __dirname,
-        "./template/TanstackState/components/ResetComponent.tsx"
+        "./template/TanstackStart/components/ResetComponent.tsx",
       );
 
       const resetDestinationPath = path.join(
         componentsDestinationPath,
-        "ResetComponent.tsx"
+        "ResetComponent.tsx",
       );
 
       if (fs.existsSync(resetComponentPath)) {
@@ -171,7 +170,7 @@ export const forgetTanstack = async () => {
       // app add auth
       const authTemplatePath = path.resolve(
         __dirname,
-        "./template/TanstackState/routes/auth"
+        "./template/TanstackStart/routes/auth",
       );
 
       // Create app directory
@@ -184,30 +183,30 @@ export const forgetTanstack = async () => {
       // Copy forget page.tsx
       const forgetPageDestinationPath = path.join(
         routesDestinationPath,
-        "forget.tsx"
+        "forget.tsx",
       );
       fs.copyFileSync(
         `${authTemplatePath}/forget.tsx`,
-        forgetPageDestinationPath
+        forgetPageDestinationPath,
       );
 
       // Copy reset-password page.tsx
       const resetPageDestinationPath = path.join(
         routesDestinationPath,
-        "reset-password.tsx"
+        "reset-password.tsx",
       );
 
       fs.copyFileSync(
         `${authTemplatePath}/reset-password.tsx`,
-        resetPageDestinationPath
+        resetPageDestinationPath,
       );
 
       console.log(
-        chalk.green("Successfully added forget and reset-password pages")
+        chalk.green("Successfully added forget and reset-password pages"),
       );
     } else {
       console.log(
-        chalk.red("Could not find emailAndPassword configuration in auth.ts")
+        chalk.red("Could not find emailAndPassword configuration in auth.ts"),
       );
     }
   } catch (error) {

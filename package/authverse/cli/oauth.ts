@@ -1,18 +1,18 @@
 import chalk from "chalk";
 import { googleNext } from "../oauth/googleNext.js";
 import { githubNext } from "../oauth/githubNext.js";
-import { googleTanstackState } from "../oauth/googleTanstackState.js";
-import { githubTanstackState } from "../oauth/githubTanstackState.js";
+import { googleTanstackStart } from "../oauth/googleTanstackStart.js";
+import { githubTanstackStart } from "../oauth/githubTanstackStart.js";
 import { getFramework } from "../utils/framework.js";
 import { facebookNext } from "../oauth/facebookNext.js";
-import { facebookTanstackState } from "../oauth/facebookTanstackState.js";
+import { facebookTanstackStart } from "../oauth/facebookTanstackStart.js";
 import { LinkedInNext } from "../oauth/LinkedInNext.js";
-import { LinkedInTanstackState } from "../oauth/LinkedInTanstackState.js";
+import { LinkedInTanstackStart } from "../oauth/LinkedInTanstackStart.js";
 import { twitterNext } from "../oauth/twitterNext.js";
-import { twitterTanstackState } from "../oauth/twitterTanstackState.js";
+import { twitterTanstackStart } from "../oauth/twitterTanstackStart.js";
 
 import { AppleNext } from "../oauth/AppleNext.js";
-import { AppleTanstackState } from "../oauth/AppleTanstackState.js";
+import { AppleTanstackStart } from "../oauth/AppleTanstackStart.js";
 
 export const Oauth = async ({ oauth }: { oauth: string }) => {
   try {
@@ -29,34 +29,34 @@ export const Oauth = async ({ oauth }: { oauth: string }) => {
       await githubNext();
     }
 
-    if (framework === "tanstack state" && oauth == "google") {
-      await googleTanstackState();
-    } else if (framework === "tanstack state" && oauth == "github") {
-      await githubTanstackState();
+    if (framework === "tanstack start" && oauth == "google") {
+      await googleTanstackStart();
+    } else if (framework === "tanstack start" && oauth == "github") {
+      await githubTanstackStart();
     }
 
     if (framework === "Next js" && oauth == "facebook") {
       await facebookNext();
-    } else if (framework === "tanstack state" && oauth == "facebook") {
-      await facebookTanstackState();
+    } else if (framework === "tanstack start" && oauth == "facebook") {
+      await facebookTanstackStart();
     }
 
     if (framework === "Next js" && oauth === "LinkedIn") {
       await LinkedInNext();
-    } else if (framework === "tanstack state" && oauth === "LinkedIn") {
-      await LinkedInTanstackState();
+    } else if (framework === "tanstack start" && oauth === "LinkedIn") {
+      await LinkedInTanstackStart();
     }
 
     if (framework === "Next js" && oauth === "twitter") {
       await twitterNext();
-    } else if (framework === "tanstack state" && oauth === "twitter") {
-      await twitterTanstackState();
+    } else if (framework === "tanstack start" && oauth === "twitter") {
+      await twitterTanstackStart();
     }
 
     if (framework === "Next js" && oauth === "apple") {
       await AppleNext();
-    } else if (framework === "tanstack state" && oauth === "apple") {
-      await AppleTanstackState();
+    } else if (framework === "tanstack start" && oauth === "apple") {
+      await AppleTanstackStart();
     }
 
     if (

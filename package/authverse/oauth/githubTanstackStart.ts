@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const AppleTanstackState = async () => {
+export const githubTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,18 +28,15 @@ export const AppleTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("apple:")) {
-      console.log(chalk.yellow("Apple provider already exists"));
+    if (content.includes("socialProviders") && content.includes("github:")) {
+      console.log(chalk.yellow("Github provider already exists"));
       return;
     }
 
-    // UPDATE 1: Added appBundleIdentifier for native iOS support
-    const appleProviderEntry = `
-    apple: {
-      clientId: process.env.APPLE_CLIENT_ID as string,
-      clientSecret: process.env.APPLE_CLIENT_SECRET as string,
-      // Important for native iOS: Use the app's bundle ID here, not the service ID
-      appBundleIdentifier: process.env.APPLE_BUNDLE_ID,
+    const githubProviderEntry = `
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -66,7 +63,7 @@ export const AppleTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        appleProviderEntry +
+        githubProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -75,7 +72,6 @@ export const AppleTanstackState = async () => {
         /database:\s*(prismaAdapter|drizzleAdapter)\([\s\S]*?\),/;
 
       if (!databaseRegex.test(content)) {
-        // UPDATE 2: Fixed typo in error message
         console.log(
           chalk.red(
             "Could not find database adapter (prismaAdapter or drizzleAdapter)",
@@ -86,7 +82,7 @@ export const AppleTanstackState = async () => {
 
       const socialProvidersBlock = `
   socialProviders: {
-${appleProviderEntry}
+${githubProviderEntry}
   },`;
 
       content = content.replace(
@@ -95,44 +91,24 @@ ${appleProviderEntry}
       );
     }
 
-    // Add appleid.apple.com to trustedOrigins
-    if (content.includes("trustedOrigins: [")) {
-      if (!content.includes("https://appleid.apple.com")) {
-        content = content.replace(
-          "trustedOrigins: [",
-          'trustedOrigins: ["https://appleid.apple.com", ',
-        );
-      }
-    } else {
-      // Add trustedOrigins after socialProviders or database
-      const betterAuthMatch = content.match(/betterAuth\(\{/);
-      if (betterAuthMatch) {
-        const insertPos = betterAuthMatch.index! + betterAuthMatch[0].length;
-        content =
-          content.slice(0, insertPos) +
-          '\n  trustedOrigins: ["https://appleid.apple.com"],' +
-          content.slice(insertPos);
-      }
-    }
-
     fs.writeFileSync(authFilePath, content, "utf8");
 
-    // UPDATE 3: Updated .env to include APPLE_BUNDLE_ID
+    // .env
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("APPLE_CLIENT_ID")) {
+      if (!envContent.includes("GITHUB_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Apple OAuth\nAPPLE_CLIENT_ID=\nAPPLE_CLIENT_SECRET=\nAPPLE_BUNDLE_ID=\n`,
+          `\n\n# Github OAuth\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n`,
         );
       }
     }
 
-    // Copy AppleOAuthButton.tsx
+    // Copy GithubOAuthButton.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/AppleOAuthButton.tsx",
+      "./template/TanstackStart/components/GithubOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -141,14 +117,14 @@ ${appleProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "AppleOAuthButton.tsx");
+    const componentDest = path.join(componentsDir, "GithubOAuthButton.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Apple provider added & merged successfully"));
+    console.log(chalk.green("Github provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("apple tanstack state error:"), error);
+    console.log(chalk.red("githubRunTanstackState error:"), error);
   }
 };

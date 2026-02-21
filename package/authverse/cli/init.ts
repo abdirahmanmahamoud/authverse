@@ -1,8 +1,8 @@
 import inquirer from "inquirer";
 import { prismaRun } from "../script/prisma.js";
 import { drizzleRun } from "../script/drizzleRun.js";
-import { prismaRunTanstackState } from "../script/prismaRunTanstackState.js";
-import { drizzleRunTanstackState } from "../script/drizzleRunTanstackState.js";
+import { prismaRunTanstackStart } from "../script/prismaRunTanstackStart.js";
+import { drizzleRunTanstackStart } from "../script/drizzleRunTanstackStart.js";
 import { getFramework } from "../utils/framework.js";
 import chalk from "chalk";
 
@@ -56,18 +56,18 @@ export const initAnswer = async () => {
     });
   }
 
-  // tanstack state or Prisma Installation
-  if (framework === "tanstack state" && answers.orm === "Prisma") {
-    await prismaRunTanstackState({
+  // tanstack start or Prisma Installation
+  if (framework === "tanstack start" && answers.orm === "Prisma") {
+    await prismaRunTanstackStart({
       authUi: answers.authUi,
       database: answers.database,
       cmd: false,
     });
   }
 
-  // tanstack state or Drizzle Installation
-  if (framework === "tanstack state" && answers.orm === "Drizzle") {
-    await drizzleRunTanstackState({
+  // tanstack start or Drizzle Installation
+  if (framework === "tanstack start" && answers.orm === "Drizzle") {
+    await drizzleRunTanstackStart({
       authUi: answers.authUi,
       cmd: false,
     });

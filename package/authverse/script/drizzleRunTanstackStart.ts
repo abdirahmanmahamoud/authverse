@@ -6,15 +6,15 @@ import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { packageManager } from "../utils/packageManager.js";
 import { authUiTanstackState } from "./authUiTanstackState.js";
 
-interface drizzleRunTanstackStateProps {
+interface drizzleRunTanstackStartProps {
   authUi: boolean;
   cmd: boolean;
 }
 
-export const drizzleRunTanstackState = async ({
+export const drizzleRunTanstackStart = async ({
   authUi,
   cmd,
-}: drizzleRunTanstackStateProps) => {
+}: drizzleRunTanstackStartProps) => {
   try {
     // Get project directory
     const projectDir = process.cwd();
@@ -81,7 +81,7 @@ export const drizzleRunTanstackState = async ({
     // Copy auth.ts
     const authTemplatePath = path.resolve(
       __dirname,
-      "./template/TanstackState/lib/auth-drizzle.ts",
+      "./template/TanstackStart/lib/auth-drizzle.ts",
     );
     const authDestinationPath = path.join(libPath, "auth.ts");
     fs.copyFileSync(authTemplatePath, authDestinationPath);
@@ -132,7 +132,7 @@ export const drizzleRunTanstackState = async ({
     // Copy auth.ts
     const authMiddlewareTemplatePath = path.resolve(
       __dirname,
-      `./template/TanstackState/middleware/auth.ts`,
+      `./template/TanstackStart/middleware/auth.ts`,
     );
     const authMiddlewareDestinationPath = path.join(middlewarePath, "auth.ts");
     fs.copyFileSync(authMiddlewareTemplatePath, authMiddlewareDestinationPath);
@@ -140,7 +140,7 @@ export const drizzleRunTanstackState = async ({
     // create file routes/api/auth/$.ts
     const fileRouteTemplatePath = path.resolve(
       __dirname,
-      `./template/TanstackState/routes/$.ts`,
+      `./template/TanstackStart/routes/$.ts`,
     );
     const fileRouteDestinationPath = path.join(
       srcPath,

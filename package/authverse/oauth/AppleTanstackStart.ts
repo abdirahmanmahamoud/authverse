@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-export const facebookTanstackState = async () => {
+export const AppleTanstackStart = async () => {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -28,15 +28,18 @@ export const facebookTanstackState = async () => {
     }
 
     // prevent duplicate
-    if (content.includes("socialProviders") && content.includes("facebook:")) {
-      console.log(chalk.yellow("Facebook provider already exists"));
+    if (content.includes("socialProviders") && content.includes("apple:")) {
+      console.log(chalk.yellow("Apple provider already exists"));
       return;
     }
 
-    const facebookProviderEntry = `
-    facebook: {
-      clientId: process.env.FACEBOOK_CLIENT_ID as string,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+    // UPDATE 1: Added appBundleIdentifier for native iOS support
+    const appleProviderEntry = `
+    apple: {
+      clientId: process.env.APPLE_CLIENT_ID as string,
+      clientSecret: process.env.APPLE_CLIENT_SECRET as string,
+      // Important for native iOS: Use the app's bundle ID here, not the service ID
+      appBundleIdentifier: process.env.APPLE_BUNDLE_ID,
     },`;
 
     // CASE 1: socialProviders already exists → merge
@@ -63,7 +66,7 @@ export const facebookTanstackState = async () => {
 
       content =
         content.slice(0, insertPos) +
-        facebookProviderEntry +
+        appleProviderEntry +
         "\n  " +
         content.slice(insertPos);
     } else {
@@ -72,6 +75,7 @@ export const facebookTanstackState = async () => {
         /database:\s*(prismaAdapter|drizzleAdapter)\([\s\S]*?\),/;
 
       if (!databaseRegex.test(content)) {
+        // UPDATE 2: Fixed typo in error message
         console.log(
           chalk.red(
             "Could not find database adapter (prismaAdapter or drizzleAdapter)",
@@ -82,7 +86,7 @@ export const facebookTanstackState = async () => {
 
       const socialProvidersBlock = `
   socialProviders: {
-${facebookProviderEntry}
+${appleProviderEntry}
   },`;
 
       content = content.replace(
@@ -91,24 +95,44 @@ ${facebookProviderEntry}
       );
     }
 
+    // Add appleid.apple.com to trustedOrigins
+    if (content.includes("trustedOrigins: [")) {
+      if (!content.includes("https://appleid.apple.com")) {
+        content = content.replace(
+          "trustedOrigins: [",
+          'trustedOrigins: ["https://appleid.apple.com", ',
+        );
+      }
+    } else {
+      // Add trustedOrigins after socialProviders or database
+      const betterAuthMatch = content.match(/betterAuth\(\{/);
+      if (betterAuthMatch) {
+        const insertPos = betterAuthMatch.index! + betterAuthMatch[0].length;
+        content =
+          content.slice(0, insertPos) +
+          '\n  trustedOrigins: ["https://appleid.apple.com"],' +
+          content.slice(insertPos);
+      }
+    }
+
     fs.writeFileSync(authFilePath, content, "utf8");
 
-    // .env
+    // UPDATE 3: Updated .env to include APPLE_BUNDLE_ID
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      if (!envContent.includes("FACEBOOK_CLIENT_ID")) {
+      if (!envContent.includes("APPLE_CLIENT_ID")) {
         fs.appendFileSync(
           envPath,
-          `\n\n# Facebook OAuth\nFACEBOOK_CLIENT_ID=\nFACEBOOK_CLIENT_SECRET=\n`,
+          `\n\n# Apple OAuth\nAPPLE_CLIENT_ID=\nAPPLE_CLIENT_SECRET=\nAPPLE_BUNDLE_ID=\n`,
         );
       }
     }
 
-    // Copy FacebookOAuthButton.tsx
+    // Copy AppleOAuthButton.tsx
     const componentTemplate = path.resolve(
       __dirname,
-      "./template/TanstackState/components/FacebookOAuthButton.tsx",
+      "./template/TanstackStart/components/AppleOAuthButton.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "authverse");
@@ -117,14 +141,14 @@ ${facebookProviderEntry}
       fs.mkdirSync(componentsDir, { recursive: true });
     }
 
-    const componentDest = path.join(componentsDir, "FacebookOAuthButton.tsx");
+    const componentDest = path.join(componentsDir, "AppleOAuthButton.tsx");
 
     if (fs.existsSync(componentTemplate)) {
       fs.copyFileSync(componentTemplate, componentDest);
     }
 
-    console.log(chalk.green("Facebook provider added & merged successfully"));
+    console.log(chalk.green("Apple provider added & merged successfully"));
   } catch (error) {
-    console.log(chalk.red("facebookRunTanstackState error:"), error);
+    console.log(chalk.red("apple tanstack state error:"), error);
   }
 };
