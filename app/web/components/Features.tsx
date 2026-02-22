@@ -5,53 +5,61 @@ import {
   Layout,
   KeyRound,
   Globe,
-  Github,
   FileCode,
+  Database,
+  Zap,
+  Fingerprint,
 } from "lucide-react";
 import { motion } from "motion/react";
 
 const features = [
   {
+    title: "Next.js & TanStack Start",
+    description:
+      "Modern full-stack frameworks integration ready to use out of the box",
+    icon: Zap,
+    iconColor: "text-yellow-500",
+  },
+  {
+    title: "Prisma & Drizzle",
+    description: "Prisma and Drizzle integration ready to use out of the box",
+    icon: Database,
+    iconColor: "text-blue-500",
+  },
+  {
     title: "Full Auth Setup",
     description:
       "Generate a complete authentication system instantly with Better Auth configuration.",
     icon: ShieldCheck,
-    iconColor: "text-blue-400",
+    iconColor: "text-emerald-500",
   },
   {
     title: "Login & Signup Screens",
     description:
       "Ready-made, beautiful ShadCN UI screens for login, signup, and forgot password.",
     icon: Layout,
-    iconColor: "text-purple-400",
+    iconColor: "text-indigo-500",
   },
   {
     title: "Forgot Password Flow",
     description:
       "Automated password reset system with secure token handling and email support.",
     icon: KeyRound,
-    iconColor: "text-amber-400",
+    iconColor: "text-orange-500",
   },
   {
-    title: "Google OAuth",
+    title: "OAuth Integration",
     description:
-      "Enable Google login instantly with auto-generated OAuth configuration.",
-    icon: Globe,
-    iconColor: "text-red-400",
+      "Enable OAuth login instantly with auto-generated OAuth configuration.",
+    icon: Fingerprint,
+    iconColor: "text-red-500",
   },
   {
-    title: "GitHub OAuth",
-    description:
-      "Built-in GitHub OAuth integration ready to use out of the box.",
-    icon: Github,
-    iconColor: "text-gray-400",
-  },
-  {
-    title: "TypeScript + Modern Setup",
+    title: "Modern Dev Stack",
     description:
       "Clean, scalable, and production-ready folder structure generated automatically.",
     icon: FileCode,
-    iconColor: "text-emerald-400",
+    iconColor: "text-sky-500",
   },
 ];
 
