@@ -19,10 +19,12 @@ export const authUiRun = async ({
   folder,
   packageJson,
   cmd,
+  database,
 }: {
   folder: string;
   packageJson: any;
   cmd: boolean;
+  database: string;
 }) => {
   try {
     const projectDir = process.cwd();
@@ -175,8 +177,15 @@ export const authUiRun = async ({
 
       fs.writeFileSync(layoutPath, layoutContent, "utf-8");
     }
-
-    console.log(chalk.green("\nSetup completed!\n"));
+    console.log(chalk.green("\nCompleted installation successfully"));
+    console.log(chalk.cyan("\nInstall Package:"));
+    console.log(chalk.white(`• prisma ${database} schema\n• better-auth`));
+    console.log(chalk.cyan("\nFiles created:"));
+    console.log(
+      chalk.white(
+        `• lib/auth.ts \n• lib/auth-client.ts \n• app/api/auth/[...all]/route.ts \n• proxy.ts\n• components/authverse/LoginComponent.tsx\n• components/authverse/SingUpComponent.tsx\n• app/auth/layout.tsx\n• app/auth/login/page.tsx\n• app/auth/signup/page.tsx\n`,
+      ),
+    );
   } catch (error) {
     console.log(chalk.red("\nauthUi setup failed:"), error);
   }

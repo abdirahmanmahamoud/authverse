@@ -277,11 +277,16 @@ export const prismaRun = async ({ authUi, database, cmd }: prismaRunProps) => {
         folder: srcFolder,
         packageJson: packageJson,
         cmd: cmd,
+        database: database,
       });
     } else {
+      console.log(chalk.green("\nCompleted installation successfully"));
+      console.log(chalk.cyan("\nInstall Package:"));
+      console.log(chalk.white(`• prisma ${database} schema\n• better-auth`));
+      console.log(chalk.cyan("\nFiles created:"));
       console.log(
-        chalk.green(
-          "\nPrisma setup completed successfully and better-auth installed\n",
+        chalk.white(
+          `• lib/auth.ts \n• lib/auth-client.ts \n• app/api/auth/[...all]/route.ts \n• proxy.ts\n`,
         ),
       );
     }
