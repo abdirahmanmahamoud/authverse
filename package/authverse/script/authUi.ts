@@ -24,7 +24,7 @@ export const authUiRun = async ({
   folder: string;
   packageJson: any;
   cmd: boolean;
-  database: string;
+  database: "prisma" | "drizzle";
 }) => {
   try {
     const projectDir = process.cwd();
@@ -179,7 +179,7 @@ export const authUiRun = async ({
     }
     console.log(chalk.green("\nCompleted installation successfully"));
     console.log(chalk.cyan("\nInstall Package:"));
-    console.log(chalk.white(`• prisma ${database} schema\n• better-auth`));
+    console.log(chalk.white(`• ${database} schema\n• better-auth`));
     console.log(chalk.cyan("\nFiles created:"));
     console.log(
       chalk.white(

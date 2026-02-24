@@ -219,6 +219,7 @@ export const drizzleRun = async ({ authUi, cmd }: drizzleRunProps) => {
         folder: srcFolder,
         packageJson: packageJson,
         cmd: cmd,
+        database: "drizzle",
       });
     } else {
       console.log(

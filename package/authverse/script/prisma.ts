@@ -277,7 +277,7 @@ export const prismaRun = async ({ authUi, database, cmd }: prismaRunProps) => {
         folder: srcFolder,
         packageJson: packageJson,
         cmd: cmd,
-        database: database,
+        database: "prisma",
       });
     } else {
       console.log(chalk.green("\nCompleted installation successfully"));
