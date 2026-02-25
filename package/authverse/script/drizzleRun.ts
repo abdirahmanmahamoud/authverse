@@ -6,6 +6,7 @@ import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 import { packageManager } from "../utils/packageManager.js";
 import inquirer from "inquirer";
+import { CreateFolder } from "../utils/CreateFolder.js";
 
 interface drizzleRunProps {
   authUi: boolean;
@@ -222,9 +223,13 @@ export const drizzleRun = async ({ authUi, cmd }: drizzleRunProps) => {
         database: "drizzle",
       });
     } else {
+      console.log(chalk.green("\nCompleted installation successfully"));
+      console.log(chalk.cyan("\nInstall Package:"));
+      console.log(chalk.white(`• drizzle schema\n• better-auth`));
+      console.log(chalk.cyan("\nFiles created:"));
       console.log(
-        chalk.green(
-          "\nDrizzle setup completed successfully and better-auth installed\n",
+        chalk.white(
+          `${CreateFolder({ srcFolder: srcFolder, destFolder: "lib/auth.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "lib/auth-client.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "app/api/auth/[...all]/route.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "proxy.ts" })}\n`,
         ),
       );
     }

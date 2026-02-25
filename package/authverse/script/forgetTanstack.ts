@@ -201,8 +201,11 @@ export const forgetTanstack = async () => {
         resetPageDestinationPath,
       );
 
+      console.log(chalk.green("\nCompleted installation successfully"));
       console.log(
-        chalk.green("Successfully added forget and reset-password pages"),
+        chalk.white(
+          `• src/components/authverse/ForgetComponent.tsx\n• src/components/authverse/ResetComponent.tsx\n• src/components/email/reset-password.tsx\n• src/routes/auth/forget.tsx\n• src/routes/auth/reset-password.tsx\n`,
+        ),
       );
     } else {
       console.log(

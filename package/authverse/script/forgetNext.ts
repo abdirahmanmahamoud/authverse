@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { email } from "../cli/email.js";
+import { CreateFolder } from "../utils/CreateFolder.js";
 
 export const forgetNext = async () => {
   try {
@@ -71,7 +72,7 @@ export const forgetNext = async () => {
       // Get the content inside emailAndPassword
       const emailAndPasswordContent = content.substring(
         emailAndPasswordStart,
-        emailAndPasswordEnd
+        emailAndPasswordEnd,
       );
 
       // Check if sendResetPassword already exists
@@ -79,7 +80,7 @@ export const forgetNext = async () => {
         // Replace existing sendResetPassword
         content = content.replace(
           /sendResetPassword:\s*async\s*\([^)]*\)[^{]*\{[^}]*\}[^,]*/,
-          codeAdded
+          codeAdded,
         );
       } else {
         // Insert sendResetPassword before the closing brace of emailAndPassword
@@ -108,14 +109,14 @@ export const forgetNext = async () => {
       // Add components/email/reset-password.tsx
       const componentPath = path.resolve(
         __dirname,
-        "./template/email/reset-password.tsx"
+        "./template/email/reset-password.tsx",
       );
 
       const destinationPath = path.join(
         projectDir,
         folder,
         "components",
-        "email"
+        "email",
       );
 
       // Ensure the directory exists before copying the file
@@ -125,7 +126,7 @@ export const forgetNext = async () => {
 
       const emailDestinationPath = path.join(
         destinationPath,
-        "reset-password.tsx"
+        "reset-password.tsx",
       );
 
       if (fs.existsSync(componentPath)) {
@@ -135,13 +136,13 @@ export const forgetNext = async () => {
       // Add components/authverse/ForgetComponent.tsx
       const forgetComponentPath = path.resolve(
         __dirname,
-        "./template/components/ForgetComponent.tsx"
+        "./template/components/ForgetComponent.tsx",
       );
       const componentsDestinationPath = path.join(
         projectDir,
         folder,
         "components",
-        "authverse"
+        "authverse",
       );
 
       // Ensure the directory exists before copying the file
@@ -151,7 +152,7 @@ export const forgetNext = async () => {
 
       const forgetDestinationPath = path.join(
         componentsDestinationPath,
-        "ForgetComponent.tsx"
+        "ForgetComponent.tsx",
       );
 
       if (fs.existsSync(forgetComponentPath)) {
@@ -161,12 +162,12 @@ export const forgetNext = async () => {
       // Add components/authverse/ResetComponent.tsx
       const resetComponentPath = path.resolve(
         __dirname,
-        "./template/components/ResetComponent.tsx"
+        "./template/components/ResetComponent.tsx",
       );
 
       const resetDestinationPath = path.join(
         componentsDestinationPath,
-        "ResetComponent.tsx"
+        "ResetComponent.tsx",
       );
 
       if (fs.existsSync(resetComponentPath)) {
@@ -176,7 +177,7 @@ export const forgetNext = async () => {
       // app add auth
       const authTemplatePath = path.resolve(
         __dirname,
-        "./template/app-auth-uiDesign"
+        "./template/app-auth-uiDesign",
       );
 
       // Create app directory
@@ -197,17 +198,17 @@ export const forgetNext = async () => {
       // Copy forget page.tsx
       const forgetPageDestinationPath = path.join(
         forgetDestinationDir,
-        "page.tsx"
+        "page.tsx",
       );
       fs.copyFileSync(
         `${authTemplatePath}/forget/page.tsx`,
-        forgetPageDestinationPath
+        forgetPageDestinationPath,
       );
 
       // Create reset-password directory
       const resetDestinationDir = path.join(
         appDestinationPath,
-        "reset-password"
+        "reset-password",
       );
 
       if (!fs.existsSync(resetDestinationDir)) {
@@ -217,20 +218,23 @@ export const forgetNext = async () => {
       // Copy reset-password page.tsx
       const resetPageDestinationPath = path.join(
         resetDestinationDir,
-        "page.tsx"
+        "page.tsx",
       );
 
       fs.copyFileSync(
         `${authTemplatePath}/reset-password/page.tsx`,
-        resetPageDestinationPath
+        resetPageDestinationPath,
       );
 
+      console.log(chalk.green("\nCompleted installation successfully"));
       console.log(
-        chalk.green("Successfully added forget and reset-password pages")
+        chalk.white(
+          `${CreateFolder({ srcFolder: folder, destFolder: "components/authverse/ForgetComponent.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "components/authverse/ResetComponent.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "components/email/reset-password.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/auth/forget/page.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/auth/reset-password/page.tsx" })}\n`,
+        ),
       );
     } else {
       console.log(
-        chalk.red("Could not find emailAndPassword configuration in auth.ts")
+        chalk.red("Could not find emailAndPassword configuration in auth.ts"),
       );
     }
   } catch (error) {

@@ -199,11 +199,16 @@ export const prismaRunTanstackStart = async ({
       await authUiTanstackState({
         packageJson: packageJson,
         cmd: cmd,
+        database: "prisma",
       });
     } else {
+      console.log(chalk.green("\nCompleted installation successfully"));
+      console.log(chalk.cyan("\nInstall Package:"));
+      console.log(chalk.white(`• prisma ${database} schema\n• better-auth`));
+      console.log(chalk.cyan("\nFiles created:"));
       console.log(
-        chalk.green(
-          "\nPrisma setup completed successfully and better-auth installed\n",
+        chalk.white(
+          `• src/lib/auth.ts\n• src/lib/auth-client.ts\n• src/app/api/auth/[...all]/route.ts\n• src/proxy.ts\n`,
         ),
       );
     }

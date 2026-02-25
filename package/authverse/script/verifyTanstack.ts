@@ -111,7 +111,7 @@ export const verifyTanstack = async () => {
 
     const templatePath = path.resolve(
       __dirname,
-      "./template/email/EmailVerification.tsx"
+      "./template/email/EmailVerification.tsx",
     );
 
     const componentsDir = path.join(srcPath, "components", "email");
@@ -126,7 +126,8 @@ export const verifyTanstack = async () => {
       fs.copyFileSync(templatePath, destFile);
     }
 
-    console.log(chalk.green("Email verification successfully configured"));
+    console.log(chalk.green("\nCompleted installation successfully"));
+    console.log(chalk.white(`• src/components/email/EmailVerification.tsx`));
   } catch (error) {
     console.log(chalk.red(String(error)));
   }

@@ -17,9 +17,11 @@ const shadcnComponents = [
 export const authUiTanstackState = async ({
   packageJson,
   cmd,
+  database,
 }: {
   packageJson: any;
   cmd: boolean;
+  database: "prisma" | "drizzle";
 }) => {
   try {
     const projectDir = process.cwd();
@@ -136,7 +138,15 @@ export const authUiTanstackState = async ({
       fs.writeFileSync(rootPath, rootContent, "utf-8");
     }
 
-    console.log(chalk.green("\nSetup completed!\n"));
+    console.log(chalk.green("\nCompleted installation successfully"));
+    console.log(chalk.cyan("\nInstall Package:"));
+    console.log(chalk.white(`• ${database} schema\n• better-auth`));
+    console.log(chalk.cyan("\nFiles created:"));
+    console.log(
+      chalk.white(
+        `• src/lib/auth.ts\n• src/lib/auth-client.ts\n• src/app/api/auth/[...all]/route.ts\n• src/proxy.ts\n• src/components/authverse/LoginComponent.tsx\n• src/components/authverse/SingUpComponent.tsx\n• src/app/auth/layout.tsx\n• src/app/auth/login/page.tsx\n• src/app/auth/signup/page.tsx\n`,
+      ),
+    );
   } catch (error) {
     console.log(chalk.red("Auth Ui Tanstack State Error: ", error));
   }

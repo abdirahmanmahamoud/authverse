@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { email } from "../cli/email.js";
+import { CreateFolder } from "../utils/CreateFolder.js";
 
 export const verifyNext = async () => {
   try {
@@ -113,7 +114,7 @@ export const verifyNext = async () => {
 
     const templatePath = path.resolve(
       __dirname,
-      "./template/email/EmailVerification.tsx"
+      "./template/email/EmailVerification.tsx",
     );
 
     const componentsDir = path.join(projectDir, folder, "components", "email");
@@ -128,7 +129,12 @@ export const verifyNext = async () => {
       fs.copyFileSync(templatePath, destFile);
     }
 
-    console.log(chalk.green("Email verification successfully configured"));
+    console.log(chalk.green("\nCompleted installation successfully"));
+    console.log(
+      chalk.white(
+        `${CreateFolder({ srcFolder: folder, destFolder: "components/email/EmailVerification.tsx" })}`,
+      ),
+    );
   } catch (error) {
     console.log(chalk.red(String(error)));
   }
