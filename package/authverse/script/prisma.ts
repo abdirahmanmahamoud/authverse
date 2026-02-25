@@ -254,7 +254,7 @@ export const prismaRun = async ({ authUi, database, cmd }: prismaRunProps) => {
       __dirname,
       "./template/proxy/proxy.ts",
     );
-    const proxyDestinationDir = path.join(projectDir, srcFolder);
+    const proxyDestinationDir = path.join(projectDir);
     const proxyDestinationPath = path.join(proxyDestinationDir, "proxy.ts");
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
