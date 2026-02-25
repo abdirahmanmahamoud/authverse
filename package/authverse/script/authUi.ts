@@ -4,6 +4,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { packageManager, runCommand } from "../utils/packageManager.js";
 import { crc32 } from "zlib";
+import { CreateFolder } from "../utils/CreateFolder.js";
 
 const shadcnComponents = [
   "button.tsx",
@@ -183,7 +184,7 @@ export const authUiRun = async ({
     console.log(chalk.cyan("\nFiles created:"));
     console.log(
       chalk.white(
-        `• ${folder === "" ? "" : folder + "/"}lib/auth.ts \n• ${folder !== "" ? folder + "/" : ""}lib/auth-client.ts \n• ${folder !== "" ? folder + "/" : ""}app/api/auth/[...all]/route.ts \n• ${folder !== "" ? folder + "/" : ""}proxy.ts\n• ${folder !== "" ? folder + "/" : ""}components/authverse/LoginComponent.tsx\n• ${folder !== "" ? folder + "/" : ""}components/authverse/SingUpComponent.tsx\n• ${folder !== "" ? folder + "/" : ""}app/auth/layout.tsx\n• ${folder !== "" ? folder + "/" : ""}app/auth/login/page.tsx\n• ${folder !== "" ? folder + "/" : ""}app/auth/signup/page.tsx\n`,
+        `${CreateFolder({ srcFolder: folder, destFolder: "lib/auth.ts" })}\n${CreateFolder({ srcFolder: folder, destFolder: "lib/auth-client.ts" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/api/auth/[...all]/route.ts" })}\n${CreateFolder({ srcFolder: folder, destFolder: "proxy.ts" })}\n${CreateFolder({ srcFolder: folder, destFolder: "components/authverse/LoginComponent.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "components/authverse/SingUpComponent.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/auth/layout.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/auth/login/page.tsx" })}\n${CreateFolder({ srcFolder: folder, destFolder: "app/auth/signup/page.tsx" })}\n`,
       ),
     );
   } catch (error) {

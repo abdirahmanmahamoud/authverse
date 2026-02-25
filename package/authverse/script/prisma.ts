@@ -6,6 +6,7 @@ import { GenerateSecret } from "../utils/GenerateSecret.js";
 import { authUiRun } from "./authUi.js";
 import { packageManager, runCommand } from "../utils/packageManager.js";
 import inquirer from "inquirer";
+import { CreateFolder } from "../utils/CreateFolder.js";
 
 interface prismaRunProps {
   authUi: boolean;
@@ -286,7 +287,7 @@ export const prismaRun = async ({ authUi, database, cmd }: prismaRunProps) => {
       console.log(chalk.cyan("\nFiles created:"));
       console.log(
         chalk.white(
-          `• ${srcFolder === "" ? "" : srcFolder + "/"}lib/auth.ts \n• ${srcFolder === "" ? "" : srcFolder + "/"}lib/auth-client.ts \n• ${srcFolder === "" ? "" : srcFolder + "/"}app/api/auth/[...all]/route.ts \n• ${srcFolder === "" ? "" : srcFolder + "/"}proxy.ts\n`,
+          `${CreateFolder({ srcFolder: srcFolder, destFolder: "lib/auth.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "lib/auth-client.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "app/api/auth/[...all]/route.ts" })}\n${CreateFolder({ srcFolder: srcFolder, destFolder: "proxy.ts" })}\n`,
         ),
       );
     }
