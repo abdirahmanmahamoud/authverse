@@ -35,7 +35,7 @@ export const forgetNext = async () => {
     let content = fs.readFileSync(authFilePath, "utf8");
 
     // Add code for sendResetPassword with proper void return
-    const codeAdded = ` sendResetPassword: async ({ user, url, token }) => {
+    const codeAdded = `sendResetPassword: async ({ user, url, token }) => {
       await sendEmail({
         email: user.email!,
         subject: "Reset your password",
@@ -76,17 +76,11 @@ export const forgetNext = async () => {
       );
 
       // Check if sendResetPassword already exists
-      if (emailAndPasswordContent.includes("sendResetPassword:")) {
-        // Replace existing sendResetPassword
-        content = content.replace(
-          /sendResetPassword:\s*async\s*\([^)]*\)[^{]*\{[^}]*\}[^,]*/,
-          codeAdded,
-        );
-      } else {
+      if (!emailAndPasswordContent.includes("sendResetPassword:")) {
         // Insert sendResetPassword before the closing brace of emailAndPassword
         const before = content.substring(0, emailAndPasswordEnd);
         const after = content.substring(emailAndPasswordEnd);
-        content = before + `\n ${codeAdded}` + after;
+        content = before + `${codeAdded}` + after;
       }
 
       fs.writeFileSync(authFilePath, content, "utf8");
@@ -100,7 +94,21 @@ export const forgetNext = async () => {
         const beforeImports = content.substring(0, nextLineAfterLastImport);
         const afterImports = content.substring(nextLineAfterLastImport);
 
-        const newImports = `import ForgotPasswordEmail from "@/components/email/reset-password";\nimport { sendEmail } from "./email";\n`;
+        const newImports = `import { sendEmail } from "./email";\n`;
+        content = beforeImports + newImports + afterImports;
+
+        fs.writeFileSync(authFilePath, content, "utf8");
+      }
+
+      if (!content.includes("import ForgotPasswordEmail from")) {
+        // Add import after the last import statement
+        const lastImportIndex = content.lastIndexOf("import");
+        const nextLineAfterLastImport =
+          content.indexOf("\n", lastImportIndex) + 1;
+        const beforeImports = content.substring(0, nextLineAfterLastImport);
+        const afterImports = content.substring(nextLineAfterLastImport);
+
+        const newImports = `import ForgotPasswordEmail from "@/components/email/reset-password";\n`;
         content = beforeImports + newImports + afterImports;
 
         fs.writeFileSync(authFilePath, content, "utf8");
