@@ -211,7 +211,7 @@ export const drizzleRun = async ({ authUi, cmd }: drizzleRunProps) => {
       __dirname,
       "./template/proxy/proxy.ts",
     );
-    const proxyDestinationDir = path.join(projectDir);
+    const proxyDestinationDir = path.join(projectDir, srcFolder);
     const proxyDestinationPath = path.join(proxyDestinationDir, "proxy.ts");
     fs.copyFileSync(proxyTemplatePath, proxyDestinationPath);
 
