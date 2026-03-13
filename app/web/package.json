@@ -27,7 +27,7 @@
     "@types/mdx": "^2.0.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "fumadocs-core": "^16.6.10",
+    "fumadocs-core": "^16.6.16",
     "fumadocs-mdx": "^14.2.7",
     "fumadocs-ui": "^16.6.2",
     "jotai": "^2.18.0",
