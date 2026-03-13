@@ -41,6 +41,10 @@ jobs:
         working-directory: package/authverse
         run: npm run build
 
+      - name: Test package
+        working-directory: package/authverse
+        run: npm run test
+
       - name: Verify tag matches package version
         working-directory: package/authverse
         run: |

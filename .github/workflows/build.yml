@@ -30,3 +30,7 @@ jobs:
       - name: Build project
         working-directory: package/authverse
         run: npm run build
+
+      - name: Test package
+        working-directory: package/authverse
+        run: npm run test
