@@ -16,7 +16,8 @@ export const AppleTanstackStart = async () => {
     const authFilePath = path.join(srcPath, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
-      console.log(chalk.red("auth.ts file not found"));
+      console.log(chalk.red("No Configured Better Auth file found"));
+      console.log(chalk.cyan("Run authverse init to initialize better auth"));
       return;
     }
 
