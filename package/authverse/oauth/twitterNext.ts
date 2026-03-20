@@ -18,7 +18,8 @@ export const twitterNext = async () => {
     const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
-      console.log(chalk.red("auth.ts file not found"));
+      console.log(chalk.red("No Configured Better Auth file found"));
+      console.log(chalk.cyan("Run authverse init to initialize better auth"));
       return;
     }
 

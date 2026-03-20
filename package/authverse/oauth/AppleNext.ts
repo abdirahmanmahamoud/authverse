@@ -18,7 +18,8 @@ export const AppleNext = async () => {
     const authFilePath = path.join(projectDir, folder, "lib", "auth.ts");
 
     if (!fs.existsSync(authFilePath)) {
-      console.log(chalk.red("auth.ts file not found"));
+      console.log(chalk.red("No Configured Better Auth file found"));
+      console.log(chalk.cyan("Run authverse init to initialize better auth"));
       return;
     }
 
@@ -26,6 +27,7 @@ export const AppleNext = async () => {
 
     if (!content.includes("betterAuth({")) {
       console.log(chalk.red("betterAuth({}) block not found"));
+      console.log(chalk.cyan("Run authverse init to initialize better auth"));
       return;
     }
 
