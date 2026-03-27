@@ -1,49 +1,72 @@
 "use client";
 
+import {
+  ShieldCheck,
+  Layout,
+  KeyRound,
+  Globe,
+  FileCode,
+  Database,
+  Zap,
+  Fingerprint,
+} from "lucide-react";
+import { motion } from "motion/react";
+
 const features = [
   {
-    title: "Framework Support",
+    title: "Next.js & TanStack Start",
     description:
-      "Seamless integration with Next.js and TanStack Start for modern full-stack development.",
+      "Modern full-stack frameworks integration ready to use out of the box",
+    icon: Zap,
+    iconColor: "text-yellow-500",
   },
   {
-    title: "First-Class ORMs",
-    description:
-      "Native support for Prisma and Drizzle, letting you choose your preferred type-safe database toolkit.",
+    title: "Prisma & Drizzle",
+    description: "Prisma and Drizzle integration ready to use out of the box",
+    icon: Database,
+    iconColor: "text-blue-500",
   },
   {
-    title: "Zero-Config Auth",
+    title: "Full Auth Setup",
     description:
-      "Instant, fully-configured authentication system powered by Better Auth out of the box.",
+      "Generate a complete authentication system instantly with Better Auth configuration.",
+    icon: ShieldCheck,
+    iconColor: "text-emerald-500",
   },
   {
-    title: "Pre-Built Components",
+    title: "Login & Signup Screens",
     description:
-      "Beautifully designed Shadcn UI interfaces for sign-in, registration, and password recovery.",
+      "Ready-made, beautiful ShadCN UI screens for login, signup, and forgot password.",
+    icon: Layout,
+    iconColor: "text-indigo-500",
   },
   {
-    title: "Account Recovery",
+    title: "Forgot Password Flow",
     description:
-      "Built-in password reset flows with secure tokens and transactional email support.",
+      "Automated password reset system with secure token handling and email support.",
+    icon: KeyRound,
+    iconColor: "text-orange-500",
   },
   {
-    title: "Social Logins",
+    title: "OAuth Integration",
     description:
-      "Enable GitHub, Google, and other OAuth providers with simple auto-generated configurations.",
+      "Enable OAuth login instantly with auto-generated OAuth configuration.",
+    icon: Fingerprint,
+    iconColor: "text-red-500",
   },
   {
-    title: "Production Ready",
+    title: "Modern Dev Stack",
     description:
-      "A meticulously organized, scalable project structure that adheres to modern clean-code best practices.",
+      "Clean, scalable, and production-ready folder structure generated automatically.",
+    icon: FileCode,
+    iconColor: "text-sky-500",
   },
 ];
 
 const Features = () => {
   return (
-    <section className="bg-background dark:bg-[#000000] relative overflow-hidden transition-colors duration-300 pt-10 pb-24">
-      {/* Subtle Background Glow */}
-
-      <div className="px-6 lg:px-16 mx-auto relative z-10">
+    <section className="py-24 bg-background dark:bg-[#000000] relative overflow-hidden transition-colors duration-300">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-foreground dark:text-white">
             Everything You Need for Auth
@@ -56,22 +79,30 @@ const Features = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
-              className="group relative p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-500/30 dark:hover:border-blue-500/30 overflow-hidden h-full flex flex-col"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="relative p-6 rounded-2xl bg-card dark:bg-gray-900/40 border border-border dark:border-gray-800 transition-all duration-300 overflow-hidden h-full"
             >
-              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
               <div className="relative z-10 flex flex-col h-full">
-                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white transition-colors">
+                <div
+                  className={`w-12 h-12 rounded-lg bg-secondary dark:bg-gray-800 flex items-center justify-center mb-6 shadow-sm`}
+                >
+                  <feature.icon className={`w-6 h-6 ${feature.iconColor}`} />
+                </div>
+
+                <h3 className="text-xl font-semibold mb-3 text-foreground dark:text-white transition-colors">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-600 dark:text-neutral-400 text-[15px] leading-relaxed">
+                <p className="text-muted-foreground dark:text-gray-400 text-sm leading-relaxed transition-colors">
                   {feature.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

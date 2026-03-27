@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Check, Copy, ArrowRight, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 const Hero = () => {
   const [copied, setCopied] = useState(false);
@@ -17,33 +19,19 @@ const Hero = () => {
 
   return (
     <section className="relative w-full min-h-[90vh] bg-background text-foreground dark:text-white flex items-center justify-center overflow-hidden transition-colors duration-300">
-      {/* Animated Gradient Background */}
-      <div className="absolute inset-0 z-0">
-        <div
-          className="absolute inset-0 bg-linear-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 animate-gradient-xy"
-          style={{
-            backgroundSize: "400% 400%",
-            animation: "gradient 15s ease infinite",
-          }}
-        />
-      </div>
+      {/* Background Gradient / Glow */}
+      {/* Background Gradient / Glow */}
+      <div className="absolute top-0 z-0 h-screen w-screen bg-white dark:bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(56,189,248,0.15),rgba(255,255,255,0))]" />
+      <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]" />
-        <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
-      </div>
-
-      {/* Floating Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float-delayed" />
-      </div>
-
-      <div className="container mx-auto px-4 md:px-6 lg:px-16 z-10 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 z-10 flex flex-col gap-12 items-center justify-center">
         {/* Text Content */}
-        <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-3 max-w-2xl mx-auto lg:mx-0">
-          {/* Status Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center text-center space-y-4 max-w-4xl mx-auto"
+        >
           <Link href="/docs/changelog">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-sm font-medium">
               <span className="relative flex h-2 w-2">
@@ -53,19 +41,16 @@ const Hero = () => {
               Expanded OAuth Ecosystem
             </div>
           </Link>
-
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight text-gray-900 dark:text-white">
-            Build Authentication the Modern Way
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight text-gray-900 dark:text-white">
+            Build Authentication the Modern Way.
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Stop building auth from scratch. With Authverse, you get a complete
-            setup Better Auth config, OAuth providers, Prisma/Drizzle database,
-            and clean Shadcn/ui{" "}
-            <span className="font-medium text-gray-800 dark:text-gray-200">
-              all generated with one command.
-            </span>
+            Stop wasting time wiring auth from scratch. With Authverse, you get
+            a fully generated authentication system Better Auth config, OAuth
+            providers, database setup Prisma/Drizzle, and beautiful ShadCN
+            screens. All done automatically with a single command.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center pt-2">
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center pt-4">
             <Button
               asChild
               size="lg"
@@ -84,99 +69,36 @@ const Hero = () => {
               <Link href="/docs">View Docs</Link>
             </Button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Enhanced Setup Steps Box */}
-        <div className="w-full max-w-2xl mx-auto lg:mx-0 lg:ml-auto">
-          <div className="relative group">
-            {/* Glow Effect Removed */}
-
-            {/* Steps Card */}
-            <div className="relative p-6 sm:p-8 rounded-2xl bg-white/70 dark:bg-neutral-900/70 border border-gray-200 dark:border-neutral-800 shadow-2xl backdrop-blur-xl">
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                  Quick Start
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-neutral-400 mt-2">
-                  Get your authentication system up and running in minutes for
-                  Next.js and TanStack Start.
-                </p>
-              </div>
-              <div className="space-y-6">
-                {/* Step 1 */}
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-bold text-sm shrink-0 shadow-inner">
-                    1
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      Run Authverse init
-                    </p>
-                    <div className="relative flex items-center justify-between p-2 pl-4 rounded-xl bg-gray-100/80 dark:bg-black/50 border border-gray-200 dark:border-white/5">
-                      <div className="flex items-center gap-3 overflow-x-auto">
-                        <Terminal className="h-4 w-4 text-primary shrink-0" />
-                        <code className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-nowrap">
-                          <span className="text-primary font-bold mr-2">$</span>
-                          {command}
-                        </code>
-                      </div>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-8 w-8 ml-2 shrink-0 rounded-lg text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
-                        onClick={handleCopy}
-                      >
-                        {copied ? (
-                          <Check className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div className="ml-4 w-0.5 h-6 bg-gray-200 dark:bg-neutral-800 -my-3" />
-
-                {/* Step 2 */}
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-bold text-sm shrink-0 shadow-inner">
-                    2
-                  </div>
-                  <div className="flex-1 pt-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white flex items-center flex-wrap gap-2">
-                      Update the .env file
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1.5">
-                      Add database connection variables and set up OAuth
-                      credentials.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div className="ml-4 w-0.5 h-6 bg-gray-200 dark:bg-neutral-800 -my-3" />
-
-                {/* Step 3 */}
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-bold text-sm shrink-0 shadow-inner">
-                    3
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white pt-1">
-                      Pull database schema
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1.5">
-                      Run the following command to push the database schema
-                      using Prisma or Drizzle.
-                    </p>
-                  </div>
-                </div>
-              </div>
+        {/* Code Snippet Box */}
+        {/* Code Snippet Box */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="w-full max-w-md mx-auto"
+        >
+          <div className="relative flex items-center justify-between p-2 pl-4 rounded-full bg-neutral-100 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm shadow-sm">
+            <div className="font-mono text-sm text-neutral-600 dark:text-neutral-400 truncate pr-4">
+              <span className="text-blue-600 dark:text-blue-400 mr-2">$</span>
+              {command}
             </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-9 w-9 rounded-full text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 shrink-0"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-500" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+              <span className="sr-only">Copy command</span>
+            </Button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
