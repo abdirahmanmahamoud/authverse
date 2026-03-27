@@ -40,7 +40,7 @@ export const authUiRun = async ({
       console.log(chalk.yellow("\n Installing shadcn ui Components\n"));
 
       if (cmd == true) {
-        runCommand("shadcn@latest init --base-color zinc --yes");
+        runCommand("shadcn@latest init");
         runCommand("shadcn@latest add button sonner card field input");
       } else {
         runCommand("shadcn@latest add button sonner card field input");
