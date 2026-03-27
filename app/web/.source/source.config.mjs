@@ -7,7 +7,10 @@ import {
 } from "fumadocs-mdx/config";
 var docs = defineDocs({
   docs: {
-    schema: frontmatterSchema
+    schema: frontmatterSchema,
+    postprocess: {
+      includeProcessedMarkdown: true
+    }
   },
   meta: {
     schema: metaSchema

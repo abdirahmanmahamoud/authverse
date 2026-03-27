@@ -1,3 +1,8 @@
+import {
+  CopyAsMarkdownButton,
+  CopyMarkdownUrlButton,
+  ViewOptions,
+} from "@/components/ai/page-actions";
 import DocsTableOfContents from "@/components/DocsTableOfContents";
 import mdxComponents from "@/components/mdxComponents";
 import { Button } from "@/components/ui/button";
@@ -55,7 +60,8 @@ const DocsPage = async (props: { params: Promise<{ slug: string[] }> }) => {
   const neighbours = findNeighbour(source.pageTree, page.url);
 
   const raw = await page.data.getText("raw");
-
+  const markdownUrl = `${page.url}.mdx`;
+  console.log(markdownUrl);
   return (
     <div className="px-[4%] mt-10 pb-5 flex flex-col lg:flex-row">
       <div className="w-full lg:w-[75%]">
@@ -63,6 +69,14 @@ const DocsPage = async (props: { params: Promise<{ slug: string[] }> }) => {
         {doc.description && (
           <p className="text-fd-muted-foreground">{doc.description}</p>
         )}
+        <div className="flex flex-row gap-2 items-center border-b pt-3 pb-6">
+          <CopyAsMarkdownButton markdownUrl={`${page.url}.mdx`} />
+          <CopyMarkdownUrlButton markdownUrl={`${page.url}.mdx`} />
+          <ViewOptions
+            markdownUrl={`${page.url}.mdx`}
+            githubUrl={`https://github.com/abdirahmanmahamoud/authverse/tree/main/app/web/content/docs/${page.path}`}
+          />
+        </div>
         <div className="mt-5">
           <MDX components={mdxComponents} />
         </div>
