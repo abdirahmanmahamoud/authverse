@@ -30,7 +30,7 @@
     "clsx": "^2.1.1",
     "fumadocs-core": "^16.6.16",
     "fumadocs-mdx": "^14.2.11",
-    "fumadocs-ui": "^16.6.2",
+    "fumadocs-ui": "^16.7.10",
     "jotai": "^2.19.0",
     "lucide-react": "^0.575.0",
     "motion": "^12.36.0",
