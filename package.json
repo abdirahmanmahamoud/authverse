@@ -20,7 +20,7 @@
     "clear": "turbo clean && pnpm dlx rimraf .turbo node_modules/.cache/turbo"
   },
   "devDependencies": {
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "turbo": "^2.8.20",
     "typescript": "5.9.3"
   },
