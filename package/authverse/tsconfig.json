@@ -1,12 +1,14 @@
 {
-   "compilerOptions": {
+  "compilerOptions": {
     "outDir": "dist",
     "target": "ES2020",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"],
+    "ignoreDeprecations": "6.0"
   },
   "include": ["index.ts", "./**/*.ts"],
   "exclude": ["node_modules", "dist"]
