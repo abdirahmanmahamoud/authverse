@@ -41,7 +41,8 @@ export const awsSesRunTanstackStart = async () => {
       !envContent.includes("AWS_SES_SERVICE") &&
       !envContent.includes("AWS_SES_USER") &&
       !envContent.includes("AWS_SES_PASS") &&
-      !envContent.includes("AWS_SES_FROM")
+      !envContent.includes("AWS_SES_FROM") &&
+      !envContent.includes("AWS_SES_FROM_NAME")
     ) {
       fs.appendFileSync(envPath, `\n\n# AWS SES API Key for sending emails`);
       fs.appendFileSync(envPath, `\nAWS_SES_HOST=`);
@@ -50,6 +51,7 @@ export const awsSesRunTanstackStart = async () => {
       fs.appendFileSync(envPath, `\nAWS_SES_USER=`);
       fs.appendFileSync(envPath, `\nAWS_SES_PASS=`);
       fs.appendFileSync(envPath, `\nAWS_SES_FROM=`);
+      fs.appendFileSync(envPath, `\nAWS_SES_FROM_NAME=`);
     }
 
     // template/email/emailAwsSes.ts

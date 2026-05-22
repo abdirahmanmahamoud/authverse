@@ -24,7 +24,7 @@ export const sendEmail = async ({
   const html = await render(components);
 
   return await transporter.sendMail({
-    from: process.env.AWS_SES_FROM,
+    from: `"${process.env.AWS_SES_FROM_NAME}" <${process.env.AWS_SES_FROM}>`,
     to: email,
     subject,
     html,
