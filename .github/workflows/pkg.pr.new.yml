@@ -46,4 +46,4 @@ jobs:
 
       - name: Publish to pkg.pr.new
         working-directory: package/authverse
-        run: npx pkg-pr-new publish --compact --no-template
+        run: npx pkg-pr-new publish --compact --no-template --npm
