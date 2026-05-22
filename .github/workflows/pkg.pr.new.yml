@@ -42,7 +42,7 @@ jobs:
         working-directory: package/authverse
         run: |
           pnpm pkg set version=0.0.0-preview.${{ github.event.pull_request.head.sha }}
-          echo "::notice title=Install (PR)::pnpm dlx https://pkg.pr.new/abdirahmanmahamood/authverse@${{ github.event.pull_request.number }} init"
+          echo "::notice title=Install (PR)::pnpm dlx https://pkg.pr.new/abdirahmanmahamoud/authverse@${{ github.event.pull_request.number }} init"
 
       - name: Publish to pkg.pr.new
         working-directory: package/authverse
