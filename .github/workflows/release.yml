@@ -25,21 +25,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           registry-url: https://registry.npmjs.org
-          cache: npm
-          cache-dependency-path: package/authverse/package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        working-directory: package/authverse
-        run: npm install
+        run: pnpm install
 
       - name: Build package
         working-directory: package/authverse
-        run: npm run build
+        run: pnpm build
 
       - name: Verify tag matches package version
         working-directory: package/authverse
@@ -68,7 +69,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
-        run: npm publish --tag ${{ steps.determine_npm_tag.outputs.npm_tag }} --access public --provenance
+        run: pnpm publish --tag ${{ steps.determine_npm_tag.outputs.npm_tag }} --access public --no-git-checks
 
       - name: Generate changelog & create GitHub Release
         working-directory: package/authverse

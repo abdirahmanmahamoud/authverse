@@ -18,15 +18,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: pnpm
 
       - name: Install dependencies
-        working-directory: package/authverse
-        run: npm install
+        run: pnpm install
 
       - name: Build project
         working-directory: package/authverse
-        run: npm run build
+        run: pnpm build
