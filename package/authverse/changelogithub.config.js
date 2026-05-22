@@ -4,7 +4,6 @@ export default {
   types: {
     feat: { title: "Features" },
     fix: { title: "Bug Fixes" },
-    test: { title: "Tests" },
   },
   commitUrlFormat: "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
   compareUrlFormat:

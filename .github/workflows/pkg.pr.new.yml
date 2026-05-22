@@ -22,25 +22,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
 
       - name: Install dependencies
-        working-directory: package/authverse
-        run: npm install
+        run: pnpm install
 
       - name: Build package
         working-directory: package/authverse
-        run: npm run build
+        run: pnpm build
 
       - name: Set preview version
         working-directory: package/authverse
         run: |
-          npm pkg set version=0.0.0-preview.${{ github.event.pull_request.head.sha }}
-          echo "::notice title=Install (PR)::npx https://pkg.pr.new/abdirahmanmahamoud/authverse@${{ github.event.pull_request.number }} init"
+          pnpm pkg set version=0.0.0-preview.${{ github.event.pull_request.head.sha }}
+          echo "::notice title=Install (PR)::pnpm dlx https://pkg.pr.new/abdirahmanmahamood/authverse@${{ github.event.pull_request.number }} init"
 
       - name: Publish to pkg.pr.new
         working-directory: package/authverse
-        run: npx pkg-pr-new publish --compact --no-template --npm
+        run: npx pkg-pr-new publish --compact --no-template
