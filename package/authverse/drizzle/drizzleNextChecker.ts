@@ -8,6 +8,7 @@ import { CreateFolder } from "../utils/CreateFolder.js";
 import { authUiRun } from "../script/authUi.js";
 import inquirer from "inquirer";
 import { GenerateSecret } from "../utils/GenerateSecret.js";
+import { packageManager } from "../utils/packageManager.js";
 
 interface drizzleNextSetupProps extends drizzleProps {
   projectDir: string;
@@ -199,6 +200,36 @@ export const drizzleNextChecker = async ({
         // Write updated schema
         fs.writeFileSync(schemaFilePath, updatedSchemaContent);
       }
+    }
+
+    // read package json
+    const packageJsonPath = path.join(projectDir, "package.json");
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+
+    // Check if better auth is already installed
+    if (!packageJson.dependencies["better-auth"]) {
+      console.log(chalk.cyan("\n⚙️  Initializing better auth...\n"));
+      packageManager("better-auth");
+    }
+
+    const drizzleDeps = [
+      "drizzle-orm",
+      "@neondatabase/serverless",
+      "dotenv",
+      "drizzle-kit",
+    ];
+
+    const missingDrizzleDeps = drizzleDeps.filter((dep) => {
+      return (
+        !packageJson.dependencies?.[dep] && !packageJson.devDependencies?.[dep]
+      );
+    });
+
+    if (missingDrizzleDeps.length > 0) {
+      console.log(chalk.cyan("\n⚙️  Initializing drizzle...\n"));
+
+      // install drizzle
+      packageManager(missingDrizzleDeps.join(" "));
     }
 
     // Create .env file

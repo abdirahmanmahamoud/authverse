@@ -23,6 +23,7 @@ export const drizzleNextSetup = async ({
     const packageJsonPath = path.join(projectDir, "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 
+    // Check if better auth is already installed
     if (!packageJson.dependencies["better-auth"]) {
       console.log(chalk.cyan("\n⚙️  Initializing better auth...\n"));
 
