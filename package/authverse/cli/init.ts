@@ -19,13 +19,13 @@ export const initAnswer = async () => {
   // User prompts (NO framework)
   const answers = await inquirer.prompt([
     {
-      type: "list",
+      type: "select",
       name: "orm",
       message: "Choose Your ORM:",
       choices: ["Prisma", "Drizzle"],
     },
     {
-      type: "list",
+      type: "select",
       name: "database",
       message: "Select Database:",
       choices: ["Postgresql", "Mongodb", "Mysql"],
