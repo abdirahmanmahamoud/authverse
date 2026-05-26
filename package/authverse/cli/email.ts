@@ -66,7 +66,7 @@ export const email = async () => {
   }
   const answers = await inquirer.prompt([
     {
-      type: "list",
+      type: "select",
       name: "emailProvider",
       message: "Choose Your Email Provider:",
       choices: ["Gmail", "AWS SES", "Resend"],
