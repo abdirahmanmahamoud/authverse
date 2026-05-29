@@ -29,7 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fumadocs-core": "^16.9.0",
-    "fumadocs-mdx": "^14.2.11",
+    "fumadocs-mdx": "^15.0.10",
     "fumadocs-ui": "^16.8.4",
     "jotai": "^2.20.0",
     "lucide-react": "^1.7.0",
