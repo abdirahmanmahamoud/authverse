@@ -1,11 +1,8 @@
 import chalk from "chalk";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
-import { GenerateSecret } from "../utils/GenerateSecret.js";
-import { packageManager } from "../utils/packageManager.js";
-import { authUiTanstackState } from "./authUiTanstackState.js";
 import { drizzleTanstackSetup } from "../drizzle/drizzleTanstackSetup.js";
+import { drizzleTanstackChecker } from "../drizzle/drizzleTanstackChecker.js";
 
 interface drizzleRunTanstackStartProps {
   authUi: boolean;
@@ -24,7 +21,7 @@ export const drizzleRunTanstackStart = async ({
     const drizzleConfigPath = path.join(projectDir, "drizzle.config.ts");
 
     if (fs.existsSync(drizzleConfigPath)) {
-      // await drizzleTanstackChecker({ authUi, cmd, projectDir });
+      await drizzleTanstackChecker({ authUi, cmd, projectDir });
     } else {
       await drizzleTanstackSetup({ authUi, cmd, projectDir });
     }
