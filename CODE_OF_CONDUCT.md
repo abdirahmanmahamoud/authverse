@@ -1,8 +1,5 @@
 # Code of Conduct
 
-**Date:** 21 November 2025  
-**Version:** 1.0
-
 This Code of Conduct is based on the Contributor Covenant, version 1.0.
 
 ---

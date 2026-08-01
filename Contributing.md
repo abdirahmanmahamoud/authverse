@@ -1,6 +1,8 @@
 # Contributing to Authverse
 
 Thank you for your interest in contributing to **Authverse**!  
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
 This project uses **Next.js** for the website, **Fumadocs** for documentation, and includes a CLI (`package/authverse`) and template files (`package/template`).
 
 We welcome contributions in the form of:
@@ -87,13 +89,13 @@ Implement your changes on the new branch. When committing, please follow these g
 documentation website **Next.js** and **Fumadocs**
 
 ```bash
-pnpm run dev
+pnpm -F authverse-web run dev
 ```
 
 Test Build
 
 ```bash
-pnpm run build
+pnpm -F authverse-web run build
 ```
 
 - Authverse Cli
@@ -101,13 +103,13 @@ pnpm run build
 MacOS and Linux
 
 ```bash
-pnpm run build && pnpm link
+pnpm -F authverse run build && pnpm link
 ```
 
 Windows
 
 ```bash
-pnpm run build:win
+pnpm -F authverse run build:win
 ```
 
 - test features added your & fix any bugs, local laptop **Test Next.js**

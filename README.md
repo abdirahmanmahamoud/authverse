@@ -85,6 +85,12 @@ Full documentation is available on the official website:
 
 ---
 
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](Contributing.md) for more details.
+
+---
+
 ## License
 
 Authverse is MIT licensed.
