@@ -53,7 +53,7 @@
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@types/node": "^26.1.2",
-    "changelogithub": "^14.0.0",
+    "changelogithub": "^15.0.4",
     "tsup": "^8.5.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.7"
