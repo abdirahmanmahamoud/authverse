@@ -109,7 +109,7 @@ export const emailOtpTanstackStart = async () => {
       content = content.slice(0, nextLine) + imports + content.slice(nextLine);
     }
 
-    if (!content.includes('import { sendEmail }')) {
+    if (!content.includes("import { sendEmail }")) {
       const lastImport = content.lastIndexOf("import");
       const nextLine = content.indexOf("\n", lastImport) + 1;
       const imports = `import { sendEmail } from "./email";\n`;
@@ -134,7 +134,7 @@ export const emailOtpTanstackStart = async () => {
       let clientContent = fs.readFileSync(authClientPath, "utf8");
 
       if (!clientContent.includes("emailOTPClient")) {
-        if (!clientContent.includes('import { emailOTPClient }')) {
+        if (!clientContent.includes("import { emailOTPClient }")) {
           const lastImport = clientContent.lastIndexOf("import");
           const nextLine = clientContent.indexOf("\n", lastImport) + 1;
           const imports = `import { emailOTPClient } from "better-auth/client/plugins";\n`;

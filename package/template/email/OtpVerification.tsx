@@ -46,7 +46,9 @@ export const OtpVerification = ({
               <Heading className="text-[24px] font-bold text-gray-900 m-0 mb-[16px]">
                 {heading}
               </Heading>
-              <Text className="text-[16px] text-gray-600 m-0">{description}</Text>
+              <Text className="text-[16px] text-gray-600 m-0">
+                {description}
+              </Text>
             </Section>
 
             <Section className="mb-[32px] text-center">
