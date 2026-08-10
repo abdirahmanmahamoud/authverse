@@ -19,8 +19,8 @@
     "authverse": "dist/index.js"
   },
   "scripts": {
-    "build": "tsup ./index.ts --format esm,cjs --dts --out-dir dist && cp -r ../template ./dist/template",
-    "build:win": "tsup ./index.ts --format esm,cjs --dts --out-dir dist && xcopy ..\\template dist\\template /E /I /Y && npm link",
+    "build": "tsup ./index.ts --format esm,cjs --out-dir dist && tsc -p tsconfig.build.json && cp -r ../template ./dist/template",
+    "build:win": "tsup ./index.ts --format esm,cjs --out-dir dist && tsc -p tsconfig.build.json && xcopy ..\\template dist\\template /E /I /Y && npm link",
     "clear": "pnpm dlx rimraf dist",
     "test": "vitest --run --typecheck"
   },
@@ -54,8 +54,8 @@
     "@commitlint/config-conventional": "^21.0.2",
     "@types/node": "^26.1.2",
     "changelogithub": "^15.0.4",
-    "tsup": "^8.5.0",
-    "typescript": "^6.0.3",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.7"
   }
 }

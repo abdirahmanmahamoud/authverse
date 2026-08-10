@@ -1,6 +1,18 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "ignoreDeprecations": "6.0"
-  }
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "index.ts",
+    "cli/**/*.ts",
+    "drizzle/**/*.ts",
+    "email/**/*.ts",
+    "oauth/**/*.ts",
+    "script/**/*.ts",
+    "utils/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "tests", "tsup.config.ts", "vitest.config.ts"]
 }
