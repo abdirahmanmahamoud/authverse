@@ -7,6 +7,7 @@ import { forget } from "./cli/forget.js";
 import { email } from "./cli/email.js";
 import { verification } from "./cli/verification.js";
 import { cmdType, initCmd } from "./cli/initCmd.js";
+import { Plugins } from "./cli/plugins.js";
 
 const packageJson = JSON.parse(readFileSync("./package.json", "utf8"));
 const program = new Command();
@@ -60,6 +61,13 @@ program
   .description("Verify authentication setup")
   .action(async () => {
     await verification();
+  });
+
+program
+  .command("plugins <plugins>")
+  .description("Add plugins to the project")
+  .action(async (plugins: string) => {
+    await Plugins({ plugins });
   });
 
 program.parse(process.argv);
