@@ -13,17 +13,26 @@ Execute the following command to add the Apple provider to your project:
 npx authverse@latest oauth apple
 ```
 
+The command installs `jose`, adds the Apple provider to your `socialProviders`, and adds `https://appleid.apple.com` to `trustedOrigins` in `auth.ts`.
+
 ## Configure Apple Developer Portal
 
-To support Apple Sign-In, you need to configure your app in the [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list):
+To support Apple Sign-In, you need to configure your app in the [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list). Apple Sign In requires an active **Apple Developer account**.
 
-1.  **App ID**: Create an App ID for your application (if not already existing).
-2.  **Services ID**: Create a Services ID for your web application.
-    - Set the **Identifier** as your Client ID.
-    - Configure the **Return URLs**:
-      - **Local development**: `http://localhost:3000/api/auth/callback/apple`
-      - **Production**: `https://example.com/api/auth/callback/apple`
-3.  **Private Key**: Create a Sign-In with Apple Private Key (`.p8` file). Note the **Key ID** and your **Team ID**.
+1.  **App ID**: Create an App ID for your application with the **Sign In with Apple** capability enabled.
+2.  **Service ID**: Create a Service ID for your web application.
+    - The Service ID **Identifier** will be your **Client ID** (`APPLE_CLIENT_ID`).
+    - Enable **Sign In with Apple** on the Service ID.
+    - Under **Primary App ID**, select the App ID created above.
+    - Under **Domains and Subdomains**, list the root domains used for Sign In with Apple.
+    - Under **Return URLs**, enter the exact callback URL: `https://yourdomain.com/api/auth/callback/apple`
+3.  **Private Key**: Create a Sign-In with Apple Private Key (`.p8` file) and note the **Key ID** and your **Team ID**.
+
+> [!WARNING]
+> Apple does **not** support `localhost` or non-HTTPS return URLs. During development you must use a domain with a valid HTTPS/TLS certificate. The Return URL must exactly match the callback URL used by your deployment.
+
+> [!IMPORTANT]
+> Apple emits the `email` claim only on the **first** authorization. Subsequent sign-ins omit it. Authverse relies on Better Auth's account model (keyed by Apple's stable provider identity), so repeat sign-ins do not create duplicate users or fail because of a missing email.
 
 ## Environment Setup
 
@@ -31,16 +40,19 @@ Add the following variables to your project's `.env` file:
 
 ```bash
 APPLE_CLIENT_ID=
-APPLE_CLIENT_SECRET=
+APPLE_TEAM_ID=
+APPLE_KEY_ID=
+APPLE_PRIVATE_KEY=
 APPLE_BUNDLE_ID=
 ```
 
-- **APPLE_CLIENT_ID**: Your Services ID Identifier.
-- **APPLE_CLIENT_SECRET**: Your generated client secret (or the contents of your `.p8` key if your adapter supports it).
-- **APPLE_BUNDLE_ID**: Important for native iOS; use the app's bundle ID here, not the service ID.
+- **APPLE_CLIENT_ID**: Your Service ID identifier.
+- **APPLE_TEAM_ID**: Your Apple Developer Team ID.
+- **APPLE_KEY_ID**: The Key ID of your Sign In with Apple private key.
+- **APPLE_PRIVATE_KEY**: The contents of your `.p8` key file. When stored in an environment variable, escaped `\n` newlines are handled automatically.
+- **APPLE_BUNDLE_ID**: Optional. Required for native iOS (uses the app's bundle ID instead of the service ID).
 
-> [!NOTE]
-> The Authverse CLI automatically adds `https://appleid.apple.com` to your `trustedOrigins` in `auth.ts` to ensure seamless authentication flow.
+The `clientSecret` JWT is generated automatically for you in `auth.ts` from these values using the `jose` package. You do **not** need to generate or commit a static client secret.
 
 ## Import and Use the Apple Provider Component
 
@@ -56,6 +68,7 @@ This component renders the Apple sign-in button at its location.
 
 ## Notes & Troubleshooting
 
-- **Authorized Redirect URIs**: Ensure the `Return URLs` in the Apple Developer Portal exactly match your deployment.
-- **Trusted Origins**: Apple requires `https://appleid.apple.com` to be in your trusted origins list.
+- **Return URLs**: Ensure the Return URL in the Apple Developer Portal exactly matches `https://yourdomain.com/api/auth/callback/apple`. Localhost is not supported by Apple.
+- **Trusted Origins**: Apple requires `https://appleid.apple.com` to be in your trusted origins list. The CLI adds it without removing any user-defined origins.
 - **Bundle ID**: For cross-platform applications, ensure `APPLE_BUNDLE_ID` is set to your native app's bundle identifier.
+- **Client Secret**: The JWT client secret expires within six months and is regenerated dynamically by the generated `generateAppleClientSecret()` function — no manual rotation needed.
