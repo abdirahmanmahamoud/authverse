@@ -2,6 +2,14 @@ import chalk from "chalk";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { packageManager } from "../utils/packageManager.js";
+import {
+  APPLE_CLIENT_SECRET_FUNCTION,
+  APPLE_ENV_VARS,
+  APPLE_IMPORT,
+  APPLE_ORIGIN,
+  APPLE_PROVIDER_ENTRY,
+} from "./appleConfig.js";
 
 export const AppleTanstackStart = async () => {
   try {
@@ -34,14 +42,15 @@ export const AppleTanstackStart = async () => {
       return;
     }
 
-    // UPDATE 1: Added appBundleIdentifier for native iOS support
-    const appleProviderEntry = `
-    apple: {
-      clientId: process.env.APPLE_CLIENT_ID as string,
-      clientSecret: process.env.APPLE_CLIENT_SECRET as string,
-      // Important for native iOS: Use the app's bundle ID here, not the service ID
-      appBundleIdentifier: process.env.APPLE_BUNDLE_ID,
-    },`;
+    // Inject jose import + Apple client secret generator at the top of the file
+    const preamble =
+      (content.includes('from "jose"') ? "" : APPLE_IMPORT) +
+      "\n" +
+      APPLE_CLIENT_SECRET_FUNCTION +
+      "\n";
+    content = preamble + content;
+
+    const appleProviderEntry = APPLE_PROVIDER_ENTRY;
 
     // CASE 1: socialProviders already exists → merge
     if (content.includes("socialProviders: {")) {
@@ -76,7 +85,6 @@ export const AppleTanstackStart = async () => {
         /database:\s*(prismaAdapter|drizzleAdapter)\([\s\S]*?\),/;
 
       if (!databaseRegex.test(content)) {
-        // UPDATE 2: Fixed typo in error message
         console.log(
           chalk.red(
             "Could not find database adapter (prismaAdapter or drizzleAdapter)",
@@ -96,39 +104,43 @@ ${appleProviderEntry}
       );
     }
 
-    // Add appleid.apple.com to trustedOrigins
+    // Add appleid.apple.com to trustedOrigins without removing existing origins
+    const trustedOriginsHasApple =
+      /trustedOrigins\s*:\s*\[[^\]]*https:\/\/appleid\.apple\.com/.test(
+        content,
+      );
     if (content.includes("trustedOrigins: [")) {
-      if (!content.includes("https://appleid.apple.com")) {
+      if (!trustedOriginsHasApple) {
         content = content.replace(
           "trustedOrigins: [",
-          'trustedOrigins: ["https://appleid.apple.com", ',
+          `trustedOrigins: [\"${APPLE_ORIGIN}\", `,
         );
       }
     } else {
-      // Add trustedOrigins after socialProviders or database
-      const betterAuthMatch = content.match(/betterAuth\(\{/);
-      if (betterAuthMatch) {
-        const insertPos = betterAuthMatch.index! + betterAuthMatch[0].length;
+      // Add trustedOrigins after the socialProviders/database block
+      const authBlockMatch = content.match(/betterAuth\(\{/);
+      if (authBlockMatch) {
+        const insertPos = authBlockMatch.index! + authBlockMatch[0].length;
         content =
           content.slice(0, insertPos) +
-          '\n  trustedOrigins: ["https://appleid.apple.com"],' +
+          `\n  trustedOrigins: [\"${APPLE_ORIGIN}\"],` +
           content.slice(insertPos);
       }
     }
 
     fs.writeFileSync(authFilePath, content, "utf8");
 
-    // UPDATE 3: Updated .env to include APPLE_BUNDLE_ID
+    // .env with the credentials required to generate the Apple client secret JWT
     const envPath = path.join(projectDir, ".env");
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
       if (!envContent.includes("APPLE_CLIENT_ID")) {
-        fs.appendFileSync(
-          envPath,
-          `\n\n# Apple OAuth\nAPPLE_CLIENT_ID=\nAPPLE_CLIENT_SECRET=\nAPPLE_BUNDLE_ID=\n`,
-        );
+        fs.appendFileSync(envPath, APPLE_ENV_VARS);
       }
     }
+
+    // Install jose for client secret generation
+    packageManager("jose");
 
     // Copy AppleOAuthButton.tsx
     const componentTemplate = path.resolve(
