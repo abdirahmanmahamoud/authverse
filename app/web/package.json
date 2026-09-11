@@ -41,7 +41,7 @@
     "react-dom": "19.2.7",
     "shiki": "^4.2.0",
     "tailwind-merge": "^3.6.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
