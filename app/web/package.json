@@ -31,7 +31,7 @@
     "fumadocs-core": "^16.9.0",
     "fumadocs-mdx": "^15.0.10",
     "fumadocs-ui": "^16.8.4",
-    "jotai": "^2.20.0",
+    "jotai": "^3.0.0",
     "lucide-react": "^1.17.0",
     "motion": "^12.40.0",
     "next": "16.3.0",
