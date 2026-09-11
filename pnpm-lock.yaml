@@ -81,8 +81,8 @@ importers:
         specifier: ^16.8.4
         version: 16.8.4(@tailwindcss/oxide@4.3.0)(@types/mdx@2.0.13)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(fumadocs-core@16.9.0(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.17.0(react@19.2.7))(next@16.3.3(@babel/core@7.29.0)(@types/node@25.6.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3))(next@16.3.3(@babel/core@7.29.0)(@types/node@25.6.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.0)
       jotai:
-        specifier: ^2.20.0
-        version: 2.20.0(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react@19.2.17)(react@19.2.7)
+        specifier: ^3.0.0
+        version: 3.0.0(@types/react@19.2.17)(react@19.2.7)
       lucide-react:
         specifier: ^1.17.0
         version: 1.17.0(react@19.2.7)
@@ -3934,19 +3934,13 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  jotai@2.20.0:
-    resolution: {integrity: sha512-b5GAqgmXmXzB4WPaTH26ppk9Sl7AA9WSQX7yfdM+gJ1rFROiWcVbi97gFuN/yVCojOcbcvop2sfLL+fjxW0JVg==}
-    engines: {node: '>=12.20.0'}
+  jotai@3.0.0:
+    resolution: {integrity: sha512-KxhbmsJUp/tmrv6aZgO+nzB3H9K8C0xmk5i3aGkwy/EANg73DVBkggv3zVHaAi5PlNlQgTgP4uiVepo+JC+wSA==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
-      '@babel/core': '>=7.0.0'
-      '@babel/template': '>=7.0.0'
-      '@types/react': '>=17.0.0'
-      react: '>=17.0.0'
+      '@types/react': '>=18.0.0'
+      react: '>=18.0.0'
     peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@babel/template':
-        optional: true
       '@types/react':
         optional: true
       react:
@@ -4368,6 +4362,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@3.3.19:
+    resolution: {integrity: sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   napi-postinstall@0.3.4:
     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -4560,6 +4559,10 @@ packages:
 
   picomatch@4.0.4:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+    engines: {node: '>=12'}
+
+  picomatch@4.0.7:
+    resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
 
   picomatch@4.0.7:
@@ -8456,6 +8459,10 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.7
 
+  fdir@6.5.0(picomatch@4.0.7):
+    optionalDependencies:
+      picomatch: 4.0.7
+
   file-entry-cache@8.0.0:
     dependencies:
       flat-cache: 4.0.1
@@ -9030,10 +9037,8 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  jotai@2.20.0(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react@19.2.17)(react@19.2.7):
+  jotai@3.0.0(@types/react@19.2.17)(react@19.2.7):
     optionalDependencies:
-      '@babel/core': 7.29.0
-      '@babel/template': 7.28.6
       '@types/react': 19.2.17
       react: 19.2.7
 
@@ -9666,6 +9671,8 @@ snapshots:
 
   nanoid@3.3.19: {}
 
+  nanoid@3.3.19: {}
+
   napi-postinstall@0.3.4: {}
 
   natural-compare@1.4.0: {}
@@ -9865,6 +9872,8 @@ snapshots:
   picomatch@2.3.2: {}
 
   picomatch@4.0.4: {}
+
+  picomatch@4.0.7: {}
 
   picomatch@4.0.7: {}
 
