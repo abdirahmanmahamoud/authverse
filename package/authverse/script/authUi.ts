@@ -3,7 +3,6 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { packageManager, runCommand } from "../utils/packageManager.js";
-import { crc32 } from "zlib";
 import { CreateFolder } from "../utils/CreateFolder.js";
 
 const shadcnComponents = [
@@ -40,7 +39,7 @@ export const authUiRun = async ({
       console.log(chalk.yellow("\n Installing shadcn ui Components\n"));
 
       if (cmd == true) {
-        runCommand("shadcn@latest init");
+        runCommand("shadcn@latest init --preset b0");
         runCommand("shadcn@latest add button sonner card field input");
       } else {
         runCommand("shadcn@latest add button sonner card field input");
