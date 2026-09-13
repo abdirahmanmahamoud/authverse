@@ -37,15 +37,16 @@ export const prismaRunTanstackStart = async ({
       console.log(chalk.cyan("\n⚙️  Initializing Prisma...\n"));
       // Install prisma + @prisma/client
       if (database !== "Mongodb") {
-        packageManager("prisma", true);
-        packageManager("@prisma/client");
+        packageManager("prisma@7.10.0", true);
+        packageManager("@prisma/client@7.10.0");
 
         if (database === "Mysql") {
           packageManager("@prisma/adapter-mariadb");
         }
 
         if (database === "Postgresql") {
-          packageManager("@prisma/adapter-pg");
+          packageManager("@prisma/adapter-pg pg");
+          packageManager("@types/pg", true);
         }
       } else if (database === "Mongodb") {
         packageManager("prisma@6.19.0", true);
@@ -76,15 +77,37 @@ export const prismaRunTanstackStart = async ({
       const destinationPath = path.join(prismaDir, "schema.prisma");
       fs.copyFileSync(templatePath, destinationPath);
 
+      // Check .env file exist
+      const envPath = path.join(projectDir, ".env");
+      if (!fs.existsSync(envPath)) {
+        fs.writeFileSync(envPath, "");
+
+        // Check .env file update DATABASE_URL
+        const envContent = fs.readFileSync(envPath, "utf-8");
+        if (!envContent.includes("DATABASE_URL")) {
+          fs.appendFileSync(envPath, "DATABASE_URL=\n");
+        }
+      }
+
+      // prisma config file template
+      const prismaConfigTempPath = path.resolve(
+        __dirname,
+        `./template/config/prisma.config.ts`,
+      );
+
       // Copy prisma.config.ts
       if (database === "Mongodb") {
-        const prismaConfigPath = path.resolve(
-          __dirname,
-          `./template/config/prisma.config.ts`,
-        );
         const prismaConfigDestinationPath = path.join("", "prisma.config.ts");
+        fs.copyFileSync(prismaConfigTempPath, prismaConfigDestinationPath);
+      }
 
-        fs.copyFileSync(prismaConfigPath, prismaConfigDestinationPath);
+      // project check content prisma.config.ts
+      const prismaConfigPath = path.join(projectDir, "prisma.config.ts");
+      const prismaConfigContent = fs.readFileSync(prismaConfigPath, "utf-8");
+
+      if (!prismaConfigContent.includes(prismaConfigTempPath)) {
+        fs.writeFileSync(prismaConfigPath, "");
+        fs.copyFileSync(prismaConfigTempPath, prismaConfigPath);
       }
     } else {
       // schema selecy
