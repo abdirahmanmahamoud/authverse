@@ -38,7 +38,7 @@ export const prismaRunTanstackStart = async ({
       // Install prisma + @prisma/client
       if (database !== "Mongodb") {
         packageManager("prisma@7.10.0", true);
-        packageManager("@prisma/client@7.10.0");
+        packageManager("@prisma/client@7.10.0 dotenv");
 
         if (database === "Mysql") {
           packageManager("@prisma/adapter-mariadb");
