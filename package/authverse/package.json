@@ -52,7 +52,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.5.1",
     "changelogithub": "^15.0.4",
     "tsup": "^8.5.1",
     "typescript": "^7.0.2",
